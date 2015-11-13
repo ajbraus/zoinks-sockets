@@ -140,16 +140,12 @@ module.exports = function (io, app) {
 
     socket.on('publish:rmReq', function (data) {
       Zoink.findById(data.zoinkId, function(err, zoink) {
-        var index = data.user._id.indexOf(zoink.reqs);
+        var index = zoink.reqs.indexOf(data.reqs);
         zoink.reqs.splice(index, 1);
-
-        // zoink.invites.push(data.user.email);
 
         zoink.save();
 
-        // TODO email host
-
-        io.sockets.in(data.zoinkId).emit('rmReq', data.user);
+        io.sockets.in(data.zoinkId).emit('rmReq', data);
       });
     });
 

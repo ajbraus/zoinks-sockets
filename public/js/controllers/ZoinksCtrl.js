@@ -164,7 +164,7 @@ angular.module('zoinks')
       $scope.carpool = {};
     }
 
-    // REQUIREMENTS
+    // REQUIREMENTS NEW
     $scope.toggleNewRequirement = function() {
       $scope.newRequirement = !$scope.newRequirement;
     }
@@ -180,6 +180,21 @@ angular.module('zoinks')
         // ADD TO REQS
         $scope.zoink.reqs.push(req.reqs);
         console.log('updated reqs on zoink', $scope.zoink);
+      });
+    });
+
+    // REQUIREMENTS DELETE
+    $scope.removeRequirement = function(rmReq) {
+      var reqs = { zoinkId: $routeParams.id, reqs: rmReq };
+      socket.emit('publish:rmReq', reqs);
+    };
+
+    $scope.$on('socket:rmReq', function (event, req) {
+      console.log('Req Removed');
+      $scope.$apply(function() {
+        // REMOVE FROM REQS
+        var index = $scope.zoink.reqs.indexOf(req.reqs);
+        $scope.zoink.reqs.splice(index, 1);
       });
     });
 
