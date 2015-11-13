@@ -21,6 +21,8 @@
                 input.form-control(type='text', ng-model='requirement', focus-me='{{newRequirement}}')
             .list-group
               .list-group-item(ng-repeat='r in zoink.reqs') {{r}}
+                span.pull-right 
+                  .btn(ng-click='removeRequirement(r)') &#10006;
         .card
           .card-header.clearfix
             h5.pull-left Shared Rides
