@@ -1,7 +1,7 @@
 /*
  * SERVER.JS
  */
- 
+require('dotenv').load(); 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 var config = require('./config')
@@ -18,7 +18,7 @@ var config = require('./config')
   , io = require('socket.io').listen(server)
   , mongoose  = require('mongoose')
   , mailer = require('express-mailer');
-
+  
 mongoose.connect(config.db);
 // app.use(express.static(__dirname + '/public'));
 app.use("/", express.static(path.join(__dirname, 'public')));

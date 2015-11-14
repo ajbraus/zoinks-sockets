@@ -22,8 +22,11 @@ DONE allow private or unlisted event (rsvp without being in invite list)
 go to profile/settings form after authenticating 
   - add image
 
+edit zoink in modal...
+
 hide emails from invites
-hide env variables
+DONE hide env variables
+  remove all commits with unhidden env variables
 Only allow RSVPED people to add things
 Only logged in people can message
 
