@@ -13,7 +13,7 @@ angular.module('zoinks')
       socket.emit('publish:joinRoom', $scope.zoink);
 
       $scope.rsvped = _.includes(_.pluck($scope.zoink.rsvps, '_id'), currentUser._id);
-      $scope.invited = _.includes($scope.zoink.invites, currentUser.email);
+      $scope.invited = _.includes(_.pluck($scope.zoink.invites, '_id'), currentUser._id);
     });
 
     $scope.$on('socket:joinRoom', function (event, clientsCount) {
@@ -29,17 +29,13 @@ angular.module('zoinks')
 
     $scope.invite = { zoinkId: $routeParams.id }
     $scope.addInvite = function() {
-      var invites = _.map($scope.zoink.invites, 'email');
-      if (!_.includes(invites, $scope.invite.email)) {
-        socket.emit('publish:addInvite', $scope.invite)
-        $scope.invite = { zoinkId: $routeParams.id }
-        $scope.toggleNewInvite();
-      } else {
-        alert($scope.invite.email + " is already invited.")
-      }
+      socket.emit('publish:addInvite', $scope.invite)
+      $scope.invite = { zoinkId: $routeParams.id }
+      $scope.toggleNewInvite();
     }
 
     $scope.$on('socket:addInvite', function (event, invite) {
+      // display error if already invited
       $scope.$apply(function() {
         $scope.zoink.invites.push(invite);
       });

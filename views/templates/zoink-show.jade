@@ -75,7 +75,7 @@
                 h5.media-heading {{rsvp.first || "You"}}
         .card
           .card-header.clearfix
-            h5.pull-left Invites
+            h5.pull-left Send Invites
             a.pull-right.btn.btn-link(ng-click='toggleNewInvite()') Add
             //-  ng-hide='!rspved'
           .card-body
@@ -83,7 +83,7 @@
               .form-group
                 input.form-control(type='text', required='', placeholder="Name", ng-model='invite.name', focus-me='{{newInvite}}')
               .form-group
-                input.form-control(type='email', required='', ng-model='invite.email')
+                input.form-control(type='email', required='', placeholder="Email" ng-model='invite.email' ng-keyup="$event.keyCode == 13 && addInvite()")
             .invite.clearfix(ng-repeat='invite in zoink.invites | reverse')
               .pull-left {{invite.name}}
               a.text-muted.pull-right(ng-click="rmInvite(invite)" href="")

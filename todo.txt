@@ -18,46 +18,53 @@ DONE Associate new zoink with creator
 
 DONE set startsAt/endsat
 DONE allow private or unlisted event (rsvp without being in invite list)
-
-go to profile/settings form after authenticating 
-  - add image
-
-edit zoink in modal...
-
-hide emails from invites
 DONE hide env variables
-  remove all commits with unhidden env variables
-Only allow RSVPED people to add things
-Only logged in people can message
+
+ONBOARDING
+  go to user profile/settings form after authenticating to 
+    - add image, 
+    - set password, 
+    - phone number
+
+ZOINK
+  edit zoink in modal
+  delete zoink (with confirmation!)
+  add todos
+  add requirements
+    claim requirements (one owner)
+  add carpools
+    rspv to carpools (has multiple passengers)
+  add costs
+    square up users to costs
+
+INVITES (Adam)
+  invite modal - Zoink Username (autocomplete w picture) or Name and Email
+  check if already invited on server
+
+RSVP (Adam)
+  confirm or reject rsvp and unrsvp, invite or uninvite
+  hide flake out button in gear in RSVP
+
+PERMISSIONS
+  Only allow RSVPED people to add things
+  Only logged in people to message. Only can message if invited if inviteOnly
+
+MESSAGES
+  persist messages
+  add users to messages "username said 1 day ago" underneath message
+  'angularMoment' for time ago it words in messages
+  remove messages - buggy with sockets
 
 auth 
   solution for profile pic when signing up with email - 7 colored pictures of crazy chipmunks
   linking fb or g+
   auth error handling - overall better error handling 
 
-confirm or reject rsvp and unrsvp
-hide flake out button in gear in RSVP
-
-Test
-1. create zoink
-2. invite test user
-3. sign up with test user
-4. rsvp as test user
-
-MESSAGES
-  persist messages
-  add users to messages
-  relativelits for when said
-  remove messages - buggy with sockets
-  make messages inset
-
-add todos
-add requirements
-	claim requirements
-add carpools
-	rspv to carpools
-add costs
-	square up users to costs
+SIMPLE TEST SCRIPT
+  1. create zoink
+  2. invite test user
+  3. sign up with test user
+  4. rsvp as test user
 
 if invite is a user, swap in the user invite and include name in email.
 
