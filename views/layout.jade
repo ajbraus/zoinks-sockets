@@ -59,6 +59,12 @@ html(lang="en", ng-app='zoinks')
   script(type="text/javascript", src='/vendor/lodash/lodash.min.js')
   script(type="text/javascript", src='/vendor/satellizer/satellizer.min.js')
   script(type="text/javascript", src='/vendor/angular-bootstrap-datetimepicker/src/js/datetimepicker.js')
+
+  //- UPLOADCARE
+  script(type="text/javascript" charset="utf-8" src="//ucarecdn.com/widget/2.5.5/uploadcare/uploadcare.full.min.js")
+  script(type="text/javascript", src="/vendor/angular-uploadcare/angular-uploadcare.js")
+  script(type="text/javascript") UPLOADCARE_LOCALE = "en"; UPLOADCARE_TABS = "file"; UPLOADCARE_PUBLIC_KEY = "0b882472fef0ff8fd9b6";
+
   script(type="text/javascript", src='/js/app.js')
   script(type="text/javascript", src='/js/services.js')
   script(type="text/javascript", src='/js/controllers/MainCtrl.js')

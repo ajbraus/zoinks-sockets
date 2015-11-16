@@ -13,6 +13,7 @@
     "font-awesome": "latest",
     "lodash": "~3.10.1",
     "satellizer": "~0.12.5",
-    "angular-bootstrap-datetimepicker": "latest"
+    "angular-bootstrap-datetimepicker": "latest",
+    "angular-uploadcare": "~0.2.0"
   }
 }
