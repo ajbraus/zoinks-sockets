@@ -16,10 +16,15 @@ angular.module('zoinks')
       $scope.user = data.data;
     });
 
+    $scope.onUCUploadComplete = function (info) {
+      $scope.user.picture = info.originalUrl;
+    }
+
     $scope.updateUser = function() {
       console.log($scope.user)
-      // $http.put('/api/me', $scope.user).then(function(data) {
-      //   $location.path('/profile');
-      // });      
+      $http.put('/api/me', $scope.user).then(function(data) {
+        console.log(data)
+        // $location.path('/profile');
+      });      
     }
   }]);
