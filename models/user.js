@@ -12,12 +12,13 @@ var UserSchema = new Schema({
   , updated_at    : { type: Date }
   , first         : { type: String, trim: true }
   , last          : { type: String, trim: true }
+  , notifications : { type: Number, default: 2 }
   , picture       : { type: String, required: true }
   , displayName   : { type: String, required: true, unique: true, trim: true, set: toLower }
   , email         : { type: String, required: true, unique: true, trim: true, set: toLower }
   , password      : { type: String, select: false }
-  , facebook      : String
-  , google        : String
+  , facebook      : { type: String, select: false }
+  , google        : { type: String, select: false }
 })
 
 UserSchema.virtual('fullname').get(function() {

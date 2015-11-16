@@ -1,0 +1,63 @@
+br
+.container
+  .row
+    .col-sm-6.col-sm-offset-3
+      legend Account Settings
+
+      form(ng-submit='updateUser()')
+        .form-group.row
+          .col-sm-4
+            img.img-responsive.img-circle(ng-src="{{user.picture}}")
+          .col-sm-8
+            label.form-control-label(for='first') Profile Picture*
+            input#picture.form-control(type='file', ng-model="user.picture" required)
+
+        .form-group.row
+          label.col-sm-4.form-control-label(for='first') First Name*
+          .col-sm-8
+            input#first.form-control(type='text', placeholder='Email' ng-model="user.first" required)
+        .form-group.row
+          label.col-sm-4.form-control-label(for='last') Last Name*
+          .col-sm-8
+            input#last.form-control(type='text', placeholder='Email' ng-model="user.last" required)
+        .form-group.row
+          label.col-sm-4.form-control-label(for='displayName') Username*
+          .col-sm-8
+            input#displayName.form-control(type='text', placeholder='Username' ng-model="user.displayName" required)
+        .form-group.row
+          label.col-sm-4.form-control-label(for='email') Email* 
+          .col-sm-8
+            input#email.form-control(type='email', placeholder='email@zoinks.com' ng-model="user.email" )
+        .form-group.row
+          label.col-sm-4.form-control-label(for='password') Password 
+          .col-sm-8
+            input#password.form-control(type='password', placeholder='Password (optional)' ng-model="user.password")
+        .form-group.row
+          label.col-sm-4 Notify me of
+          .col-sm-8
+            .radio
+              label
+                input#gridRadios1(type='radio', name='gridRadios', ng-model="user.notifications" value='3')
+                | All Activity
+            .radio
+              label
+                input#gridRadios1(type='radio', name='gridRadios', ng-model="user.notifications" value='2', checked='')
+                | Only Important Stuff and Mentions
+            .radio
+              label
+                input#gridRadios2(type='radio', name='gridRadios', ng-model="user.notifications" value='1')
+                | Only Mentions
+            .radio
+              label
+                input#gridRadios2(type='radio', name='gridRadios', ng-model="user.notifications" value='0')
+                | Nothing
+        //- .form-group.row
+        //-   label.col-sm-4 Checkbox
+        //-   .col-sm-8
+        //-     .checkbox
+        //-       label
+        //-         input(type='checkbox')
+        //-         |  Check me out
+        .form-group.row
+          .text-right
+            button.btn.btn-primary(type='submit') Update Account

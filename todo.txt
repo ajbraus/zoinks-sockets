@@ -23,9 +23,12 @@ go to profile/settings form after authenticating
   - add image
 
 hide emails from invites
+  - create invites
+  - remove invites
 hide env variables
 Only allow RSVPED people to add things
 Only logged in people can message
+Prompt people to login after 10 seconds
 
 auth 
   solution for profile pic when signing up with email - 7 colored pictures of crazy chipmunks

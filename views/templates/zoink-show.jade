@@ -1,13 +1,10 @@
 .col-sm-8.box-shadow-left.whole-height.main.no-padding
   .container-fluid
-    h4 {{zoink.title}} 
+    h4.pull-left {{zoink.title}} 
       small.text-muted.small at 
         a(href='http://maps.google.com/?q={{zoink.location}}', target='_blank') {{zoink.location}}
-    b Starts At 
-    {{zoink.startsAt | date:'EEE MMM d, h:mma'}}
-    br
-    b Ends At 
-    {{zoink.endsAt | date:'EEE MMM d, h:mma'}}
+    .pull-right.margin-top
+      {{zoink.startsAt | date:'EEE MMM d, h:mma'}} - {{zoink.endsAt | date:'EEE MMM d, h:mma'}}
     .row
       .col-sm-8
         .card
@@ -66,7 +63,8 @@
           .card-header.clearfix
             h5.pull-left RSVPs
             a.btn.btn-primary.pull-right(ng-click='rsvp()', ng-disabled='rsvped || (zoink.inviteOnly && !invited)' ng-hide="rsvped") RSVP
-            a.btn.btn-danger.pull-right(ng-click='unrsvp()', ng-show="rsvped") Flake Out
+            a.btn.btn-danger.btn-sm.pull-right(ng-click='unrsvp()', ng-show="rsvped") 
+              i.icon.ion-eject
           .card-body
             .media(ng-repeat='rsvp in zoink.rsvps')
               .media-left

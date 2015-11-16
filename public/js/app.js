@@ -28,6 +28,11 @@ angular.module('zoinks', ['zoinks.filters',
         controller: 'ProfileCtrl'
       });
 
+      $routeProvider.when('/settings', {
+        templateUrl: 'templates/settings',
+        controller: 'SettingsCtrl'
+      });
+
       $routeProvider.otherwise({redirectTo: '/'});
 
       $locationProvider.html5Mode(true);

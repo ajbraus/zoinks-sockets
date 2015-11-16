@@ -9,4 +9,17 @@ angular.module('zoinks')
     });
     $scope.zoinks = Zoink.query();
     $scope.invites = Invite.query();
+  }])
+
+  .controller('SettingsCtrl', ['$scope', '$http', '$location', 'Zoink', 'Invite', '$auth', 'Auth', function($scope, $http, $location, Zoink, Invite, $auth, Auth) {
+    $http.get('/api/me').then(function(data) {
+      $scope.user = data.data;
+    });
+
+    $scope.updateUser = function() {
+      console.log($scope.user)
+      // $http.put('/api/me', $scope.user).then(function(data) {
+      //   $location.path('/profile');
+      // });      
+    }
   }]);
