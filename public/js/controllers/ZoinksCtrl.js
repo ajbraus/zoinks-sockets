@@ -147,54 +147,71 @@ angular.module('zoinks')
       // carpool.push(currenUser);
     }
 
-    $scope.claimRequirement = function(requirement) {
-      // TODO
-      // requirement.owner.push(currentUser);
-      // display owner in template
-    }
-
     // CARPOOLS
     $scope.toggleNewCarpool = function() {
       $scope.newCarpool = !$scope.newCarpool;
-    }
+    };
     $scope.addCarpool = function() {
       // carpool.driver = currentUser;
       $scope.zoink.carpools.unshift($scope.carpool)
       $scope.newCarpool = false;
       $scope.carpool = {};
-    }
+    };
 
     // REQUIREMENTS NEW
     $scope.toggleNewRequirement = function() {
       $scope.newRequirement = !$scope.newRequirement;
-    }
+    };
+
     $scope.addRequirement = function() {
-      var reqs = { zoinkId: $routeParams.id, reqs: $scope.requirement };
+      var reqs = { zoinkId: $routeParams.id, req: $scope.requirement };
       socket.emit('publish:addReq', reqs);
       $scope.requirement = [];
     };
 
-    $scope.$on('socket:addReq', function (event, req) {
-      console.log('Req Added')
+    $scope.$on('socket:addReq', function (event, reqs) {
       $scope.$apply(function() {
-        // ADD TO REQS
-        $scope.zoink.reqs.push(req.reqs);
-        console.log('updated reqs on zoink', $scope.zoink);
+        // UPDATE all the reqs
+        $scope.zoink.reqs = reqs;
       });
     });
 
     // REQUIREMENTS DELETE
     $scope.removeRequirement = function(rmReq) {
-      var reqs = { zoinkId: $routeParams.id, reqs: rmReq };
+      var reqs = { zoinkId: $routeParams.id, req: rmReq };
       socket.emit('publish:rmReq', reqs);
     };
 
-    $scope.$on('socket:rmReq', function (event, req) {
-      console.log('Req Removed');
+    $scope.$on('socket:rmReq', function (event, reqs) {
       $scope.$apply(function() {
-        // REMOVE FROM REQS
-        var index = $scope.zoink.reqs.indexOf(req.reqs);
-        $scope.zoink.reqs.splice(index, 1);
+        // UPDATE all the reqs
+        $scope.zoink.reqs = reqs;
+      });
+    });
+
+    // REQUIREMENTS CLAIM
+    $scope.claimRequirement = function(req) {
+      var data = { zoinkId: $routeParams.id, req: req, user: currentUser };
+      socket.emit('publish:clReq', data);
+    };
+
+    $scope.$on('socket:clReq', function (event, reqs) {
+      $scope.$apply(function() {
+        // UPDATE all the reqs
+        $scope.zoink.reqs = reqs;
+      });
+    });
+
+    // REQUIREMENTS UNCLAIM
+    $scope.unclaimRequirement = function(req) {
+      var data = { zoinkId: $routeParams.id, req: req, user: currentUser };
+      socket.emit('publish:unclReq', data);
+    };
+
+    $scope.$on('socket:unclReq', function (event, reqs) {
+      $scope.$apply(function() {
+        // UPDATE all the reqs
+        $scope.zoink.reqs = reqs;
       });
     });
 
