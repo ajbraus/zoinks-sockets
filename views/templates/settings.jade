@@ -10,8 +10,7 @@ br
             img.img-responsive.img-circle(ng-src="{{user.picture}}")
           .col-sm-8
             label.form-control-label(for='first') Profile Picture*
-            input#picture.form-control(type='file', ng-model="user.picture" required)
-
+            input(uploadcare-widget ng-model="object.image.info.uuid" data-public-key="0b882472fef0ff8fd9b6" data-tabs="file url" data-images-only="true" data-preview-step="true" data-crop="300:300" on-upload-complete="onUCUploadComplete(info)" on-widget-ready="onUCWidgetReady(widget)" value="{{object.image.info.cdnUrl}}")
         .form-group.row
           label.col-sm-4.form-control-label(for='first') First Name*
           .col-sm-8
