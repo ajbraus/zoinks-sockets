@@ -10,7 +10,8 @@ angular.module('zoinks', ['zoinks.filters',
                          'ngSanitize', 
                          'ngRoute',
                          'satellizer',
-                         'ui.bootstrap.datetimepicker' //https://github.com/dalelotts/angular-bootstrap-datetimepicker
+                         'ui.bootstrap.datetimepicker', //https://github.com/dalelotts/angular-bootstrap-datetimepicker
+                         'ng-uploadcare'
                          ])
 
     .config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {

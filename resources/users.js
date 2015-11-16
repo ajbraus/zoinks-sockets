@@ -12,21 +12,20 @@ module.exports = function(app) {
 
   app.get('/api/me', auth.ensureAuthenticated, function(req, res) {
     User.findById(req.userId, function(err, user) {
-      console.log(user)
       res.send(user);
     });
   });
 
   app.put('/api/me', auth.ensureAuthenticated, function(req, res) {
-    User.findById(req.userId, function(err, user) {
+    console.log(req.body)
+    User.update(req.userId, req.body, function(err, user) {
       if (!user) {
         return res.status(400).send({ message: 'User not found' });
+      } else if (err) {
+        return res.status(400).send({ message: err });
+      } else {
+        return res.status(200).end();
       }
-      user.displayName = req.body.displayName || user.displayName;
-      user.email = req.body.email || user.email;
-      user.save(function(err) {
-        res.status(200).end();
-      });
     });
   });
 
