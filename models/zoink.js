@@ -14,7 +14,7 @@ var MessageSchema = new Schema({
 
 var InviteSchema = new Schema({
     name        : String
-  , email       : String
+  , email       : { type: String, select: false }
   , createdAt   : { type: Date }
 });
 
