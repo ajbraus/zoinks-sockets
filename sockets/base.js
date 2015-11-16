@@ -138,6 +138,7 @@ module.exports = function (io, app) {
 
     socket.on('publish:rmReq', function (data) {
       Zoink.findById(data.zoinkId, function(err, zoink) {
+<<<<<<< HEAD
         var rmObj = zoink.reqs.id(data.req._id);
         rmObj.remove();
         zoink.save();
@@ -166,7 +167,6 @@ module.exports = function (io, app) {
           zoink.save();
 
           io.sockets.in(data.zoinkId).emit('clReq', zoink.reqs);
-          
       });
     });
 

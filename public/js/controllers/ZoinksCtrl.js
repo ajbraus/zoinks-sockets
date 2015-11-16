@@ -215,6 +215,21 @@ angular.module('zoinks')
       });
     });
 
+    // REQUIREMENTS DELETE
+    $scope.removeRequirement = function(rmReq) {
+      var reqs = { zoinkId: $routeParams.id, reqs: rmReq };
+      socket.emit('publish:rmReq', reqs);
+    };
+
+    $scope.$on('socket:rmReq', function (event, req) {
+      console.log('Req Removed');
+      $scope.$apply(function() {
+        // REMOVE FROM REQS
+        var index = $scope.zoink.reqs.indexOf(req.reqs);
+        $scope.zoink.reqs.splice(index, 1);
+      });
+    });
+
     // TODOS
     $scope.toggleNewTodo = function() {
       $scope.newTodo = !$scope.newTodo;
