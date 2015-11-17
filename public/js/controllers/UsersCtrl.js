@@ -19,7 +19,7 @@ angular.module('zoinks')
 
     $scope.onUCUploadComplete = function (info) {
       $scope.user.picture = info.cdnUrl;
-
+      console.log($scope.user);
     }
 
     $scope.updateUser = function() {
