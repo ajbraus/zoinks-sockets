@@ -99,16 +99,16 @@ module.exports = function (io, app) {
       Zoink.findById(data.zoinkId, function(err, zoink) {
         zoink.rsvps.push(data.user._id);
 
-        var index = data.user.email.indexOf(zoink.invites)
-        zoink.invites.splice(index, 1)
+        var index = data.user.email.indexOf(zoink.invites);
+        zoink.invites.splice(index, 1);
 
         zoink.save();
 
         // TODO email host
 
-        io.sockets.in(data.zoinkId).emit('addRsvp', data.user)
-      })
-    })
+        io.sockets.in(data.zoinkId).emit('addRsvp', data.user);
+      });
+    });
 
     socket.on('publish:rmRsvp', function (data) {
       Zoink.findById(data.zoinkId, function(err, zoink) {
@@ -121,35 +121,51 @@ module.exports = function (io, app) {
 
         // TODO email host
 
-        io.sockets.in(data.zoinkId).emit('rmRsvp', data.user)
-      })
-    })
+        io.sockets.in(data.zoinkId).emit('rmRsvp', data.user);
+      });
+    });
 
     // REQS
     socket.on('publish:addReq', function (data) {
-      console.log(data);
       Zoink.findById(data.zoinkId, function(err, zoink) {
-        zoink.reqs.push(data.reqs);
-        console.log(zoink);
+        zoink.reqs.push({title: data.req});
 
         zoink.save();
 
-        io.sockets.in(data.zoinkId).emit('addReq', data);
+        io.sockets.in(data.zoinkId).emit('addReq', zoink.reqs);
       });
     });
 
     socket.on('publish:rmReq', function (data) {
       Zoink.findById(data.zoinkId, function(err, zoink) {
-        var index = data.user._id.indexOf(zoink.reqs);
-        zoink.reqs.splice(index, 1);
-
-        // zoink.invites.push(data.user.email);
-
+        var rmObj = zoink.reqs.id(data.req._id);
+        rmObj.remove();
         zoink.save();
 
-        // TODO email host
+        io.sockets.in(data.zoinkId).emit('rmReq', zoink.reqs);
+      });
+    });
 
-        io.sockets.in(data.zoinkId).emit('rmReq', data.user);
+    socket.on('publish:clReq', function (data) {
+      Zoink.findById(data.zoinkId, function(err, zoink) {
+          var clObj = zoink.reqs.id(data.req._id);
+          clObj.userName = data.user.displayName;
+          clObj.userPic = data.user.picture;
+          zoink.save();
+
+          io.sockets.in(data.zoinkId).emit('clReq', zoink.reqs);
+          
+      });
+    });
+
+    socket.on('publish:unclReq', function (data) {
+      Zoink.findById(data.zoinkId, function(err, zoink) {
+          var clObj = zoink.reqs.id(data.req._id);
+          clObj.userName = undefined;
+          clObj.userPic = undefined;
+          zoink.save();
+
+          io.sockets.in(data.zoinkId).emit('clReq', zoink.reqs);
       });
     });
 

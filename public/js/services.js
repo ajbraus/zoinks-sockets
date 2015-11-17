@@ -8,11 +8,11 @@ angular.module('zoinks.services', [])
   .factory('Zoink', ['$resource', '$window', function ($resource, $window) {
     return $resource($window.location.origin + '/api/zoinks/:id', { id: '@id' }, {
       update: { method: 'PUT' }
-    })
+    });
   }])
 
   .factory('Invite', ['$resource', '$window', function ($resource, $window) {
-    return $resource($window.location.origin + '/api/invites/:id', { id: '@id' })
+    return $resource($window.location.origin + '/api/invites/:id', { id: '@id' });
   }])
 
   .factory('Auth', ['$auth', function ($auth) {
@@ -24,16 +24,16 @@ angular.module('zoinks.services', [])
           email: user.email,
           picture: user.picture,
           displayName: user.displayName
-        }
+        };
         return currentUser;
       }
-    }
+    };
   }])
 
   .factory('socket', ['socketFactory', function (socketFactory) {
     var socket = socketFactory();
-    socket.forward('joinRoom')
-    socket.forward('leaveRoom')
+    socket.forward('joinRoom');
+    socket.forward('leaveRoom');
     socket.forward('addInvite');
     socket.forward('rmInvite');
     socket.forward('addMessage');
@@ -42,8 +42,10 @@ angular.module('zoinks.services', [])
     socket.forward('rmRsvp');
     socket.forward('addReq');
     socket.forward('rmReq');
+    socket.forward('clReq');
+    socket.forward('unclReq');
 
-    return socket
+    return socket;
   }])
 
   // .factory('_', ['$window', function($window) {

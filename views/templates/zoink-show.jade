@@ -17,7 +17,14 @@
               .form-group
                 input.form-control(type='text', ng-model='requirement', focus-me='{{newRequirement}}')
             .list-group
-              .list-group-item(ng-repeat='r in zoink.reqs') {{r}}
+              .list-group-item(ng-repeat='r in zoink.reqs') {{r.title}}
+                span.pull-right 
+                  {{r.userName}}
+                  button.close(ng-click='removeRequirement(r)') &#10006;
+                  button.btn.btn-sm.btn-default(ng-click='claimRequirement(r)' ng-if='!r.userName') Claim
+                  button.btn.btn-sm.btn-default(ng-click='unclaimRequirement(r)' ng-if='r.userName == currentUser.displayName') Unclaim
+                  img.img-responsive.img-circle.pull-left(ng-src='{{r.userPic}}', width='25px')
+                
         .card
           .card-header.clearfix
             h5.pull-left Shared Rides
