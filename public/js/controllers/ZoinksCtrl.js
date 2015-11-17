@@ -59,7 +59,11 @@ angular.module('zoinks')
     // CHAT
 
     // ADD MESSAGE
-    $scope.message = {zoinkId: $routeParams.id}
+    $scope.message = { zoinkId: $routeParams.id, 
+                       picture: currentUser.picture, 
+                       displayName: currentUser.displayName
+                     }
+                     
     $scope.addMessage = function() {
       socket.emit('publish:addMessage', $scope.message)
     }

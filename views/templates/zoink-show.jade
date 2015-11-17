@@ -1,10 +1,11 @@
 .col-sm-8.box-shadow-left.whole-height.main.no-padding
   .container-fluid
-    h4.pull-left {{zoink.title}} 
-      small.text-muted.small at 
-        a(href='http://maps.google.com/?q={{zoink.location}}', target='_blank') {{zoink.location}}
-    .pull-right.margin-top
-      {{zoink.startsAt | date:'EEE MMM d, h:mma'}} - {{zoink.endsAt | date:'EEE MMM d, h:mma'}}
+    .clearfix
+      h4.pull-left {{zoink.title}} 
+        small.text-muted.small at 
+          a(href='http://maps.google.com/?q={{zoink.location}}', target='_blank') {{zoink.location}}
+      .pull-right.margin-top
+        {{zoink.startsAt | date:'EEE MMM d, h:mma'}} - {{zoink.endsAt | date:'EEE MMM d, h:mma'}}
     .row
       .col-sm-8
         .card
@@ -96,6 +97,7 @@
 .col-sm-4.chat.box-shadow-left.whole-height
   div(ng-repeat="message in zoink.messages")
     {{message.content}}
+    p.small.text-right.text-muted said by {{message.displayName}} 
     .text-right(ng-click="rmMessage(message)") 
       .btn.btn-sm.btn-default
         i.icon.ion-eject.large

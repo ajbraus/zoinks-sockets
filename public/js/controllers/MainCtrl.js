@@ -30,10 +30,10 @@ angular.module('zoinks')
           $scope.zoinks = Zoink.query();
           $scope.invites = Invite.query();
         } else {
-          $auth.removeToken(); 
+          $auth.logout();
         }
       }, function (data) {
-        $auth.removeToken(); 
+        $auth.logout();
         $location.path('/');
       });
     };
@@ -43,7 +43,6 @@ angular.module('zoinks')
     $scope.signup = function() {
       $auth.signup($scope.user)
         .then(function(response) {
-          console.log(response)
           $auth.setToken(response);
           $('#login-modal').modal('hide');
           $scope.isAuthenticated();
@@ -57,7 +56,7 @@ angular.module('zoinks')
 
     $scope.login = function() {
       $auth.login($scope.user)
-        .then(function(respone) {
+        .then(function(response) {
           // toastr.success('You have successfully signed in');
           $auth.setToken(response.data.token);
           $('#login-modal').modal('hide');
@@ -85,7 +84,7 @@ angular.module('zoinks')
       $auth.logout()
         .then(function() {
           // toastr.info('You have been logged out');
-          $auth.removeToken();
+          $auth.logout();
           $scope.currentUser = null;
           $location.path('/')
         });

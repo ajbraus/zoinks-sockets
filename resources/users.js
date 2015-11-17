@@ -17,14 +17,13 @@ module.exports = function(app) {
   });
 
   app.put('/api/me', auth.ensureAuthenticated, function(req, res) {
-    console.log(req.body)
     User.update(req.userId, req.body, function(err, user) {
       if (!user) {
         return res.status(400).send({ message: 'User not found' });
       } else if (err) {
         return res.status(400).send({ message: err });
       } else {
-        return res.status(200).end();
+        return res.send({ token: auth.createJWT(user) });
       }
     });
   });
@@ -165,7 +164,6 @@ module.exports = function(app) {
       console.log("accessToken", accessToken);
       // Step 2. Retrieve profile information about the current user.
       request.get({ url: peopleApiUrl, headers: headers, json: true }, function(err, response, profile) {
-        console.log("profile:", profile)
         if (profile.error) {
           return res.status(500).send({message: profile.error.message});
         }

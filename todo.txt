@@ -20,17 +20,18 @@ DONE set startsAt/endsat
 DONE allow private or unlisted event (rsvp without being in invite list)
 DONE hide env variables
 
-ONBOARDING
+ONBOARDING (Adam)
   go to user profile/settings form after authenticating to 
     - phone number
-  update token upon user save
+    - update token after updating
+    - logging me out after updating
 
 ZOINK
-  edit zoink in modal
-  delete zoink (with confirmation!)
+  Edit Zoink in modal
+  Archive zoink (with confirmation!)
   add todos
-  add requirements
-    claim requirements (one owner)
+  DONE add requirements
+    DONE claim requirements (one owner)
   add carpools
     rspv to carpools (has multiple passengers)
   add costs
@@ -54,10 +55,13 @@ MESSAGES
   'angularMoment' for time ago it words in messages
   remove messages - buggy with sockets
 
+PAYMENTS
+  Start New Zoink - 5 RSVPS - free, 25 - 6.99, 100 - 12.99, 300 - 24.99, 1000 34.99
+  Limit RSVP by zoink size - once RSVP limit is reached don't show url to non-signed in people
 
 auth 
   solution for profile pic when signing up with email - 7 colored pictures of crazy chipmunks
-  linking fb or g+
+  linking/unlinking fb or g+
   auth error handling - overall better error handling 
 
 SIMPLE TEST SCRIPT
@@ -71,12 +75,9 @@ if invite is a user, swap in the user invite and include name in email.
 archive zoink
 pretty title url
 
-MVP
-
 make ionic app (angular 2?)
 
 like zoinksapp: div(class="fb-like", data-share="true", data-width="450", data-show-faces="true")
 
 icebox:
-
-add event images - instagram #
+  add event images - instagram #

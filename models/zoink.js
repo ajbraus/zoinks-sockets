@@ -7,8 +7,8 @@ var mongoose = require('mongoose'),
 
 var MessageSchema = new Schema({
     content     : { type: String, required: true }
-  , authorName  : { type: String, required: true }
-  , authorPic   : { type: String, required: true }
+  , displayName : { type: String, required: true }
+  , picture     : { type: String, required: true }
   , createdAt   : { type: Date }
 });
 

@@ -5,7 +5,6 @@
 angular.module('zoinks')
   .controller('ProfileCtrl', ['$scope', '$http', 'Zoink', 'Invite', '$auth', 'Auth', function($scope, $http, Zoink, Invite, $auth, Auth) {
     $http.get('/api/me').then(function(data) {
-      console.log(data)
       $scope.user = data.data;
     });
     $scope.zoinks = Zoink.query();
@@ -23,9 +22,10 @@ angular.module('zoinks')
     }
 
     $scope.updateUser = function() {
-      console.log($scope.user)
       $http.put('/api/me', $scope.user).then(function(data) {
-        $location.path('/profile');
+        console.log(data.data)
+        $auth.setToken(data.data.token);
+        // $location.path('/profile');
       });      
     }
   }]);
