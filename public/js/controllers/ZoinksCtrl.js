@@ -212,11 +212,33 @@ angular.module('zoinks')
     $scope.toggleNewTodo = function() {
       $scope.newTodo = !$scope.newTodo;
     }
+
+    // ADD TODO
     $scope.addTodo = function() {
-      $scope.zoink.todos.unshift($scope.todo)
-      $scope.newTodo = false;
-      $scope.todo = {};
-    }
+      var todo = { zoinkId: $routeParams.id, todo: $scope.todo };
+      socket.emit('publish:addTodo', todo);
+      $scope.todo = [];
+    };
+
+    $scope.$on('socket:addTodo', function (event, todos) {
+      $scope.$apply(function() {
+        // UPDATE all the todos
+        $scope.zoink.todos = todos;
+      });
+    });
+
+    // DELETE TODO
+    $scope.removeTodo = function(rmTodo) {
+      var todo = { zoinkId: $routeParams.id, todo: rmTodo };
+      socket.emit('publish:rmTodo', todo);
+    };
+
+    $scope.$on('socket:rmTodo', function (event, todos) {
+      $scope.$apply(function() {
+        // UPDATE all the todos
+        $scope.zoink.todos = todos;
+      });
+    });
  
   }])
 
