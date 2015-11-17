@@ -12,6 +12,12 @@ var MessageSchema = new Schema({
   , createdAt   : { type: Date }
 });
 
+var RequirementSchema = new Schema({
+  title         : { type: String, required: true }
+  , userName    : String
+  , userPic     : String
+});
+
 var InviteSchema = new Schema({
     name        : String
   , email       : { type: String, select: false }
@@ -36,7 +42,7 @@ var ZoinkSchema = new Schema({
   , messages    : [MessageSchema]
   , purchases   : []
   , carpools    : []
-  , reqs        : []
+  , reqs        : [RequirementSchema]
 });
 
 MessageSchema.pre('save', function(next){
