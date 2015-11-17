@@ -22,9 +22,8 @@ DONE hide env variables
 
 ONBOARDING
   go to user profile/settings form after authenticating to 
-    - add image, 
-    - set password, 
     - phone number
+  update token upon user save
 
 ZOINK
   edit zoink in modal

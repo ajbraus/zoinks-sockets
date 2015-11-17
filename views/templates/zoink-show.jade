@@ -70,7 +70,7 @@
               .media-left
                 img.media-object.img-circle(ng-src='{{rsvp.picture}}', width='40px', alt='{{rsvp.name}}')
               .media-body
-                h5.media-heading {{rsvp.first || "You"}}
+                h5.media-heading {{rsvp.displayName || "You"}}
         .card
           .card-header.clearfix
             h5.pull-left Send Invites
