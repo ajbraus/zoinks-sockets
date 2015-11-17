@@ -164,8 +164,8 @@ angular.module('zoinks')
     };
 
     $scope.addRequirement = function() {
-      var reqs = { zoinkId: $routeParams.id, req: $scope.requirement };
-      socket.emit('publish:addReq', reqs);
+      var req = { zoinkId: $routeParams.id, req: $scope.requirement };
+      socket.emit('publish:addReq', req);
       $scope.requirement = [];
     };
 
@@ -178,8 +178,8 @@ angular.module('zoinks')
 
     // REQUIREMENTS DELETE
     $scope.removeRequirement = function(rmReq) {
-      var reqs = { zoinkId: $routeParams.id, req: rmReq };
-      socket.emit('publish:rmReq', reqs);
+      var req = { zoinkId: $routeParams.id, req: rmReq };
+      socket.emit('publish:rmReq', req);
     };
 
     $scope.$on('socket:rmReq', function (event, reqs) {
@@ -212,21 +212,6 @@ angular.module('zoinks')
       $scope.$apply(function() {
         // UPDATE all the reqs
         $scope.zoink.reqs = reqs;
-      });
-    });
-
-    // REQUIREMENTS DELETE
-    $scope.removeRequirement = function(rmReq) {
-      var reqs = { zoinkId: $routeParams.id, reqs: rmReq };
-      socket.emit('publish:rmReq', reqs);
-    };
-
-    $scope.$on('socket:rmReq', function (event, req) {
-      console.log('Req Removed');
-      $scope.$apply(function() {
-        // REMOVE FROM REQS
-        var index = $scope.zoink.reqs.indexOf(req.reqs);
-        $scope.zoink.reqs.splice(index, 1);
       });
     });
 
