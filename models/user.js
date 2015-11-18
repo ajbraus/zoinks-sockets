@@ -13,6 +13,7 @@ var UserSchema = new Schema({
   , first         : { type: String, trim: true }
   , last          : { type: String, trim: true }
   , notifications : { type: Number, default: 2 }
+  , phone         : { type: String, trim: true }
   , picture       : { type: String, required: true }
   , displayName   : { type: String, required: true, unique: true, trim: true, set: toLower }
   , email         : { type: String, required: true, unique: true, trim: true, set: toLower }

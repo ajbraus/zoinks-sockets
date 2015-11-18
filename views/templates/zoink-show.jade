@@ -7,7 +7,7 @@
       .pull-right.margin-top
         {{zoink.startsAt | date:'EEE MMM d, h:mma'}} - {{zoink.endsAt | date:'EEE MMM d, h:mma'}}
     .row
-      .col-sm-8
+      .col-sm-7
         .card
           .card-header.clearfix
             h5.pull-left Pitch In
@@ -66,7 +66,7 @@
                 input.form-control(type='text', ng-model='todo', focus-me='{{newTodo}}')
             .list-group
               .list-group-item(ng-repeat='todo in zoink.todos') {{todo}}
-      .col-sm-4
+      .col-sm-5
         .card
           .card-header.clearfix
             h5.pull-left RSVPs

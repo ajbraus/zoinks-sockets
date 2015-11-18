@@ -22,7 +22,9 @@ DONE hide env variables
 
 ONBOARDING (Adam)
   go to user profile/settings form after authenticating to 
-    - phone number
+    DONE - phone number
+    - require password if no password
+    - if username is already taken add integer to it
     - update token after updating
     - logging me out after updating
 
@@ -44,16 +46,14 @@ INVITES (Adam)
 RSVP (Adam)
   confirm or reject rsvp and unrsvp, invite or uninvite
   hide flake out button in gear in RSVP
+  unrsvp not adding email to invite
 
 PERMISSIONS
   Only allow RSVPED people to add things
   Only logged in people to message. Only can message if invited if inviteOnly
 
 MESSAGES
-  persist messages
-  add users to messages "username said 1 day ago" underneath message
   'angularMoment' for time ago it words in messages
-  remove messages - buggy with sockets
 
 PAYMENTS
   Start New Zoink - 5 RSVPS - free, 25 - 6.99, 100 - 12.99, 300 - 24.99, 1000 34.99
