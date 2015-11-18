@@ -172,6 +172,26 @@ module.exports = function (io, app) {
       });
     });
 
+    // TODOS
+    socket.on('publish:addTodo', function (data) {
+      Zoink.findById(data.zoinkId, function(err, zoink) {
+        zoink.todos.push(data.todo);
+
+        zoink.save();
+
+        io.sockets.in(data.zoinkId).emit('addTodo', zoink.todos);
+      });
+    });
+
+    socket.on('publish:rmTodo', function (data) {
+      Zoink.findById(data.zoinkId, function(err, zoink) {
+        var index = zoink.todos.indexOf(data.todo);
+        zoink.todos.splice(index, 1);
+        zoink.save();
+
+        io.sockets.in(data.zoinkId).emit('rmTodo', zoink.todos);
+      });
+    });
 
     // QUESTIONQUEUE
 

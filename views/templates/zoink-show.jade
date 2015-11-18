@@ -52,7 +52,7 @@
           .card-body
             form(ng-submit='addPurchase()', ng-show='newPurchase')
               .form-group
-                input.form-control(type='text', ng-model='purchase', focus-me='{{newTodo}}')
+                input.form-control(type='text', ng-model='purchase', focus-me='{{newPurchase}}')
             .list-group
               .list-group-item(ng-repeat='purchase in zoink.purchases') {{purchase}}
         .card
@@ -66,6 +66,8 @@
                 input.form-control(type='text', ng-model='todo', focus-me='{{newTodo}}')
             .list-group
               .list-group-item(ng-repeat='todo in zoink.todos') {{todo}}
+                span.pull-right
+                  button.close(ng-click='removeTodo(todo)') &#10006;
       .col-sm-5
         .card
           .card-header.clearfix
