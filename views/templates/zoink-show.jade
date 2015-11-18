@@ -66,10 +66,9 @@
                 input.form-control(type='text', ng-model='todo', focus-me='{{newTodo}}')
             .list-group
               .list-group-item(ng-repeat='todo in zoink.todos') {{todo}}
-      .col-sm-5
                 span.pull-right
                   button.close(ng-click='removeTodo(todo)') &#10006;
-
+      .col-sm-5
         .card
           .card-header.clearfix
             h5.pull-left RSVPs
