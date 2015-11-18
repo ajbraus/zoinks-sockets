@@ -4,6 +4,7 @@
 
 var Zoink = require('../models/zoink.js')
 var config = require('../config') 
+var _ = require('lodash')
 
 'use strict';
 
@@ -77,10 +78,8 @@ module.exports = function (io, app) {
 
     // MESSAGES
     socket.on('publish:addMessage', function (data) {
-      console.log(data)
+      console.log("new message", data)
       Zoink.findById(data.zoinkId, function(err, zoink) {
-        data.picture = data.picture
-        data.displayName = data.displayName
         zoink.messages.push(data);
         zoink.save();
         io.sockets.in(data.zoinkId).emit('addMessage', data)
@@ -88,12 +87,14 @@ module.exports = function (io, app) {
     })
 
     socket.on('publish:rmMessage', function (data) {
-      Zoink.findById(data.zoinkId, function(err, zoink) {
-        var index = zoink.messages.indexOf(data.content);
-        zoink.messages.splice(index, 1);
-        zoink.save();
-        io.sockets.in(data.zoinkId).emit('rmMessage', data.content)
-      })
+      var message = data.message
+      Zoink.findByIdAndUpdate(data.zoinkId, {
+        $pull: {
+          messages: {_id: message._id}
+        }
+      }, function(err, zoink) {
+        io.sockets.in(data.zoinkId).emit('rmMessage', message);
+      });
     })
 
     // RSVPS

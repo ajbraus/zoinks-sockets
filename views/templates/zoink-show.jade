@@ -97,10 +97,14 @@
 .col-sm-4.chat.box-shadow-left.whole-height
   div(ng-repeat="message in zoink.messages")
     {{message.content}}
-    p.small.text-right.text-muted said by {{message.displayName}} 
-    .text-right(ng-click="rmMessage(message)") 
-      .btn.btn-sm.btn-default
-        i.icon.ion-eject.large
+    .small.text-right.text-muted said by {{message.displayName}}&nbsp;
+      .text-muted.pull-right.dropdown(ng-show="message.displayName == currentUser.displayName") 
+        a#dropdownMenu1.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
+          i.icon.ion-gear-b
+        ul.dropdown-menu(aria-labelledby='dropdownMenu1')
+          li
+            a(href="" ng-click="rmMessage(message)") Delete Message
+
   form(ng-submit='addMessage()')
     .form-group
       textarea.form-control(name='', id='', ng-model='message.content' ng-keyup="$event.keyCode == 13 && addMessage()")

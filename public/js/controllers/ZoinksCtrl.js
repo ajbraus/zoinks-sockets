@@ -49,9 +49,7 @@ angular.module('zoinks')
 
     $scope.$on('socket:rmInvite', function (event, invite) {
       $scope.$apply(function() {
-        _.remove($scope.zoink.invites, function(el) {
-          el._id == invite._id
-        })
+        $scope.zoink.invites = _.reject($scope.zoink.invites, '_id', invite._id)
       });
     });
 
@@ -63,34 +61,29 @@ angular.module('zoinks')
                        picture: currentUser.picture, 
                        displayName: currentUser.displayName
                      }
-                     
+
     $scope.addMessage = function() {
       socket.emit('publish:addMessage', $scope.message)
     }
 
     $scope.$on('socket:addMessage', function (event, message) {
       console.log('message added')
-      // if (invite.zoinkId == $scope.zoink._id) {
-        $scope.$apply(function() {
-          $scope.zoink.messages.push(message);
-          $scope.message.content = '';
-        });
-      // };
+      $scope.$apply(function() {
+        $scope.zoink.messages.push(message);
+        $scope.message.content = '';
+      });
     });
 
     // REMOVE MESSAGE
-    $scope.rmMessage = function(content) {
-      var message = { zoinkId: $routeParams.id, content: content }
+    $scope.rmMessage = function(message) {
+      var message = { zoinkId: $routeParams.id, message: message }
       socket.emit('publish:rmMessage', message)
     }
 
     $scope.$on('socket:rmMessage', function (event, message) {
-      // if (invite.zoinkId == $scope.zoink._id) {
-        $scope.$apply(function() {
-          var index = $scope.zoink.messages.indexOf(message);
-          $scope.zoink.messages.splice(index, 1);
-        });
-      // };
+      $scope.$apply(function() {
+        $scope.zoink.messages = _.reject($scope.zoink.messages, '_id', message._id);
+      });
     });
 
     // RSVP

@@ -74,6 +74,7 @@ angular.module('zoinks')
           // toastr.success('You have successfully signed in with ' + provider);
           $('#login-modal').modal('hide');
           $scope.isAuthenticated();
+          $location.path('/profile')
         })
         .catch(function(response) {
           console.log(response)
