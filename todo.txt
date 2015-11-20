@@ -40,6 +40,7 @@ ZOINK
   DONE add todos
   DONE add requirements
     DONE claim requirements (one owner)
+    not working
   add carpools
     rspv to carpools (has multiple passengers)
   add costs
@@ -52,6 +53,7 @@ PERMISSIONS
 MESSAGES
   'angularMoment' for time ago it words in messages
   messages embedded is a problem - sending always!
+  styling
 
 PAYMENTS
   Start New Zoink - 5 RSVPS - free, 25 - 6.99, 100 - 12.99, 300 - 24.99, 1000 34.99
