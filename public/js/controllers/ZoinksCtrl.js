@@ -3,6 +3,7 @@
 /* ZOINKS Controllers */
 
 angular.module('zoinks')
+
   .controller('ZoinkShowCtrl', ['$scope', '$routeParams', 'Zoink', 'socket', '$auth', 'Auth', function($scope, $routeParams, Zoink, socket, $auth, Auth) {
     if ($auth.isAuthenticated()) {
       var currentUser = Auth.currentUser()
@@ -34,10 +35,9 @@ angular.module('zoinks')
       $scope.toggleNewInvite();
     }
 
-    $scope.$on('socket:addInvite', function (event, invite) {
-      // display error if already invited
+    $scope.$on('socket:addInvite', function (event, invites) {
       $scope.$apply(function() {
-        $scope.zoink.invites.push(invite);
+        $scope.zoink.invites = invites;
       });
     });
 
@@ -47,9 +47,9 @@ angular.module('zoinks')
       socket.emit('publish:rmInvite', invite)
     }
 
-    $scope.$on('socket:rmInvite', function (event, invite) {
+    $scope.$on('socket:rmInvite', function (event, invites) {
       $scope.$apply(function() {
-        $scope.zoink.invites = _.reject($scope.zoink.invites, '_id', invite._id)
+        $scope.zoink.invites = invites;
       });
     });
 
@@ -95,17 +95,13 @@ angular.module('zoinks')
     }
 
     $scope.$on('socket:addRsvp', function (event, user) {
-      console.log('Rsvp Added')
       $scope.$apply(function() {
         // ADD TO RSVPS
-        console.log(user)
         $scope.zoink.rsvps.push(user);
 
-        // REMOVE FROM INVITES (if in invites)
-        var index = $scope.zoink.invites.indexOf(user.email);
-        if (index > -1) {
-          $scope.zoink.invites.splice(index, 1);
-        }
+        // REMOVE FROM INVITES
+        var index = user.email.indexOf(_.pluck($scope.zoink.invites, 'email'));
+        $scope.zoink.invites.splice(index, 1);
         
         $scope.rsvped = true;
         $scope.invited = false;
@@ -122,7 +118,12 @@ angular.module('zoinks')
       console.log('Rsvp Removed')
       $scope.$apply(function() {
         // ADD BACK TO INVITES
-        $scope.zoink.invites.push(user.email);
+        var invite = {
+          displayName: user.displayName,
+          email: user.email,
+          picture: user.picture
+        }
+        $scope.zoink.invites.push(invite);
 
         // REMOVE FROM RSVPS
         var index = user._id.indexOf(_.pluck($scope.zoink.rsvps, '_id'));

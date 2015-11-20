@@ -28,10 +28,16 @@ ONBOARDING (Adam)
     - update token after updating
     - logging me out after updating
 
+INVITES/RSVPS (Adam)
+  invite modal - Zoink Username (autocomplete w picture) or Name and Email
+  check if already invited on server
+  uninvite dropdown busted
+  invites foggy, rsvps clear
+
 ZOINK
   Edit Zoink in modal
   Archive zoink (with confirmation!)
-  add todos
+  DONE add todos
   DONE add requirements
     DONE claim requirements (one owner)
   add carpools
@@ -39,21 +45,13 @@ ZOINK
   add costs
     square up users to costs
 
-INVITES (Adam)
-  invite modal - Zoink Username (autocomplete w picture) or Name and Email
-  check if already invited on server
-
-RSVP (Adam)
-  confirm or reject rsvp and unrsvp, invite or uninvite
-  hide flake out button in gear in RSVP
-  unrsvp not adding email to invite
-
 PERMISSIONS
   Only allow RSVPED people to add things
   Only logged in people to message. Only can message if invited if inviteOnly
 
 MESSAGES
   'angularMoment' for time ago it words in messages
+  messages embedded is a problem - sending always!
 
 PAYMENTS
   Start New Zoink - 5 RSVPS - free, 25 - 6.99, 100 - 12.99, 300 - 24.99, 1000 34.99

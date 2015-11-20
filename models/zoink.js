@@ -13,15 +13,16 @@ var MessageSchema = new Schema({
 });
 
 var RequirementSchema = new Schema({
-  title         : { type: String, required: true }
+    title         : { type: String, required: true }
   , userName    : String
   , userPic     : String
 });
 
 var InviteSchema = new Schema({
-    name        : String
+    displayName : String
   , email       : { type: String, select: false }
-  , createdAt   : { type: Date }
+  , picture     : String
+  , createdAt   : Date
 });
 
 var ZoinkSchema = new Schema({
@@ -36,7 +37,6 @@ var ZoinkSchema = new Schema({
   , title       : { type: String, required: true, trim: true }
   , desc        : String
   , invites     : [InviteSchema]
-  , userInvites : [{ type : Schema.Types.ObjectId, ref : 'User' }]
   , rsvps       : [{ type : Schema.Types.ObjectId, ref : 'User' }]
   , todos       : []
   , messages    : [MessageSchema]

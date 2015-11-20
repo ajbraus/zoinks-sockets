@@ -3,6 +3,7 @@
  */
 
 var Zoink = require('../models/zoink.js')
+var User = require('../models/user.js')
 var config = require('../config') 
 var _ = require('lodash')
 
@@ -50,31 +51,76 @@ module.exports = function (io, app) {
     // INVITES
     socket.on('publish:addInvite', function (data) {
       Zoink.findById(data.zoinkId, function(err, zoink) {
-        var invite = { name: data.name, email: data.email };
-        zoink.invites.push(invite);
-        zoink.save(function(err) {
-          // SEND INVITE EMAIL
-          app.mailer.send('emails/new-invite', {
-            to: data.email, // REQUIRED. This can be a comma delimited string just like a normal email to field.  
-            subject: 'Zoinks! A New Invite', // REQUIRED. 
-            zoink: zoink,  // All additional properties are also passed to the template as local variables. 
-            userName: data.name
-          }, function (err) {
-            if (err) { console.log(err); return }
-          });
+        var invite = { displayName: data.displayName, email: data.email };
 
-          io.sockets.in(data.zoinkId).emit('addInvite', data)
-        });
+        User.findOne({ displayName: data.displayName }, function(err, user) {
+          if (user) {
+            invite.picture = user.picture;
+          }
+
+          zoink.invites.push(invite);
+          zoink.save(function(err) {
+            // SEND INVITE EMAIL
+            app.mailer.send('emails/new-invite', {
+              to: data.email, // REQUIRED. This can be a comma delimited string just like a normal email to field.  
+              subject: 'Zoinks! A New Invite', // REQUIRED. 
+              zoink: zoink,  // All additional properties are also passed to the template as local variables. 
+              userName: data.displayName
+            }, function (err) {
+              if (err) { console.log(err); return }
+            });
+
+            io.sockets.in(data.zoinkId).emit('addInvite', zoink.invites)
+          });
+        })
       })
     })
 
     socket.on('publish:rmInvite', function (data) {
-      Zoink.findById(data.zoinkId, function(err, zoink) {
-        zoink.invites.id(data.invite._id).remove();
-        zoink.save();
-        io.sockets.in(data.zoinkId).emit('rmInvite', data.invite)
-      })
+      Zoink.findByIdAndUpdate(data.zoinkId, {
+        $pull: {
+          invites: {_id: data.invite._id}
+        }
+      }, function(err, zoink) {
+        io.sockets.in(data.zoinkId).emit('rmInvite', zoink.invites)
+      });
     })
+
+    // RSVPS
+    socket.on('publish:addRsvp', function (data) {
+      var user = data.user;
+      Zoink.findById(data.zoinkId, function(err, zoink) {
+        // ADD RSVPED USER
+        zoink.rsvps.push(user._id);
+
+        // REMOVE INVITE (FILTER INVITE BY MATCHING EMAIL)
+        zoink.invites = _.filter(zoink.invites, _.matches({ email: user.email }));
+
+        zoink.save();
+
+        io.sockets.in(data.zoinkId).emit('addRsvp', data.user);
+      });
+    });
+
+    socket.on('publish:rmRsvp', function (data) {
+      Zoink.findById(data.zoinkId, function(err, zoink) {
+        // REMOVE RSVP
+        var index = data.user._id.indexOf(zoink.rsvps);
+        zoink.rsvps.splice(index, 1);
+
+        // ADD NEW INVITE BASED ON RSVP
+        var invite = {
+          name: data.user.displayName,
+          email: data.user.email,
+          picture: data.user.picture
+        }
+        zoink.invites.push(invite);
+
+        zoink.save();
+
+        io.sockets.in(data.zoinkId).emit('rmRsvp', data.user);
+      });
+    });
 
     // MESSAGES
     socket.on('publish:addMessage', function (data) {
@@ -96,37 +142,6 @@ module.exports = function (io, app) {
         io.sockets.in(data.zoinkId).emit('rmMessage', message);
       });
     })
-
-    // RSVPS
-    socket.on('publish:addRsvp', function (data) {
-      Zoink.findById(data.zoinkId, function(err, zoink) {
-        zoink.rsvps.push(data.user._id);
-
-        var index = data.user.email.indexOf(zoink.invites);
-        zoink.invites.splice(index, 1);
-
-        zoink.save();
-
-        // TODO email host
-
-        io.sockets.in(data.zoinkId).emit('addRsvp', data.user);
-      });
-    });
-
-    socket.on('publish:rmRsvp', function (data) {
-      Zoink.findById(data.zoinkId, function(err, zoink) {
-        var index = data.user._id.indexOf(zoink.rsvps);
-        zoink.rsvps.splice(index, 1);
-
-        zoink.invites.push(data.user.email);
-
-        zoink.save();
-
-        // TODO email host
-
-        io.sockets.in(data.zoinkId).emit('rmRsvp', data.user);
-      });
-    });
 
     // REQS
     socket.on('publish:addReq', function (data) {
