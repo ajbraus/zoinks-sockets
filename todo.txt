@@ -1,24 +1,5 @@
-DONE get to work
-DONE create zoink
-DONE add invites with sockets
-DONE prevent dup invites
-DONE remove invite
-DONE add messages with sockets
-DONE make each zoink a room
-DONE login not working
-
-DONE allow to rsvp if invited
-DONE rsvp with sockets
-DONE unrsvp adds you back to invited
-DONE replace HOST with $window.location.host
-DONE When adding zoink make zoinks dropdown appear
-
-DONE Associate new zoink with creator
-  DONE rsvp creator
-
-DONE set startsAt/endsat
-DONE allow private or unlisted event (rsvp without being in invite list)
-DONE hide env variables
+pry = require('pryjs')
+eval(pry.it)
 
 ONBOARDING (Adam)
   go to user profile/settings form after authenticating to 
@@ -81,3 +62,26 @@ like zoinksapp: div(class="fb-like", data-share="true", data-width="450", data-s
 
 icebox:
   add event images - instagram #
+
+
+DONE get to work
+DONE create zoink
+DONE add invites with sockets
+DONE prevent dup invites
+DONE remove invite
+DONE add messages with sockets
+DONE make each zoink a room
+DONE login not working
+
+DONE allow to rsvp if invited
+DONE rsvp with sockets
+DONE unrsvp adds you back to invited
+DONE replace HOST with $window.location.host
+DONE When adding zoink make zoinks dropdown appear
+
+DONE Associate new zoink with creator
+  DONE rsvp creator
+
+DONE set startsAt/endsat
+DONE allow private or unlisted event (rsvp without being in invite list)
+DONE hide env variables

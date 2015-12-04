@@ -27,10 +27,10 @@ var InviteSchema = new Schema({
 
 var ZoinkSchema = new Schema({
     user        : { type : Schema.Types.ObjectId, ref : 'User' }
-  , slug        : { type: String, default: '', trim: true, unique: true }
+  , slug        : { type: String, default: '', trim: true } //, unique: true
   , createdAt   : Date
   , updatedAt   : Date
-  , location    : String
+  , location    : { type: String, default: '', trim: true }
   , startsAt    : Date
   , endsAt      : Date
   , inviteOnly  : { type: Boolean, default: false }
@@ -66,9 +66,12 @@ InviteSchema.pre('save', function(next){
 ZoinkSchema.pre('save', function(next){
   // SET slug
   var slug = (this.title + this.location).replace(/\s+/g, '-').toLowerCase();
-  Zoink.find({ slug: slug}).exec(function(zoinks) {
-    if (zoinks) {
-      slug = slug + "-" + zoinks.length
+  console.log(slug)
+  Zoink.findOne({ slug: slug}).exec(function(zoink) {
+    console.log("zoinks with slug", zoink)
+    var num = Math.floor(Math.random()*90000) + 10000;
+    if (zoink) {
+      slug = slug + "-" + num
     }
     this.slug = slug
   })

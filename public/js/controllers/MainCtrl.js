@@ -10,9 +10,9 @@ angular.module('zoinks')
     $scope.zoink = {};
     
     $scope.createZoink = function() {
-      console.log('hello')
       var zoink = new Zoink($scope.zoink)
       zoink.$save(function(zoink) {
+        console.log('zoink id', zoink)
         $location.path('/zoinks/' + zoink._id)
         $('#new-zoink').modal('hide');
         $scope.zoinks = Zoink.query();

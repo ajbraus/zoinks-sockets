@@ -19,7 +19,6 @@ module.exports = function(app) {
   // USER's INVITES
   app.get('/api/invites', auth.ensureAuthenticated, function(req, res) {
     Zoink.find({ invites: req.userEmail }, function(err, zoinks) {
-      console.log(zoinks)
       res.send(zoinks);
     });
   });
@@ -38,16 +37,11 @@ module.exports = function(app) {
     var zoink = new Zoink(req.body);
     console.log('new zoink', zoink);
     zoink.user = req.userId;
-    User.findById(req.userId, function (err, user) {
-      console.log('hell')
-      console.log(user)
-      if (err) { return console.log(err) }
-      zoink.rsvps.push(user);
-      zoink.save(function (err) {
-        if (err) { return res.send(err) };
-        res.status(201).json(zoink); 
-      });      
-    })
+    zoink.rsvps.push(req.userId);
+    zoink.save(function (err) {
+      if (err) { return res.send(err) };
+      res.status(201).json(zoink); 
+    });
   });
 
   // // UPDATE
