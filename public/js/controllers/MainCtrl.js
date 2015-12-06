@@ -3,9 +3,7 @@
 /* MAIN Controller */
 
 angular.module('zoinks')
-  .controller('MainCtrl', ['$scope', '$rootScope', '$location', 'Zoink', '$auth', '$http', 'Invite',  function($scope, $rootScope, $location, Zoink, $auth, $http, Invite) {
-
-
+  .controller('MainCtrl', ['$scope', '$rootScope', '$location', 'Zoink', '$auth', '$http', 'Invite',  function ($scope, $rootScope, $location, Zoink, $auth, $http, Invite) {
     // NEW ZOINK
     $scope.zoink = {};
     
@@ -70,7 +68,8 @@ angular.module('zoinks')
 
     $scope.authenticate = function(provider) {
       $auth.authenticate(provider)
-        .then(function() {
+        .then(function (response) {
+          $auth.setToken(response.data.token);
           // toastr.success('You have successfully signed in with ' + provider);
           $('#login-modal').modal('hide');
           $scope.isAuthenticated();

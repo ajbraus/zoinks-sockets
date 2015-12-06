@@ -1,22 +1,24 @@
-.col-sm-8
+
+{{currentUser}}
+.col-sm-9
   .container-fluid
     .col-sm-4
       .clearfix.margin-top
         h4 {{zoink.title}} 
         .text-muted 
             a(href='http://maps.google.com/?q={{zoink.location}}', target='_blank') {{zoink.location}}
-        .margin-top
+        .margin-top(ng-show="zoink.startsAt || zoink.endsAt")
           | Starts at: {{zoink.startsAt | date:'EEE MMM d, h:mma'}}
           br
           | Finishes: {{zoink.endsAt | date:'EEE MMM d, h:mma'}}
         .margin-top
-        a.btn.btn-primary.btn-block(ng-click='rsvp()', ng-disabled='rsvped || (zoink.inviteOnly && !invited)' ng-hide="rsvped") RSVP
-        .btn.btn-default.btn-block.dropdown(ng-show="rsvped") 
-          a.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
-            | Unrsvp
-          ul.dropdown-menu
-            li
-              a(href="" ng-click="unrsvp()") Flake Out
+          a.btn.btn-primary(ng-click='rsvp()', ng-disabled='rsvped || (zoink.inviteOnly && !invited)' ng-hide="rsvped") RSVP
+          .btn.btn-default.dropdown(ng-show="rsvped") 
+            a.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
+              | Unrsvp
+            ul.dropdown-menu
+              li
+                a(href="" ng-click="unrsvp()") Flake Out
         .card
           .card-header.clearfix
             h5.pull-left RSVPs

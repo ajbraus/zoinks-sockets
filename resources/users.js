@@ -115,7 +115,7 @@ module.exports = function(app) {
               user.displayName = user.displayName || profile.name;
               user.first = profile.first_name;
               user.last = profile.last_name;
-              user.save(function() {
+              user.save(function (err) {
                 var token = auth.createJWT(user);
                 res.send({ token: token });
               });
@@ -183,7 +183,7 @@ module.exports = function(app) {
               user.google = profile.sub;
               user.picture = user.picture || profile.picture.replace('sz=50', 'sz=200');
               user.displayName = user.displayName || profile.name;
-              user.save(function() {
+              user.save(function (err) {
                 var token = auth.createJWT(user);
                 res.send({ token: token });
               });
@@ -203,7 +203,7 @@ module.exports = function(app) {
             user.picture = profile.picture.replace('sz=50', 'sz=200');
             user.displayName = profile.name;
             user.email = profile.email;
-            user.save(function(err) {
+            user.save(function (err) {
               console.log('err:', err);
               var token = auth.createJWT(user);
               res.send({ token: token });

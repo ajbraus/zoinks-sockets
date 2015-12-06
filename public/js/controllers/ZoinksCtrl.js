@@ -7,7 +7,9 @@ angular.module('zoinks')
   .controller('ZoinkShowCtrl', ['$scope', '$routeParams', 'Zoink', 'socket', '$auth', 'Auth', function($scope, $routeParams, Zoink, socket, $auth, Auth) {
     if ($auth.isAuthenticated()) {
       var currentUser = Auth.currentUser()
+      $scope.currentUser = currentUser;
     }
+
 
     Zoink.get({ id: $routeParams.id }, function(data) {
       $scope.zoink = data
