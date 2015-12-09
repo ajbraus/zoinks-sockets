@@ -1,3 +1,4 @@
+
 pry = require('pryjs')
 eval(pry.it)
 
@@ -64,6 +65,10 @@ icebox:
   add event images - instagram #
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 28b0dedd7d39179fa034b4563db3df4b39d3333e
 DONE get to work
 DONE create zoink
 DONE add invites with sockets
@@ -84,4 +89,8 @@ DONE Associate new zoink with creator
 
 DONE set startsAt/endsat
 DONE allow private or unlisted event (rsvp without being in invite list)
+<<<<<<< HEAD
 DONE hide env variables
+=======
+DONE hide env variables
+>>>>>>> 28b0dedd7d39179fa034b4563db3df4b39d3333e

@@ -115,6 +115,7 @@ module.exports = function (io, app) {
           picture: data.user.picture
         }
         zoink.invites.push(invite);
+        console.log(zoink)
 
         zoink.save();
 
