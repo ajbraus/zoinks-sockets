@@ -40,6 +40,7 @@ angular.module('zoinks.services', [])
     socket.forward('rmMessage');
     socket.forward('addRsvp');
     socket.forward('rmRsvp');
+    socket.forward('addCar');
     socket.forward('addReq');
     socket.forward('rmReq');
     socket.forward('clReq');

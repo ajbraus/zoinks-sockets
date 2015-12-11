@@ -147,12 +147,23 @@ angular.module('zoinks')
     $scope.toggleNewCarpool = function() {
       $scope.newCarpool = !$scope.newCarpool;
     };
+
+    $scope.carpool = {};
     $scope.addCarpool = function() {
       // carpool.driver = currentUser;
-      $scope.zoink.carpools.unshift($scope.carpool)
-      $scope.newCarpool = false;
+      // $scope.zoink.carpools.unshift($scope.carpool)
+      var car = { zoinkId: $routeParams.id, car: $scope.carpool.name };
+      socket.emit('publish:addCar', car);
       $scope.carpool = {};
     };
+
+    $scope.$on('socket:addCar', function (event, cars) {
+      $scope.$apply(function() {
+        // UPDATE all the cars
+        console.log(cars);
+        $scope.zoink.carpools = cars;
+      });
+    });
 
     // REQUIREMENTS NEW
     $scope.toggleNewRequirement = function() {
@@ -163,6 +174,7 @@ angular.module('zoinks')
     $scope.addRequirement = function() {
       var req = { zoinkId: $routeParams.id, req: $scope.requirement.name };
       socket.emit('publish:addReq', req);
+      $scope.newRequirement = false;
       $scope.requirement = [];
     };
 
