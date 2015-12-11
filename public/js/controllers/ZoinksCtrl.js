@@ -159,8 +159,9 @@ angular.module('zoinks')
       $scope.newRequirement = !$scope.newRequirement;
     };
 
+    $scope.requirement = {};
     $scope.addRequirement = function() {
-      var req = { zoinkId: $routeParams.id, req: $scope.requirement };
+      var req = { zoinkId: $routeParams.id, req: $scope.requirement.name };
       socket.emit('publish:addReq', req);
       $scope.requirement = [];
     };

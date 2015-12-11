@@ -56,7 +56,7 @@
             .card-body
               form(ng-submit='addRequirement()', ng-show='newRequirement')
                 .form-group
-                  input.form-control(type='text', ng-model='requirement', focus-me='{{newRequirement}}')
+                  input.form-control(type='text', ng-model='requirement.name', focus-me='{{newRequirement}}')
               .list-group
                 .list-group-item(ng-repeat='r in zoink.reqs') {{r.title}}
                   span.pull-right 
