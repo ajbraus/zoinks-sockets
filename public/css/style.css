@@ -185,3 +185,7 @@ fieldset {
 .big {
   font-size:150%;
 }
+
+.toast-top-right {
+  top: 80px;
+}

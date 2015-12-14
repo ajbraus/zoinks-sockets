@@ -30,7 +30,6 @@ module.exports = {
 	createJWT: function(user) {
 	  var payload = {
 	    sub: user._id,
-	    email: user.email,
 	    name: user.fullname,
 	    picture: user.picture,
 	    displayName: user.displayName,
