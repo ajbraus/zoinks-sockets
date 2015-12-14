@@ -1,10 +1,6 @@
 {
   "name": "angular",
-<<<<<<< HEAD
-  "version": "1.4.7",
-=======
   "version": "1.4.8",
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
   "main": "./angular.js",
   "ignore": [],
   "dependencies": {

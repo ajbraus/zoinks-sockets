@@ -1,9 +1,5 @@
 /**
-<<<<<<< HEAD
- * @license AngularJS v1.4.7
-=======
  * @license AngularJS v1.4.8
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
  * (c) 2010-2015 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -61,11 +57,7 @@ function minErr(module, ErrorConstructor) {
       return match;
     });
 
-<<<<<<< HEAD
-    message += '\nhttp://errors.angularjs.org/1.4.7/' +
-=======
     message += '\nhttp://errors.angularjs.org/1.4.8/' +
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
       (module ? module + '/' : '') + code;
 
     for (i = SKIP_INDEXES, paramPrefix = '?'; i < templateArgs.length; i++, paramPrefix = '&') {
@@ -437,13 +429,10 @@ function baseExtend(dst, objs, deep) {
           dst[key] = new Date(src.valueOf());
         } else if (isRegExp(src)) {
           dst[key] = new RegExp(src);
-<<<<<<< HEAD
-=======
         } else if (src.nodeName) {
           dst[key] = src.cloneNode(true);
         } else if (isElement(src)) {
           dst[key] = src.clone();
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
         } else {
           if (!isObject(dst[key])) dst[key] = isArray(src) ? [] : {};
           baseExtend(dst[key], [src], true);
@@ -559,11 +548,7 @@ identity.$inject = [];
 function valueFn(value) {return function() {return value;};}
 
 function hasCustomToString(obj) {
-<<<<<<< HEAD
-  return isFunction(obj.toString) && obj.toString !== Object.prototype.toString;
-=======
   return isFunction(obj.toString) && obj.toString !== toString;
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
 }
 
 
@@ -762,15 +747,9 @@ function isPromiseLike(obj) {
 }
 
 
-<<<<<<< HEAD
-var TYPED_ARRAY_REGEXP = /^\[object (Uint8(Clamped)?)|(Uint16)|(Uint32)|(Int8)|(Int16)|(Int32)|(Float(32)|(64))Array\]$/;
-function isTypedArray(value) {
-  return TYPED_ARRAY_REGEXP.test(toString.call(value));
-=======
 var TYPED_ARRAY_REGEXP = /^\[object (?:Uint8|Uint8Clamped|Uint16|Uint32|Int8|Int16|Int32|Float32|Float64)Array\]$/;
 function isTypedArray(value) {
   return value && isNumber(value.length) && TYPED_ARRAY_REGEXP.test(toString.call(value));
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
 }
 
 
@@ -892,50 +871,6 @@ function arrayRemove(array, value) {
  </file>
  </example>
  */
-<<<<<<< HEAD
-function copy(source, destination, stackSource, stackDest) {
-  if (isWindow(source) || isScope(source)) {
-    throw ngMinErr('cpws',
-      "Can't copy! Making copies of Window or Scope instances is not supported.");
-  }
-  if (isTypedArray(destination)) {
-    throw ngMinErr('cpta',
-      "Can't copy! TypedArray destination cannot be mutated.");
-  }
-
-  if (!destination) {
-    destination = source;
-    if (isObject(source)) {
-      var index;
-      if (stackSource && (index = stackSource.indexOf(source)) !== -1) {
-        return stackDest[index];
-      }
-
-      // TypedArray, Date and RegExp have specific copy functionality and must be
-      // pushed onto the stack before returning.
-      // Array and other objects create the base object and recurse to copy child
-      // objects. The array/object will be pushed onto the stack when recursed.
-      if (isArray(source)) {
-        return copy(source, [], stackSource, stackDest);
-      } else if (isTypedArray(source)) {
-        destination = new source.constructor(source);
-      } else if (isDate(source)) {
-        destination = new Date(source.getTime());
-      } else if (isRegExp(source)) {
-        destination = new RegExp(source.source, source.toString().match(/[^\/]*$/)[0]);
-        destination.lastIndex = source.lastIndex;
-      } else if (isFunction(source.cloneNode)) {
-          destination = source.cloneNode(true);
-      } else {
-        var emptyObject = Object.create(getPrototypeOf(source));
-        return copy(source, emptyObject, stackSource, stackDest);
-      }
-
-      if (stackDest) {
-        stackSource.push(source);
-        stackDest.push(destination);
-      }
-=======
 function copy(source, destination) {
   var stackSource = [];
   var stackDest = [];
@@ -946,7 +881,6 @@ function copy(source, destination) {
     }
     if (source === destination) {
       throw ngMinErr('cpi', "Can't copy! Source and destination are identical.");
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
     }
 
     // Empty the destination object
@@ -960,18 +894,6 @@ function copy(source, destination) {
       });
     }
 
-<<<<<<< HEAD
-    if (isObject(source)) {
-      stackSource.push(source);
-      stackDest.push(destination);
-    }
-
-    var result, key;
-    if (isArray(source)) {
-      destination.length = 0;
-      for (var i = 0; i < source.length; i++) {
-        destination.push(copy(source[i], null, stackSource, stackDest));
-=======
     stackSource.push(source);
     stackDest.push(destination);
     return copyRecurse(source, destination);
@@ -985,39 +907,17 @@ function copy(source, destination) {
     if (isArray(source)) {
       for (var i = 0, ii = source.length; i < ii; i++) {
         destination.push(copyElement(source[i]));
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
       }
     } else if (isBlankObject(source)) {
       // createMap() fast path --- Safe to avoid hasOwnProperty check because prototype chain is empty
       for (key in source) {
         destination[key] = copyElement(source[key]);
       }
-<<<<<<< HEAD
-      if (isBlankObject(source)) {
-        // createMap() fast path --- Safe to avoid hasOwnProperty check because prototype chain is empty
-        for (key in source) {
-          destination[key] = copy(source[key], null, stackSource, stackDest);
-        }
-      } else if (source && typeof source.hasOwnProperty === 'function') {
-        // Slow path, which must rely on hasOwnProperty
-        for (key in source) {
-          if (source.hasOwnProperty(key)) {
-            destination[key] = copy(source[key], null, stackSource, stackDest);
-          }
-        }
-      } else {
-        // Slowest path --- hasOwnProperty can't be called as a method
-        for (key in source) {
-          if (hasOwnProperty.call(source, key)) {
-            destination[key] = copy(source[key], null, stackSource, stackDest);
-          }
-=======
     } else if (source && typeof source.hasOwnProperty === 'function') {
       // Slow path, which must rely on hasOwnProperty
       for (key in source) {
         if (source.hasOwnProperty(key)) {
           destination[key] = copyElement(source[key]);
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
         }
       }
     } else {
@@ -1043,8 +943,6 @@ function copy(source, destination) {
     if (index !== -1) {
       return stackDest[index];
     }
-<<<<<<< HEAD
-=======
 
     if (isWindow(source) || isScope(source)) {
       throw ngMinErr('cpws',
@@ -1077,7 +975,6 @@ function copy(source, destination) {
     return needsRecurse
       ? copyRecurse(source, destination)
       : destination;
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
   }
 }
 
@@ -1180,7 +1077,6 @@ function equals(o1, o2) {
 
 var csp = function() {
   if (!isDefined(csp.rules)) {
-<<<<<<< HEAD
 
 
     var ngCspElement = (document.querySelector('[ng-csp]') ||
@@ -1203,30 +1099,6 @@ var csp = function() {
 
   return csp.rules;
 
-=======
-
-
-    var ngCspElement = (document.querySelector('[ng-csp]') ||
-                    document.querySelector('[data-ng-csp]'));
-
-    if (ngCspElement) {
-      var ngCspAttribute = ngCspElement.getAttribute('ng-csp') ||
-                    ngCspElement.getAttribute('data-ng-csp');
-      csp.rules = {
-        noUnsafeEval: !ngCspAttribute || (ngCspAttribute.indexOf('no-unsafe-eval') !== -1),
-        noInlineStyle: !ngCspAttribute || (ngCspAttribute.indexOf('no-inline-style') !== -1)
-      };
-    } else {
-      csp.rules = {
-        noUnsafeEval: noUnsafeEval(),
-        noInlineStyle: false
-      };
-    }
-  }
-
-  return csp.rules;
-
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
   function noUnsafeEval() {
     try {
       /* jshint -W031, -W054 */
@@ -2526,19 +2398,11 @@ function toDebugString(obj) {
  * - `codeName` – `{string}` – Code name of the release, such as "jiggling-armfat".
  */
 var version = {
-<<<<<<< HEAD
-  full: '1.4.7',    // all of these placeholder strings will be replaced by grunt's
-  major: 1,    // package task
-  minor: 4,
-  dot: 7,
-  codeName: 'dark-luminescence'
-=======
   full: '1.4.8',    // all of these placeholder strings will be replaced by grunt's
   major: 1,    // package task
   minor: 4,
   dot: 8,
   codeName: 'ice-manipulation'
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
 };
 
 
@@ -4724,11 +4588,7 @@ function $AnchorScrollProvider() {
    * When called, it scrolls to the element related to the specified `hash` or (if omitted) to the
    * current value of {@link ng.$location#hash $location.hash()}, according to the rules specified
    * in the
-<<<<<<< HEAD
-   * [HTML5 spec](http://dev.w3.org/html5/spec/Overview.html#the-indicated-part-of-the-document).
-=======
    * [HTML5 spec](http://www.w3.org/html/wg/drafts/html/master/browsers.html#the-indicated-part-of-the-document).
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
    *
    * It also watches the {@link ng.$location#hash $location.hash()} and automatically scrolls to
    * match any anchor whenever it changes. This can be disabled by calling
@@ -5157,7 +5017,6 @@ var $AnimateProvider = ['$provide', function($provide) {
    *   The element to animate, the `doneFunction` and the options fed into the animation. Depending
    *   on the type of animation additional arguments will be injected into the animation function. The
    *   list below explains the function signatures for the different animation methods:
-<<<<<<< HEAD
    *
    *   - setClass: function(element, addedClasses, removedClasses, doneFunction, options)
    *   - addClass: function(element, addedClasses, doneFunction, options)
@@ -5165,15 +5024,6 @@ var $AnimateProvider = ['$provide', function($provide) {
    *   - enter, leave, move: function(element, doneFunction, options)
    *   - animate: function(element, fromStyles, toStyles, doneFunction, options)
    *
-=======
-   *
-   *   - setClass: function(element, addedClasses, removedClasses, doneFunction, options)
-   *   - addClass: function(element, addedClasses, doneFunction, options)
-   *   - removeClass: function(element, removedClasses, doneFunction, options)
-   *   - enter, leave, move: function(element, doneFunction, options)
-   *   - animate: function(element, fromStyles, toStyles, doneFunction, options)
-   *
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
    *   Make sure to trigger the `doneFunction` once the animation is fully complete.
    *
    * ```js
@@ -5252,17 +5102,6 @@ var $AnimateProvider = ['$provide', function($provide) {
      * for animation hooks. The default behavior is the application of DOM operations, however,
      * when an animation is detected (and animations are enabled), $animate will do the heavy lifting
      * to ensure that animation runs with the triggered DOM operation.
-<<<<<<< HEAD
-     *
-     * By default $animate doesn't trigger an animations. This is because the `ngAnimate` module isn't
-     * included and only when it is active then the animation hooks that `$animate` triggers will be
-     * functional. Once active then all structural `ng-` directives will trigger animations as they perform
-     * their DOM-related operations (enter, leave and move). Other directives such as `ngClass`,
-     * `ngShow`, `ngHide` and `ngMessages` also provide support for animations.
-     *
-     * It is recommended that the`$animate` service is always used when executing DOM-related procedures within directives.
-     *
-=======
      *
      * By default $animate doesn't trigger any animations. This is because the `ngAnimate` module isn't
      * included and only when it is active then the animation hooks that `$animate` triggers will be
@@ -5272,15 +5111,12 @@ var $AnimateProvider = ['$provide', function($provide) {
      *
      * It is recommended that the`$animate` service is always used when executing DOM-related procedures within directives.
      *
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
      * To learn more about enabling animation support, click here to visit the
      * {@link ngAnimate ngAnimate module page}.
      */
     return {
       // we don't call it directly since non-existant arguments may
       // be interpreted as null within the sub enabled function
-<<<<<<< HEAD
-=======
 
       /**
        *
@@ -5313,146 +5149,6 @@ var $AnimateProvider = ['$provide', function($provide) {
       /**
        *
        * @ngdoc method
-       * @name $animate#off
-       * @kind function
-       * @description Deregisters an event listener based on the event which has been associated with the provided element. This method
-       * can be used in three different ways depending on the arguments:
-       *
-       * ```js
-       * // remove all the animation event listeners listening for `enter`
-       * $animate.off('enter');
-       *
-       * // remove all the animation event listeners listening for `enter` on the given element and its children
-       * $animate.off('enter', container);
-       *
-       * // remove the event listener function provided by `listenerFn` that is set
-       * // to listen for `enter` on the given `element` as well as its children
-       * $animate.off('enter', container, callback);
-       * ```
-       *
-       * @param {string} event the animation event (e.g. enter, leave, move, addClass, removeClass, etc...)
-       * @param {DOMElement=} container the container element the event listener was placed on
-       * @param {Function=} callback the callback function that was registered as the listener
-       */
-      off: $$animateQueue.off,
-
-      /**
-       * @ngdoc method
-       * @name $animate#pin
-       * @kind function
-       * @description Associates the provided element with a host parent element to allow the element to be animated even if it exists
-       *    outside of the DOM structure of the Angular application. By doing so, any animation triggered via `$animate` can be issued on the
-       *    element despite being outside the realm of the application or within another application. Say for example if the application
-       *    was bootstrapped on an element that is somewhere inside of the `<body>` tag, but we wanted to allow for an element to be situated
-       *    as a direct child of `document.body`, then this can be achieved by pinning the element via `$animate.pin(element)`. Keep in mind
-       *    that calling `$animate.pin(element, parentElement)` will not actually insert into the DOM anywhere; it will just create the association.
-       *
-       *    Note that this feature is only active when the `ngAnimate` module is used.
-       *
-       * @param {DOMElement} element the external element that will be pinned
-       * @param {DOMElement} parentElement the host parent element that will be associated with the external element
-       */
-      pin: $$animateQueue.pin,
-
-      /**
-       *
-       * @ngdoc method
-       * @name $animate#enabled
-       * @kind function
-       * @description Used to get and set whether animations are enabled or not on the entire application or on an element and its children. This
-       * function can be called in four ways:
-       *
-       * ```js
-       * // returns true or false
-       * $animate.enabled();
-       *
-       * // changes the enabled state for all animations
-       * $animate.enabled(false);
-       * $animate.enabled(true);
-       *
-       * // returns true or false if animations are enabled for an element
-       * $animate.enabled(element);
-       *
-       * // changes the enabled state for an element and its children
-       * $animate.enabled(element, true);
-       * $animate.enabled(element, false);
-       * ```
-       *
-       * @param {DOMElement=} element the element that will be considered for checking/setting the enabled state
-       * @param {boolean=} enabled whether or not the animations will be enabled for the element
-       *
-       * @return {boolean} whether or not animations are enabled
-       */
-      enabled: $$animateQueue.enabled,
-
-      /**
-       * @ngdoc method
-       * @name $animate#cancel
-       * @kind function
-       * @description Cancels the provided animation.
-       *
-       * @param {Promise} animationPromise The animation promise that is returned when an animation is started.
-       */
-      cancel: function(runner) {
-        runner.end && runner.end();
-      },
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
-
-      /**
-       *
-       * @ngdoc method
-       * @name $animate#on
-       * @kind function
-<<<<<<< HEAD
-       * @description Sets up an event listener to fire whenever the animation event (enter, leave, move, etc...)
-       *    has fired on the given element or among any of its children. Once the listener is fired, the provided callback
-       *    is fired with the following params:
-       *
-       * ```js
-       * $animate.on('enter', container,
-       *    function callback(element, phase) {
-       *      // cool we detected an enter animation within the container
-       *    }
-       * );
-       * ```
-       *
-       * @param {string} event the animation event that will be captured (e.g. enter, leave, move, addClass, removeClass, etc...)
-       * @param {DOMElement} container the container element that will capture each of the animation events that are fired on itself
-       *     as well as among its children
-       * @param {Function} callback the callback function that will be fired when the listener is triggered
-       *
-       * The arguments present in the callback function are:
-       * * `element` - The captured DOM element that the animation was fired on.
-       * * `phase` - The phase of the animation. The two possible phases are **start** (when the animation starts) and **close** (when it ends).
-       */
-      on: $$animateQueue.on,
-=======
-       * @description Inserts the element into the DOM either after the `after` element (if provided) or
-       *   as the first child within the `parent` element and then triggers an animation.
-       *   A promise is returned that will be resolved during the next digest once the animation
-       *   has completed.
-       *
-       * @param {DOMElement} element the element which will be inserted into the DOM
-       * @param {DOMElement} parent the parent element which will append the element as
-       *   a child (so long as the after element is not present)
-       * @param {DOMElement=} after the sibling element after which the element will be appended
-       * @param {object=} options an optional collection of options/styles that will be applied to the element
-       *
-       * @return {Promise} the animation callback promise
-       */
-      enter: function(element, parent, after, options) {
-        parent = parent && jqLite(parent);
-        after = after && jqLite(after);
-        parent = parent || after.parent();
-        domInsert(element, parent, after);
-        return $$animateQueue.push(element, 'enter', prepareAnimateOptions(options));
-      },
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
-
-      /**
-       *
-       * @ngdoc method
-<<<<<<< HEAD
        * @name $animate#off
        * @kind function
        * @description Deregisters an event listener based on the event which has been associated with the provided element. This method
@@ -5551,64 +5247,23 @@ var $AnimateProvider = ['$provide', function($provide) {
        * @param {DOMElement} parent the parent element which will append the element as
        *   a child (so long as the after element is not present)
        * @param {DOMElement=} after the sibling element after which the element will be appended
-=======
-       * @name $animate#move
-       * @kind function
-       * @description Inserts (moves) the element into its new position in the DOM either after
-       *   the `after` element (if provided) or as the first child within the `parent` element
-       *   and then triggers an animation. A promise is returned that will be resolved
-       *   during the next digest once the animation has completed.
-       *
-       * @param {DOMElement} element the element which will be moved into the new DOM position
-       * @param {DOMElement} parent the parent element which will append the element as
-       *   a child (so long as the after element is not present)
-       * @param {DOMElement=} after the sibling element after which the element will be appended
        * @param {object=} options an optional collection of options/styles that will be applied to the element
        *
        * @return {Promise} the animation callback promise
        */
-      move: function(element, parent, after, options) {
-        parent = parent && jqLite(parent);
-        after = after && jqLite(after);
-        parent = parent || after.parent();
-        domInsert(element, parent, after);
-        return $$animateQueue.push(element, 'move', prepareAnimateOptions(options));
-      },
-
-      /**
-       * @ngdoc method
-       * @name $animate#leave
-       * @kind function
-       * @description Triggers an animation and then removes the element from the DOM.
-       * When the function is called a promise is returned that will be resolved during the next
-       * digest once the animation has completed.
-       *
-       * @param {DOMElement} element the element which will be removed from the DOM
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
-       * @param {object=} options an optional collection of options/styles that will be applied to the element
-       *
-       * @return {Promise} the animation callback promise
-       */
-<<<<<<< HEAD
       enter: function(element, parent, after, options) {
         parent = parent && jqLite(parent);
         after = after && jqLite(after);
         parent = parent || after.parent();
         domInsert(element, parent, after);
         return $$animateQueue.push(element, 'enter', prepareAnimateOptions(options));
-=======
-      leave: function(element, options) {
-        return $$animateQueue.push(element, 'leave', prepareAnimateOptions(options), function() {
-          element.remove();
-        });
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
       },
 
       /**
+       *
        * @ngdoc method
        * @name $animate#move
        * @kind function
-<<<<<<< HEAD
        * @description Inserts (moves) the element into its new position in the DOM either after
        *   the `after` element (if provided) or as the first child within the `parent` element
        *   and then triggers an animation. A promise is returned that will be resolved
@@ -5618,23 +5273,10 @@ var $AnimateProvider = ['$provide', function($provide) {
        * @param {DOMElement} parent the parent element which will append the element as
        *   a child (so long as the after element is not present)
        * @param {DOMElement=} after the sibling element after which the element will be appended
-=======
-       *
-       * @description Triggers an addClass animation surrounding the addition of the provided CSS class(es). Upon
-       *   execution, the addClass operation will only be handled after the next digest and it will not trigger an
-       *   animation if element already contains the CSS class or if the class is removed at a later step.
-       *   Note that class-based animations are treated differently compared to structural animations
-       *   (like enter, move and leave) since the CSS classes may be added/removed at different points
-       *   depending if CSS or JavaScript animations are used.
-       *
-       * @param {DOMElement} element the element which the CSS classes will be applied to
-       * @param {string} className the CSS class(es) that will be added (multiple classes are separated via spaces)
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
        * @param {object=} options an optional collection of options/styles that will be applied to the element
        *
        * @return {Promise} the animation callback promise
        */
-<<<<<<< HEAD
       move: function(element, parent, after, options) {
         parent = parent && jqLite(parent);
         after = after && jqLite(after);
@@ -5687,15 +5329,6 @@ var $AnimateProvider = ['$provide', function($provide) {
       },
 
       /**
-=======
-      addClass: function(element, className, options) {
-        options = prepareAnimateOptions(options);
-        options.addClass = mergeClasses(options.addclass, className);
-        return $$animateQueue.push(element, 'addClass', options);
-      },
-
-      /**
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
        * @ngdoc method
        * @name $animate#removeClass
        * @kind function
@@ -6778,7 +6411,6 @@ function $TemplateCacheProvider() {
  *
  * #### `scope`
  * The scope property can be `true`, an object or a falsy value:
-<<<<<<< HEAD
  *
  * * **falsy:** No scope will be created for the directive. The directive will use its parent's scope.
  *
@@ -6792,21 +6424,6 @@ function $TemplateCacheProvider() {
  * scope. This is useful when creating reusable components, which should not accidentally read or modify
  * data in the parent scope.
  *
-=======
- *
- * * **falsy:** No scope will be created for the directive. The directive will use its parent's scope.
- *
- * * **`true`:** A new child scope that prototypically inherits from its parent will be created for
- * the directive's element. If multiple directives on the same element request a new scope,
- * only one new scope is created. The new scope rule does not apply for the root of the template
- * since the root of the template always gets a new scope.
- *
- * * **`{...}` (an object hash):** A new "isolate" scope is created for the directive's element. The
- * 'isolate' scope differs from normal scope in that it does not prototypically inherit from its parent
- * scope. This is useful when creating reusable components, which should not accidentally read or modify
- * data in the parent scope.
- *
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
  * The 'isolate' scope object hash defines a set of local scope properties derived from attributes on the
  * directive's element. These local properties are useful for aliasing values for templates. The keys in
  * the object hash map to the name of the property on the isolate scope; the values define how the property
@@ -8093,11 +7710,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
             if (nodeLinkFn.scope) {
               childScope = scope.$new();
               compile.$$addScopeInfo(jqLite(node), childScope);
-              var destroyBindings = nodeLinkFn.$$destroyBindings;
-              if (destroyBindings) {
-                nodeLinkFn.$$destroyBindings = null;
-                childScope.$on('$destroyed', destroyBindings);
-              }
             } else {
               childScope = scope;
             }
@@ -8116,8 +7728,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
               childBoundTranscludeFn = null;
             }
 
-            nodeLinkFn(childLinkFn, childScope, node, $rootElement, childBoundTranscludeFn,
-                       nodeLinkFn);
+            nodeLinkFn(childLinkFn, childScope, node, $rootElement, childBoundTranscludeFn);
 
           } else if (childLinkFn) {
             childLinkFn(scope, node.childNodes, undefined, parentBoundTranscludeFn);
@@ -8615,26 +8226,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
           }
 
           var controllerInstance = $controller(controller, locals, true, directive.controllerAs);
-<<<<<<< HEAD
-
-          // For directives with element transclusion the element is a comment,
-          // but jQuery .data doesn't support attaching data to comment nodes as it's hard to
-          // clean up (http://bugs.jquery.com/ticket/8335).
-          // Instead, we save the controllers for the element in a local hash and attach to .data
-          // later, once we have the actual element.
-          elementControllers[directive.name] = controllerInstance;
-          if (!hasElementTranscludeDirective) {
-            $element.data('$' + directive.name + 'Controller', controllerInstance.instance);
-          }
-        }
-        return elementControllers;
-      }
-
-      function nodeLinkFn(childLinkFn, scope, linkNode, $rootElement, boundTranscludeFn,
-                          thisLinkFn) {
-        var i, ii, linkFn, controller, isolateScope, elementControllers, transcludeFn, $element,
-            attrs;
-=======
 
           // For directives with element transclusion the element is a comment,
           // but jQuery .data doesn't support attaching data to comment nodes as it's hard to
@@ -8652,7 +8243,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
       function nodeLinkFn(childLinkFn, scope, linkNode, $rootElement, boundTranscludeFn) {
         var linkFn, isolateScope, controllerScope, elementControllers, transcludeFn, $element,
             attrs, removeScopeBindingWatches, removeControllerBindingWatches;
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
 
         if (compileNode === linkNode) {
           attrs = templateAttrs;
@@ -8687,44 +8277,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
           compile.$$addScopeClass($element, true);
           isolateScope.$$isolateBindings =
               newIsolateScopeDirective.$$isolateBindings;
-<<<<<<< HEAD
-          initializeDirectiveBindings(scope, attrs, isolateScope,
-                                      isolateScope.$$isolateBindings,
-                                      newIsolateScopeDirective, isolateScope);
-        }
-        if (elementControllers) {
-          // Initialize bindToController bindings for new/isolate scopes
-          var scopeDirective = newIsolateScopeDirective || newScopeDirective;
-          var bindings;
-          var controllerForBindings;
-          if (scopeDirective && elementControllers[scopeDirective.name]) {
-            bindings = scopeDirective.$$bindings.bindToController;
-            controller = elementControllers[scopeDirective.name];
-
-            if (controller && controller.identifier && bindings) {
-              controllerForBindings = controller;
-              thisLinkFn.$$destroyBindings =
-                  initializeDirectiveBindings(scope, attrs, controller.instance,
-                                              bindings, scopeDirective);
-            }
-          }
-          for (i in elementControllers) {
-            controller = elementControllers[i];
-            var controllerResult = controller();
-
-            if (controllerResult !== controller.instance) {
-              // If the controller constructor has a return value, overwrite the instance
-              // from setupControllers and update the element data
-              controller.instance = controllerResult;
-              $element.data('$' + i + 'Controller', controllerResult);
-              if (controller === controllerForBindings) {
-                // Remove and re-install bindToController bindings
-                thisLinkFn.$$destroyBindings();
-                thisLinkFn.$$destroyBindings =
-                  initializeDirectiveBindings(scope, attrs, controllerResult, bindings, scopeDirective);
-              }
-            }
-=======
           removeScopeBindingWatches = initializeDirectiveBindings(scope, attrs, isolateScope,
                                         isolateScope.$$isolateBindings,
                                         newIsolateScopeDirective);
@@ -8753,7 +8305,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
             removeControllerBindingWatches && removeControllerBindingWatches();
             removeControllerBindingWatches =
               initializeDirectiveBindings(controllerScope, attrs, controller.instance, bindings, controllerDirective);
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
           }
         }
 
@@ -9019,7 +8570,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
               childBoundTranscludeFn = boundTranscludeFn;
             }
             afterTemplateNodeLinkFn(afterTemplateChildLinkFn, scope, linkNode, $rootElement,
-              childBoundTranscludeFn, afterTemplateNodeLinkFn);
+              childBoundTranscludeFn);
           }
           linkQueue = null;
         });
@@ -9036,8 +8587,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
           if (afterTemplateNodeLinkFn.transcludeOnThisElement) {
             childBoundTranscludeFn = createBoundTranscludeFn(scope, afterTemplateNodeLinkFn.transclude, boundTranscludeFn);
           }
-          afterTemplateNodeLinkFn(afterTemplateChildLinkFn, scope, node, rootElement, childBoundTranscludeFn,
-                                  afterTemplateNodeLinkFn);
+          afterTemplateNodeLinkFn(afterTemplateChildLinkFn, scope, node, rootElement, childBoundTranscludeFn);
         }
       };
     }
@@ -9249,11 +8799,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
         // Copy over user data (that includes Angular's $scope etc.). Don't copy private
         // data here because there's no public interface in jQuery to do that and copying over
         // event listeners (which is the main use of private data) wouldn't work anyway.
-<<<<<<< HEAD
-        jqLite(newNode).data(jqLite(firstElementToRemove).data());
-=======
         jqLite.data(newNode, jqLite.data(firstElementToRemove));
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
 
         // Remove data of the replaced element. We cannot just call .remove()
         // on the element it since that would deallocate scope that is needed
@@ -9301,14 +8847,8 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
 
     // Set up $watches for isolate scope and controller bindings. This process
     // only occurs for isolate scopes and new scopes with controllerAs.
-<<<<<<< HEAD
-    function initializeDirectiveBindings(scope, attrs, destination, bindings,
-                                         directive, newScope) {
-      var onNewScopeDestroyed;
-=======
     function initializeDirectiveBindings(scope, attrs, destination, bindings, directive) {
       var removeWatchCollection = [];
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
       forEach(bindings, function(definition, scopeName) {
         var attrName = definition.attrName,
         optional = definition.optional,
@@ -9370,16 +8910,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
               return lastValue = parentValue;
             };
             parentValueWatch.$stateful = true;
-<<<<<<< HEAD
-            var unwatch;
-            if (definition.collection) {
-              unwatch = scope.$watchCollection(attrs[attrName], parentValueWatch);
-            } else {
-              unwatch = scope.$watch($parse(attrs[attrName], parentValueWatch), null, parentGet.literal);
-            }
-            onNewScopeDestroyed = (onNewScopeDestroyed || []);
-            onNewScopeDestroyed.push(unwatch);
-=======
             var removeWatch;
             if (definition.collection) {
               removeWatch = scope.$watchCollection(attrs[attrName], parentValueWatch);
@@ -9387,7 +8917,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
               removeWatch = scope.$watch($parse(attrs[attrName], parentValueWatch), null, parentGet.literal);
             }
             removeWatchCollection.push(removeWatch);
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
             break;
 
           case '&':
@@ -9403,25 +8932,12 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
             break;
         }
       });
-<<<<<<< HEAD
-      var destroyBindings = onNewScopeDestroyed ? function destroyBindings() {
-        for (var i = 0, ii = onNewScopeDestroyed.length; i < ii; ++i) {
-          onNewScopeDestroyed[i]();
-        }
-      } : noop;
-      if (newScope && destroyBindings !== noop) {
-        newScope.$on('$destroy', destroyBindings);
-        return noop;
-      }
-      return destroyBindings;
-=======
 
       return removeWatchCollection.length && function removeWatches() {
         for (var i = 0, ii = removeWatchCollection.length; i < ii; ++i) {
           removeWatchCollection[i]();
         }
       };
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
     }
   }];
 }
@@ -10146,15 +9662,9 @@ function $HttpProvider() {
    * Configure `$http` service to return promises without the shorthand methods `success` and `error`.
    * This should be used to make sure that applications work without these methods.
    *
-<<<<<<< HEAD
-   * Defaults to false. If no value is specified, returns the current configured value.
-   *
-   * @param {boolean=} value If true, `$http` will return a normal promise without the `success` and `error` methods.
-=======
    * Defaults to true. If no value is specified, returns the current configured value.
    *
    * @param {boolean=} value If true, `$http` will return a promise with the deprecated legacy `success` and `error` methods.
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
    *
    * @returns {boolean|Object} If a value is specified, returns the $httpProvider for chaining.
    *    otherwise, returns the current configured value.
@@ -13492,7 +13002,6 @@ AST.prototype = {
     } else {
       this.throwError('not a primary expression', this.peek());
     }
-<<<<<<< HEAD
 
     var next;
     while ((next = this.expect('(', '[', '.'))) {
@@ -13519,34 +13028,6 @@ AST.prototype = {
       args.push(this.expression());
     }
 
-=======
-
-    var next;
-    while ((next = this.expect('(', '[', '.'))) {
-      if (next.text === '(') {
-        primary = {type: AST.CallExpression, callee: primary, arguments: this.parseArguments() };
-        this.consume(')');
-      } else if (next.text === '[') {
-        primary = { type: AST.MemberExpression, object: primary, property: this.expression(), computed: true };
-        this.consume(']');
-      } else if (next.text === '.') {
-        primary = { type: AST.MemberExpression, object: primary, property: this.identifier(), computed: false };
-      } else {
-        this.throwError('IMPOSSIBLE');
-      }
-    }
-    return primary;
-  },
-
-  filter: function(baseExpression) {
-    var args = [baseExpression];
-    var result = {type: AST.CallExpression, callee: this.identifier(), arguments: args, filter: true};
-
-    while (this.expect(':')) {
-      args.push(this.expression());
-    }
-
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
     return result;
   },
 
@@ -13614,46 +13095,6 @@ AST.prototype = {
 
     return {type: AST.ObjectExpression, properties: properties };
   },
-<<<<<<< HEAD
-
-  throwError: function(msg, token) {
-    throw $parseMinErr('syntax',
-        'Syntax Error: Token \'{0}\' {1} at column {2} of the expression [{3}] starting at [{4}].',
-          token.text, msg, (token.index + 1), this.text, this.text.substring(token.index));
-  },
-
-  consume: function(e1) {
-    if (this.tokens.length === 0) {
-      throw $parseMinErr('ueoe', 'Unexpected end of expression: {0}', this.text);
-    }
-
-    var token = this.expect(e1);
-    if (!token) {
-      this.throwError('is unexpected, expecting [' + e1 + ']', this.peek());
-    }
-    return token;
-  },
-
-  peekToken: function() {
-    if (this.tokens.length === 0) {
-      throw $parseMinErr('ueoe', 'Unexpected end of expression: {0}', this.text);
-    }
-    return this.tokens[0];
-  },
-
-  peek: function(e1, e2, e3, e4) {
-    return this.peekAhead(0, e1, e2, e3, e4);
-  },
-
-  peekAhead: function(i, e1, e2, e3, e4) {
-    if (this.tokens.length > i) {
-      var token = this.tokens[i];
-      var t = token.text;
-      if (t === e1 || t === e2 || t === e3 || t === e4 ||
-          (!e1 && !e2 && !e3 && !e4)) {
-        return token;
-      }
-=======
 
   throwError: function(msg, token) {
     throw $parseMinErr('syntax',
@@ -13696,17 +13137,6 @@ AST.prototype = {
     return false;
   },
 
-  expect: function(e1, e2, e3, e4) {
-    var token = this.peek(e1, e2, e3, e4);
-    if (token) {
-      this.tokens.shift();
-      return token;
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
-    }
-    return false;
-  },
-
-<<<<<<< HEAD
   expect: function(e1, e2, e3, e4) {
     var token = this.peek(e1, e2, e3, e4);
     if (token) {
@@ -13883,175 +13313,6 @@ function ASTCompiler(astBuilder, $filter) {
   this.$filter = $filter;
 }
 
-=======
-
-  /* `undefined` is not a constant, it is an identifier,
-   * but using it as an identifier is not supported
-   */
-  constants: {
-    'true': { type: AST.Literal, value: true },
-    'false': { type: AST.Literal, value: false },
-    'null': { type: AST.Literal, value: null },
-    'undefined': {type: AST.Literal, value: undefined },
-    'this': {type: AST.ThisExpression }
-  }
-};
-
-function ifDefined(v, d) {
-  return typeof v !== 'undefined' ? v : d;
-}
-
-function plusFn(l, r) {
-  if (typeof l === 'undefined') return r;
-  if (typeof r === 'undefined') return l;
-  return l + r;
-}
-
-function isStateless($filter, filterName) {
-  var fn = $filter(filterName);
-  return !fn.$stateful;
-}
-
-function findConstantAndWatchExpressions(ast, $filter) {
-  var allConstants;
-  var argsToWatch;
-  switch (ast.type) {
-  case AST.Program:
-    allConstants = true;
-    forEach(ast.body, function(expr) {
-      findConstantAndWatchExpressions(expr.expression, $filter);
-      allConstants = allConstants && expr.expression.constant;
-    });
-    ast.constant = allConstants;
-    break;
-  case AST.Literal:
-    ast.constant = true;
-    ast.toWatch = [];
-    break;
-  case AST.UnaryExpression:
-    findConstantAndWatchExpressions(ast.argument, $filter);
-    ast.constant = ast.argument.constant;
-    ast.toWatch = ast.argument.toWatch;
-    break;
-  case AST.BinaryExpression:
-    findConstantAndWatchExpressions(ast.left, $filter);
-    findConstantAndWatchExpressions(ast.right, $filter);
-    ast.constant = ast.left.constant && ast.right.constant;
-    ast.toWatch = ast.left.toWatch.concat(ast.right.toWatch);
-    break;
-  case AST.LogicalExpression:
-    findConstantAndWatchExpressions(ast.left, $filter);
-    findConstantAndWatchExpressions(ast.right, $filter);
-    ast.constant = ast.left.constant && ast.right.constant;
-    ast.toWatch = ast.constant ? [] : [ast];
-    break;
-  case AST.ConditionalExpression:
-    findConstantAndWatchExpressions(ast.test, $filter);
-    findConstantAndWatchExpressions(ast.alternate, $filter);
-    findConstantAndWatchExpressions(ast.consequent, $filter);
-    ast.constant = ast.test.constant && ast.alternate.constant && ast.consequent.constant;
-    ast.toWatch = ast.constant ? [] : [ast];
-    break;
-  case AST.Identifier:
-    ast.constant = false;
-    ast.toWatch = [ast];
-    break;
-  case AST.MemberExpression:
-    findConstantAndWatchExpressions(ast.object, $filter);
-    if (ast.computed) {
-      findConstantAndWatchExpressions(ast.property, $filter);
-    }
-    ast.constant = ast.object.constant && (!ast.computed || ast.property.constant);
-    ast.toWatch = [ast];
-    break;
-  case AST.CallExpression:
-    allConstants = ast.filter ? isStateless($filter, ast.callee.name) : false;
-    argsToWatch = [];
-    forEach(ast.arguments, function(expr) {
-      findConstantAndWatchExpressions(expr, $filter);
-      allConstants = allConstants && expr.constant;
-      if (!expr.constant) {
-        argsToWatch.push.apply(argsToWatch, expr.toWatch);
-      }
-    });
-    ast.constant = allConstants;
-    ast.toWatch = ast.filter && isStateless($filter, ast.callee.name) ? argsToWatch : [ast];
-    break;
-  case AST.AssignmentExpression:
-    findConstantAndWatchExpressions(ast.left, $filter);
-    findConstantAndWatchExpressions(ast.right, $filter);
-    ast.constant = ast.left.constant && ast.right.constant;
-    ast.toWatch = [ast];
-    break;
-  case AST.ArrayExpression:
-    allConstants = true;
-    argsToWatch = [];
-    forEach(ast.elements, function(expr) {
-      findConstantAndWatchExpressions(expr, $filter);
-      allConstants = allConstants && expr.constant;
-      if (!expr.constant) {
-        argsToWatch.push.apply(argsToWatch, expr.toWatch);
-      }
-    });
-    ast.constant = allConstants;
-    ast.toWatch = argsToWatch;
-    break;
-  case AST.ObjectExpression:
-    allConstants = true;
-    argsToWatch = [];
-    forEach(ast.properties, function(property) {
-      findConstantAndWatchExpressions(property.value, $filter);
-      allConstants = allConstants && property.value.constant;
-      if (!property.value.constant) {
-        argsToWatch.push.apply(argsToWatch, property.value.toWatch);
-      }
-    });
-    ast.constant = allConstants;
-    ast.toWatch = argsToWatch;
-    break;
-  case AST.ThisExpression:
-    ast.constant = false;
-    ast.toWatch = [];
-    break;
-  }
-}
-
-function getInputs(body) {
-  if (body.length != 1) return;
-  var lastExpression = body[0].expression;
-  var candidate = lastExpression.toWatch;
-  if (candidate.length !== 1) return candidate;
-  return candidate[0] !== lastExpression ? candidate : undefined;
-}
-
-function isAssignable(ast) {
-  return ast.type === AST.Identifier || ast.type === AST.MemberExpression;
-}
-
-function assignableAST(ast) {
-  if (ast.body.length === 1 && isAssignable(ast.body[0].expression)) {
-    return {type: AST.AssignmentExpression, left: ast.body[0].expression, right: {type: AST.NGValueParameter}, operator: '='};
-  }
-}
-
-function isLiteral(ast) {
-  return ast.body.length === 0 ||
-      ast.body.length === 1 && (
-      ast.body[0].expression.type === AST.Literal ||
-      ast.body[0].expression.type === AST.ArrayExpression ||
-      ast.body[0].expression.type === AST.ObjectExpression);
-}
-
-function isConstant(ast) {
-  return ast.constant;
-}
-
-function ASTCompiler(astBuilder, $filter) {
-  this.astBuilder = astBuilder;
-  this.$filter = $filter;
-}
-
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
 ASTCompiler.prototype = {
   compile: function(expression, expensiveChecks) {
     var self = this;
@@ -14436,8 +13697,6 @@ ASTCompiler.prototype = {
       }
     }
   },
-<<<<<<< HEAD
-=======
 
   not: function(expression) {
     return '!(' + expression + ')';
@@ -14937,696 +14196,6 @@ var getterFnCacheExpensive = createMap();
 function isPossiblyDangerousMemberName(name) {
   return name == 'constructor';
 }
-
-var objectValueOf = Object.prototype.valueOf;
-
-function getValueOf(value) {
-  return isFunction(value.valueOf) ? value.valueOf() : objectValueOf.call(value);
-}
-
-///////////////////////////////////
-
-/**
- * @ngdoc service
- * @name $parse
- * @kind function
- *
- * @description
- *
- * Converts Angular {@link guide/expression expression} into a function.
- *
- * ```js
- *   var getter = $parse('user.name');
- *   var setter = getter.assign;
- *   var context = {user:{name:'angular'}};
- *   var locals = {user:{name:'local'}};
- *
- *   expect(getter(context)).toEqual('angular');
- *   setter(context, 'newValue');
- *   expect(context.user.name).toEqual('newValue');
- *   expect(getter(context, locals)).toEqual('local');
- * ```
- *
- *
- * @param {string} expression String expression to compile.
- * @returns {function(context, locals)} a function which represents the compiled expression:
- *
- *    * `context` – `{object}` – an object against which any expressions embedded in the strings
- *      are evaluated against (typically a scope object).
- *    * `locals` – `{object=}` – local variables context object, useful for overriding values in
- *      `context`.
- *
- *    The returned function also has the following properties:
- *      * `literal` – `{boolean}` – whether the expression's top-level node is a JavaScript
- *        literal.
- *      * `constant` – `{boolean}` – whether the expression is made entirely of JavaScript
- *        constant literals.
- *      * `assign` – `{?function(context, value)}` – if the expression is assignable, this will be
- *        set to a function to change its value on the given context.
- *
- */
-
-
-/**
- * @ngdoc provider
- * @name $parseProvider
- *
- * @description
- * `$parseProvider` can be used for configuring the default behavior of the {@link ng.$parse $parse}
- *  service.
- */
-function $ParseProvider() {
-  var cacheDefault = createMap();
-  var cacheExpensive = createMap();
-
-  this.$get = ['$filter', function($filter) {
-    var noUnsafeEval = csp().noUnsafeEval;
-    var $parseOptions = {
-          csp: noUnsafeEval,
-          expensiveChecks: false
-        },
-        $parseOptionsExpensive = {
-          csp: noUnsafeEval,
-          expensiveChecks: true
-        };
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
-
-  not: function(expression) {
-    return '!(' + expression + ')';
-  },
-
-<<<<<<< HEAD
-  notNull: function(expression) {
-    return expression + '!=null';
-  },
-=======
-      switch (typeof exp) {
-        case 'string':
-          exp = exp.trim();
-          cacheKey = exp;
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
-
-  nonComputedMember: function(left, right) {
-    return left + '.' + right;
-  },
-
-<<<<<<< HEAD
-  computedMember: function(left, right) {
-    return left + '[' + right + ']';
-  },
-
-  member: function(left, right, computed) {
-    if (computed) return this.computedMember(left, right);
-    return this.nonComputedMember(left, right);
-  },
-
-  addEnsureSafeObject: function(item) {
-    this.current().body.push(this.ensureSafeObject(item), ';');
-  },
-
-  addEnsureSafeMemberName: function(item) {
-    this.current().body.push(this.ensureSafeMemberName(item), ';');
-  },
-=======
-          if (!parsedExpression) {
-            if (exp.charAt(0) === ':' && exp.charAt(1) === ':') {
-              oneTime = true;
-              exp = exp.substring(2);
-            }
-            var parseOptions = expensiveChecks ? $parseOptionsExpensive : $parseOptions;
-            var lexer = new Lexer(parseOptions);
-            var parser = new Parser(lexer, $filter, parseOptions);
-            parsedExpression = parser.parse(exp);
-            if (parsedExpression.constant) {
-              parsedExpression.$$watchDelegate = constantWatchDelegate;
-            } else if (oneTime) {
-              parsedExpression.$$watchDelegate = parsedExpression.literal ?
-                  oneTimeLiteralWatchDelegate : oneTimeWatchDelegate;
-            } else if (parsedExpression.inputs) {
-              parsedExpression.$$watchDelegate = inputsWatchDelegate;
-            }
-            cache[cacheKey] = parsedExpression;
-          }
-          return addInterceptor(parsedExpression, interceptorFn);
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
-
-  addEnsureSafeFunction: function(item) {
-    this.current().body.push(this.ensureSafeFunction(item), ';');
-  },
-
-<<<<<<< HEAD
-  addEnsureSafeAssignContext: function(item) {
-    this.current().body.push(this.ensureSafeAssignContext(item), ';');
-  },
-
-  ensureSafeObject: function(item) {
-    return 'ensureSafeObject(' + item + ',text)';
-  },
-
-  ensureSafeMemberName: function(item) {
-    return 'ensureSafeMemberName(' + item + ',text)';
-  },
-
-  ensureSafeFunction: function(item) {
-    return 'ensureSafeFunction(' + item + ',text)';
-  },
-=======
-        default:
-          return noop;
-      }
-    };
-
-    function expressionInputDirtyCheck(newValue, oldValueOfValue) {
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
-
-  getStringValue: function(item) {
-    this.assign(item, 'getStringValue(' + item + ',text)');
-  },
-
-  ensureSafeAssignContext: function(item) {
-    return 'ensureSafeAssignContext(' + item + ',text)';
-  },
-
-  lazyRecurse: function(ast, intoId, nameId, recursionFn, create, skipWatchIdCheck) {
-    var self = this;
-    return function() {
-      self.recurse(ast, intoId, nameId, recursionFn, create, skipWatchIdCheck);
-    };
-  },
-
-  lazyAssign: function(id, value) {
-    var self = this;
-    return function() {
-      self.assign(id, value);
-    };
-  },
-
-  stringEscapeRegex: /[^ a-zA-Z0-9]/g,
-
-<<<<<<< HEAD
-  stringEscapeFn: function(c) {
-    return '\\u' + ('0000' + c.charCodeAt(0).toString(16)).slice(-4);
-  },
-
-  escape: function(value) {
-    if (isString(value)) return "'" + value.replace(this.stringEscapeRegex, this.stringEscapeFn) + "'";
-    if (isNumber(value)) return value.toString();
-    if (value === true) return 'true';
-    if (value === false) return 'false';
-    if (value === null) return 'null';
-    if (typeof value === 'undefined') return 'undefined';
-
-    throw $parseMinErr('esc', 'IMPOSSIBLE');
-  },
-
-  nextId: function(skip, init) {
-    var id = 'v' + (this.state.nextId++);
-    if (!skip) {
-      this.current().vars.push(id + (init ? '=' + init : ''));
-    }
-    return id;
-  },
-=======
-      //Primitive or NaN
-      return newValue === oldValueOfValue || (newValue !== newValue && oldValueOfValue !== oldValueOfValue);
-    }
-
-    function inputsWatchDelegate(scope, listener, objectEquality, parsedExpression, prettyPrintExpression) {
-      var inputExpressions = parsedExpression.inputs;
-      var lastResult;
-
-      if (inputExpressions.length === 1) {
-        var oldInputValueOf = expressionInputDirtyCheck; // init to something unique so that equals check fails
-        inputExpressions = inputExpressions[0];
-        return scope.$watch(function expressionInputWatch(scope) {
-          var newInputValue = inputExpressions(scope);
-          if (!expressionInputDirtyCheck(newInputValue, oldInputValueOf)) {
-            lastResult = parsedExpression(scope, undefined, undefined, [newInputValue]);
-            oldInputValueOf = newInputValue && getValueOf(newInputValue);
-          }
-          return lastResult;
-        }, listener, objectEquality, prettyPrintExpression);
-      }
-
-      var oldInputValueOfValues = [];
-      var oldInputValues = [];
-      for (var i = 0, ii = inputExpressions.length; i < ii; i++) {
-        oldInputValueOfValues[i] = expressionInputDirtyCheck; // init to something unique so that equals check fails
-        oldInputValues[i] = null;
-      }
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
-
-  current: function() {
-    return this.state[this.state.computing];
-  }
-};
-
-<<<<<<< HEAD
-
-function ASTInterpreter(astBuilder, $filter) {
-  this.astBuilder = astBuilder;
-  this.$filter = $filter;
-}
-
-ASTInterpreter.prototype = {
-  compile: function(expression, expensiveChecks) {
-    var self = this;
-    var ast = this.astBuilder.ast(expression);
-    this.expression = expression;
-    this.expensiveChecks = expensiveChecks;
-    findConstantAndWatchExpressions(ast, self.$filter);
-    var assignable;
-    var assign;
-    if ((assignable = assignableAST(ast))) {
-      assign = this.recurse(assignable);
-    }
-    var toWatch = getInputs(ast.body);
-    var inputs;
-    if (toWatch) {
-      inputs = [];
-      forEach(toWatch, function(watch, key) {
-        var input = self.recurse(watch);
-        watch.input = input;
-        inputs.push(input);
-        watch.watchId = key;
-      });
-    }
-    var expressions = [];
-    forEach(ast.body, function(expression) {
-      expressions.push(self.recurse(expression.expression));
-    });
-    var fn = ast.body.length === 0 ? function() {} :
-             ast.body.length === 1 ? expressions[0] :
-             function(scope, locals) {
-               var lastValue;
-               forEach(expressions, function(exp) {
-                 lastValue = exp(scope, locals);
-               });
-               return lastValue;
-             };
-    if (assign) {
-      fn.assign = function(scope, value, locals) {
-        return assign(scope, locals, value);
-      };
-=======
-        for (var i = 0, ii = inputExpressions.length; i < ii; i++) {
-          var newInputValue = inputExpressions[i](scope);
-          if (changed || (changed = !expressionInputDirtyCheck(newInputValue, oldInputValueOfValues[i]))) {
-            oldInputValues[i] = newInputValue;
-            oldInputValueOfValues[i] = newInputValue && getValueOf(newInputValue);
-          }
-        }
-
-        if (changed) {
-          lastResult = parsedExpression(scope, undefined, undefined, oldInputValues);
-        }
-
-        return lastResult;
-      }, listener, objectEquality, prettyPrintExpression);
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
-    }
-    if (inputs) {
-      fn.inputs = inputs;
-    }
-    fn.literal = isLiteral(ast);
-    fn.constant = isConstant(ast);
-    return fn;
-  },
-
-  recurse: function(ast, context, create) {
-    var left, right, self = this, args, expression;
-    if (ast.input) {
-      return this.inputs(ast.input, ast.watchId);
-    }
-    switch (ast.type) {
-    case AST.Literal:
-      return this.value(ast.value, context);
-    case AST.UnaryExpression:
-      right = this.recurse(ast.argument);
-      return this['unary' + ast.operator](right, context);
-    case AST.BinaryExpression:
-      left = this.recurse(ast.left);
-      right = this.recurse(ast.right);
-      return this['binary' + ast.operator](left, right, context);
-    case AST.LogicalExpression:
-      left = this.recurse(ast.left);
-      right = this.recurse(ast.right);
-      return this['binary' + ast.operator](left, right, context);
-    case AST.ConditionalExpression:
-      return this['ternary?:'](
-        this.recurse(ast.test),
-        this.recurse(ast.alternate),
-        this.recurse(ast.consequent),
-        context
-      );
-    case AST.Identifier:
-      ensureSafeMemberName(ast.name, self.expression);
-      return self.identifier(ast.name,
-                             self.expensiveChecks || isPossiblyDangerousMemberName(ast.name),
-                             context, create, self.expression);
-    case AST.MemberExpression:
-      left = this.recurse(ast.object, false, !!create);
-      if (!ast.computed) {
-        ensureSafeMemberName(ast.property.name, self.expression);
-        right = ast.property.name;
-      }
-      if (ast.computed) right = this.recurse(ast.property);
-      return ast.computed ?
-        this.computedMember(left, right, context, create, self.expression) :
-        this.nonComputedMember(left, right, self.expensiveChecks, context, create, self.expression);
-    case AST.CallExpression:
-      args = [];
-      forEach(ast.arguments, function(expr) {
-        args.push(self.recurse(expr));
-      });
-      if (ast.filter) right = this.$filter(ast.callee.name);
-      if (!ast.filter) right = this.recurse(ast.callee, true);
-      return ast.filter ?
-        function(scope, locals, assign, inputs) {
-          var values = [];
-          for (var i = 0; i < args.length; ++i) {
-            values.push(args[i](scope, locals, assign, inputs));
-          }
-          var value = right.apply(undefined, values, inputs);
-          return context ? {context: undefined, name: undefined, value: value} : value;
-        } :
-        function(scope, locals, assign, inputs) {
-          var rhs = right(scope, locals, assign, inputs);
-          var value;
-          if (rhs.value != null) {
-            ensureSafeObject(rhs.context, self.expression);
-            ensureSafeFunction(rhs.value, self.expression);
-            var values = [];
-            for (var i = 0; i < args.length; ++i) {
-              values.push(ensureSafeObject(args[i](scope, locals, assign, inputs), self.expression));
-            }
-            value = ensureSafeObject(rhs.value.apply(rhs.context, values), self.expression);
-          }
-          return context ? {value: value} : value;
-        };
-    case AST.AssignmentExpression:
-      left = this.recurse(ast.left, true, 1);
-      right = this.recurse(ast.right);
-      return function(scope, locals, assign, inputs) {
-        var lhs = left(scope, locals, assign, inputs);
-        var rhs = right(scope, locals, assign, inputs);
-        ensureSafeObject(lhs.value, self.expression);
-        ensureSafeAssignContext(lhs.context);
-        lhs.context[lhs.name] = rhs;
-        return context ? {value: rhs} : rhs;
-      };
-    case AST.ArrayExpression:
-      args = [];
-      forEach(ast.elements, function(expr) {
-        args.push(self.recurse(expr));
-      });
-      return function(scope, locals, assign, inputs) {
-        var value = [];
-        for (var i = 0; i < args.length; ++i) {
-          value.push(args[i](scope, locals, assign, inputs));
-        }
-        return context ? {value: value} : value;
-      };
-    case AST.ObjectExpression:
-      args = [];
-      forEach(ast.properties, function(property) {
-        args.push({key: property.key.type === AST.Identifier ?
-                        property.key.name :
-                        ('' + property.key.value),
-                   value: self.recurse(property.value)
-        });
-      });
-      return function(scope, locals, assign, inputs) {
-        var value = {};
-        for (var i = 0; i < args.length; ++i) {
-          value[args[i].key] = args[i].value(scope, locals, assign, inputs);
-        }
-        return context ? {value: value} : value;
-      };
-    case AST.ThisExpression:
-      return function(scope) {
-        return context ? {value: scope} : scope;
-      };
-    case AST.NGValueParameter:
-      return function(scope, locals, assign, inputs) {
-        return context ? {value: assign} : assign;
-      };
-    }
-  },
-
-  'unary+': function(argument, context) {
-    return function(scope, locals, assign, inputs) {
-      var arg = argument(scope, locals, assign, inputs);
-      if (isDefined(arg)) {
-        arg = +arg;
-      } else {
-        arg = 0;
-      }
-      return context ? {value: arg} : arg;
-    };
-  },
-  'unary-': function(argument, context) {
-    return function(scope, locals, assign, inputs) {
-      var arg = argument(scope, locals, assign, inputs);
-      if (isDefined(arg)) {
-        arg = -arg;
-      } else {
-        arg = 0;
-      }
-      return context ? {value: arg} : arg;
-    };
-  },
-  'unary!': function(argument, context) {
-    return function(scope, locals, assign, inputs) {
-      var arg = !argument(scope, locals, assign, inputs);
-      return context ? {value: arg} : arg;
-    };
-  },
-  'binary+': function(left, right, context) {
-    return function(scope, locals, assign, inputs) {
-      var lhs = left(scope, locals, assign, inputs);
-      var rhs = right(scope, locals, assign, inputs);
-      var arg = plusFn(lhs, rhs);
-      return context ? {value: arg} : arg;
-    };
-  },
-  'binary-': function(left, right, context) {
-    return function(scope, locals, assign, inputs) {
-      var lhs = left(scope, locals, assign, inputs);
-      var rhs = right(scope, locals, assign, inputs);
-      var arg = (isDefined(lhs) ? lhs : 0) - (isDefined(rhs) ? rhs : 0);
-      return context ? {value: arg} : arg;
-    };
-  },
-  'binary*': function(left, right, context) {
-    return function(scope, locals, assign, inputs) {
-      var arg = left(scope, locals, assign, inputs) * right(scope, locals, assign, inputs);
-      return context ? {value: arg} : arg;
-    };
-  },
-  'binary/': function(left, right, context) {
-    return function(scope, locals, assign, inputs) {
-      var arg = left(scope, locals, assign, inputs) / right(scope, locals, assign, inputs);
-      return context ? {value: arg} : arg;
-    };
-  },
-  'binary%': function(left, right, context) {
-    return function(scope, locals, assign, inputs) {
-      var arg = left(scope, locals, assign, inputs) % right(scope, locals, assign, inputs);
-      return context ? {value: arg} : arg;
-    };
-  },
-  'binary===': function(left, right, context) {
-    return function(scope, locals, assign, inputs) {
-      var arg = left(scope, locals, assign, inputs) === right(scope, locals, assign, inputs);
-      return context ? {value: arg} : arg;
-    };
-  },
-  'binary!==': function(left, right, context) {
-    return function(scope, locals, assign, inputs) {
-      var arg = left(scope, locals, assign, inputs) !== right(scope, locals, assign, inputs);
-      return context ? {value: arg} : arg;
-    };
-  },
-  'binary==': function(left, right, context) {
-    return function(scope, locals, assign, inputs) {
-      var arg = left(scope, locals, assign, inputs) == right(scope, locals, assign, inputs);
-      return context ? {value: arg} : arg;
-    };
-  },
-  'binary!=': function(left, right, context) {
-    return function(scope, locals, assign, inputs) {
-      var arg = left(scope, locals, assign, inputs) != right(scope, locals, assign, inputs);
-      return context ? {value: arg} : arg;
-    };
-  },
-  'binary<': function(left, right, context) {
-    return function(scope, locals, assign, inputs) {
-      var arg = left(scope, locals, assign, inputs) < right(scope, locals, assign, inputs);
-      return context ? {value: arg} : arg;
-    };
-  },
-  'binary>': function(left, right, context) {
-    return function(scope, locals, assign, inputs) {
-      var arg = left(scope, locals, assign, inputs) > right(scope, locals, assign, inputs);
-      return context ? {value: arg} : arg;
-    };
-  },
-  'binary<=': function(left, right, context) {
-    return function(scope, locals, assign, inputs) {
-      var arg = left(scope, locals, assign, inputs) <= right(scope, locals, assign, inputs);
-      return context ? {value: arg} : arg;
-    };
-  },
-  'binary>=': function(left, right, context) {
-    return function(scope, locals, assign, inputs) {
-      var arg = left(scope, locals, assign, inputs) >= right(scope, locals, assign, inputs);
-      return context ? {value: arg} : arg;
-    };
-  },
-  'binary&&': function(left, right, context) {
-    return function(scope, locals, assign, inputs) {
-      var arg = left(scope, locals, assign, inputs) && right(scope, locals, assign, inputs);
-      return context ? {value: arg} : arg;
-    };
-  },
-  'binary||': function(left, right, context) {
-    return function(scope, locals, assign, inputs) {
-      var arg = left(scope, locals, assign, inputs) || right(scope, locals, assign, inputs);
-      return context ? {value: arg} : arg;
-    };
-  },
-  'ternary?:': function(test, alternate, consequent, context) {
-    return function(scope, locals, assign, inputs) {
-      var arg = test(scope, locals, assign, inputs) ? alternate(scope, locals, assign, inputs) : consequent(scope, locals, assign, inputs);
-      return context ? {value: arg} : arg;
-    };
-  },
-  value: function(value, context) {
-    return function() { return context ? {context: undefined, name: undefined, value: value} : value; };
-  },
-  identifier: function(name, expensiveChecks, context, create, expression) {
-    return function(scope, locals, assign, inputs) {
-      var base = locals && (name in locals) ? locals : scope;
-      if (create && create !== 1 && base && !(base[name])) {
-        base[name] = {};
-      }
-      var value = base ? base[name] : undefined;
-      if (expensiveChecks) {
-        ensureSafeObject(value, expression);
-      }
-      if (context) {
-        return {context: base, name: name, value: value};
-      } else {
-        return value;
-      }
-    };
-  },
-  computedMember: function(left, right, context, create, expression) {
-    return function(scope, locals, assign, inputs) {
-      var lhs = left(scope, locals, assign, inputs);
-      var rhs;
-      var value;
-      if (lhs != null) {
-        rhs = right(scope, locals, assign, inputs);
-        rhs = getStringValue(rhs);
-        ensureSafeMemberName(rhs, expression);
-        if (create && create !== 1 && lhs && !(lhs[rhs])) {
-          lhs[rhs] = {};
-        }
-        value = lhs[rhs];
-        ensureSafeObject(value, expression);
-      }
-      if (context) {
-        return {context: lhs, name: rhs, value: value};
-      } else {
-        return value;
-      }
-    };
-  },
-  nonComputedMember: function(left, right, expensiveChecks, context, create, expression) {
-    return function(scope, locals, assign, inputs) {
-      var lhs = left(scope, locals, assign, inputs);
-      if (create && create !== 1 && lhs && !(lhs[right])) {
-        lhs[right] = {};
-      }
-      var value = lhs != null ? lhs[right] : undefined;
-      if (expensiveChecks || isPossiblyDangerousMemberName(right)) {
-        ensureSafeObject(value, expression);
-      }
-      if (context) {
-        return {context: lhs, name: right, value: value};
-      } else {
-        return value;
-      }
-    };
-  },
-  inputs: function(input, watchId) {
-    return function(scope, value, locals, inputs) {
-      if (inputs) return inputs[watchId];
-      return input(scope, value, locals);
-    };
-  }
-};
-
-/**
- * @constructor
- */
-var Parser = function(lexer, $filter, options) {
-  this.lexer = lexer;
-  this.$filter = $filter;
-  this.options = options;
-  this.ast = new AST(this.lexer);
-  this.astCompiler = options.csp ? new ASTInterpreter(this.ast, $filter) :
-                                   new ASTCompiler(this.ast, $filter);
-};
-
-<<<<<<< HEAD
-Parser.prototype = {
-  constructor: Parser,
-=======
-    function addInterceptor(parsedExpression, interceptorFn) {
-      if (!interceptorFn) return parsedExpression;
-      var watchDelegate = parsedExpression.$$watchDelegate;
-      var useInputs = false;
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
-
-  parse: function(text) {
-    return this.astCompiler.compile(text, this.options.expensiveChecks);
-  }
-};
-
-<<<<<<< HEAD
-var getterFnCacheDefault = createMap();
-var getterFnCacheExpensive = createMap();
-
-function isPossiblyDangerousMemberName(name) {
-  return name == 'constructor';
-}
-=======
-      var fn = regularWatch ? function regularInterceptedExpression(scope, locals, assign, inputs) {
-        var value = useInputs && inputs ? inputs[0] : parsedExpression(scope, locals, assign, inputs);
-        return interceptorFn(value, scope, locals);
-      } : function oneTimeInterceptedExpression(scope, locals, assign, inputs) {
-        var value = parsedExpression(scope, locals, assign, inputs);
-        var result = interceptorFn(value, scope, locals);
-        // we only return the interceptor's result if the
-        // initial value is defined (for bind-once)
-        return isDefined(value) ? result : value;
-      };
-
-      // Propagate $$watchDelegates other then inputsWatchDelegate
-      if (parsedExpression.$$watchDelegate &&
-          parsedExpression.$$watchDelegate !== inputsWatchDelegate) {
-        fn.$$watchDelegate = parsedExpression.$$watchDelegate;
-      } else if (!interceptorFn.$stateful) {
-        // If there is an interceptor, but no watchDelegate then treat the interceptor like
-        // we treat filters - it is assumed to be a pure function unless flagged with $stateful
-        fn.$$watchDelegate = inputsWatchDelegate;
-        useInputs = !parsedExpression.inputs;
-        fn.inputs = parsedExpression.inputs ? parsedExpression.inputs : [parsedExpression];
-      }
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
 
 var objectValueOf = Object.prototype.valueOf;
 
@@ -15867,13 +14436,14 @@ function $ParseProvider() {
     function addInterceptor(parsedExpression, interceptorFn) {
       if (!interceptorFn) return parsedExpression;
       var watchDelegate = parsedExpression.$$watchDelegate;
+      var useInputs = false;
 
       var regularWatch =
           watchDelegate !== oneTimeLiteralWatchDelegate &&
           watchDelegate !== oneTimeWatchDelegate;
 
       var fn = regularWatch ? function regularInterceptedExpression(scope, locals, assign, inputs) {
-        var value = parsedExpression(scope, locals, assign, inputs);
+        var value = useInputs && inputs ? inputs[0] : parsedExpression(scope, locals, assign, inputs);
         return interceptorFn(value, scope, locals);
       } : function oneTimeInterceptedExpression(scope, locals, assign, inputs) {
         var value = parsedExpression(scope, locals, assign, inputs);
@@ -15891,6 +14461,7 @@ function $ParseProvider() {
         // If there is an interceptor, but no watchDelegate then treat the interceptor like
         // we treat filters - it is assumed to be a pure function unless flagged with $stateful
         fn.$$watchDelegate = inputsWatchDelegate;
+        useInputs = !parsedExpression.inputs;
         fn.inputs = parsedExpression.inputs ? parsedExpression.inputs : [parsedExpression];
       }
 
@@ -20691,17 +19262,10 @@ function limitToFilter() {
 
     if (isNumber(input)) input = input.toString();
     if (!isArray(input) && !isString(input)) return input;
-<<<<<<< HEAD
-
-    begin = (!begin || isNaN(begin)) ? 0 : toInt(begin);
-    begin = (begin < 0 && begin >= -input.length) ? input.length + begin : begin;
-
-=======
 
     begin = (!begin || isNaN(begin)) ? 0 : toInt(begin);
     begin = (begin < 0) ? Math.max(0, input.length + begin) : begin;
 
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
     if (limit >= 0) {
       return input.slice(begin, begin + limit);
     } else {
@@ -21621,19 +20185,11 @@ function FormController(element, attrs, $scope, $animate, $interpolate) {
    * Note that the current state of the control will not be reflected on the new parent form. This
    * is not an issue with normal use, as freshly compiled and linked controls are in a `$pristine`
    * state.
-<<<<<<< HEAD
    *
    * However, if the method is used programmatically, for example by adding dynamically created controls,
    * or controls that have been previously removed without destroying their corresponding DOM element,
    * it's the developers responsiblity to make sure the current state propagates to the parent form.
    *
-=======
-   *
-   * However, if the method is used programmatically, for example by adding dynamically created controls,
-   * or controls that have been previously removed without destroying their corresponding DOM element,
-   * it's the developers responsiblity to make sure the current state propagates to the parent form.
-   *
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
    * For example, if an input control is added that is already `$dirty` and has `$error` properties,
    * calling `$setDirty()` and `$validate()` afterwards will propagate the state to the parent form.
    */
@@ -27527,753 +26083,6 @@ var ngOptionsMinErr = minErr('ngOptions');
  *
  * ## Complex Models (objects or collections)
  *
- * **Note:** By default, `ngModel` watches the model by reference, not value. This is important when
- * binding any input directive to a model that is an object or a collection.
- *
- * Since this is a common situation for `ngOptions` the directive additionally watches the model using
- * `$watchCollection` when the select has the `multiple` attribute or when there is a `track by` clause in
- * the options expression. This allows ngOptions to trigger a re-rendering of the options even if the actual
- * object/collection has not changed identity but only a property on the object or an item in the collection
- * changes.
- *
- * Note that `$watchCollection` does a shallow comparison of the properties of the object (or the items in the collection
- * if the model is an array). This means that changing a property deeper inside the object/collection that the
- * first level will not trigger a re-rendering.
- *
- *
- * ## `select` **`as`**
- *
- * Using `select` **`as`** will bind the result of the `select` expression to the model, but
- * the value of the `<select>` and `<option>` html elements will be either the index (for array data sources)
- * or property name (for object data sources) of the value within the collection. If a **`track by`** expression
- * is used, the result of that expression will be set as the value of the `option` and `select` elements.
- *
- *
- * ### `select` **`as`** and **`track by`**
- *
- * <div class="alert alert-warning">
- * Do not use `select` **`as`** and **`track by`** in the same expression. They are not designed to work together.
- * </div>
- *
- * Consider the following example:
- *
- * ```html
- * <select ng-options="item.subItem as item.label for item in values track by item.id" ng-model="selected"></select>
- * ```
- *
- * ```js
- * $scope.values = [{
- *   id: 1,
- *   label: 'aLabel',
- *   subItem: { name: 'aSubItem' }
- * }, {
- *   id: 2,
- *   label: 'bLabel',
- *   subItem: { name: 'bSubItem' }
- * }];
- *
- * $scope.selected = { name: 'aSubItem' };
- * ```
- *
- * With the purpose of preserving the selection, the **`track by`** expression is always applied to the element
- * of the data source (to `item` in this example). To calculate whether an element is selected, we do the
- * following:
- *
- * 1. Apply **`track by`** to the elements in the array. In the example: `[1, 2]`
- * 2. Apply **`track by`** to the already selected value in `ngModel`.
- *    In the example: this is not possible as **`track by`** refers to `item.id`, but the selected
- *    value from `ngModel` is `{name: 'aSubItem'}`, so the **`track by`** expression is applied to
- *    a wrong object, the selected element can't be found, `<select>` is always reset to the "not
- *    selected" option.
- *
- *
- * @param {string} ngModel Assignable angular expression to data-bind to.
- * @param {string=} name Property name of the form under which the control is published.
- * @param {string=} required The control is considered valid only if value is entered.
- * @param {string=} ngRequired Adds `required` attribute and `required` validation constraint to
- *    the element when the ngRequired expression evaluates to true. Use `ngRequired` instead of
- *    `required` when you want to data-bind to the `required` attribute.
- * @param {comprehension_expression=} ngOptions in one of the following forms:
- *
- *   * for array data sources:
- *     * `label` **`for`** `value` **`in`** `array`
- *     * `select` **`as`** `label` **`for`** `value` **`in`** `array`
- *     * `label` **`group by`** `group` **`for`** `value` **`in`** `array`
- *     * `label` **`disable when`** `disable` **`for`** `value` **`in`** `array`
- *     * `label` **`group by`** `group` **`for`** `value` **`in`** `array` **`track by`** `trackexpr`
- *     * `label` **`disable when`** `disable` **`for`** `value` **`in`** `array` **`track by`** `trackexpr`
- *     * `label` **`for`** `value` **`in`** `array` | orderBy:`orderexpr` **`track by`** `trackexpr`
- *        (for including a filter with `track by`)
- *   * for object data sources:
- *     * `label` **`for (`**`key` **`,`** `value`**`) in`** `object`
- *     * `select` **`as`** `label` **`for (`**`key` **`,`** `value`**`) in`** `object`
- *     * `label` **`group by`** `group` **`for (`**`key`**`,`** `value`**`) in`** `object`
- *     * `label` **`disable when`** `disable` **`for (`**`key`**`,`** `value`**`) in`** `object`
- *     * `select` **`as`** `label` **`group by`** `group`
- *         **`for` `(`**`key`**`,`** `value`**`) in`** `object`
- *     * `select` **`as`** `label` **`disable when`** `disable`
- *         **`for` `(`**`key`**`,`** `value`**`) in`** `object`
- *
- * Where:
- *
- *   * `array` / `object`: an expression which evaluates to an array / object to iterate over.
- *   * `value`: local variable which will refer to each item in the `array` or each property value
- *      of `object` during iteration.
- *   * `key`: local variable which will refer to a property name in `object` during iteration.
- *   * `label`: The result of this expression will be the label for `<option>` element. The
- *     `expression` will most likely refer to the `value` variable (e.g. `value.propertyName`).
- *   * `select`: The result of this expression will be bound to the model of the parent `<select>`
- *      element. If not specified, `select` expression will default to `value`.
- *   * `group`: The result of this expression will be used to group options using the `<optgroup>`
- *      DOM element.
- *   * `disable`: The result of this expression will be used to disable the rendered `<option>`
- *      element. Return `true` to disable.
- *   * `trackexpr`: Used when working with an array of objects. The result of this expression will be
- *      used to identify the objects in the array. The `trackexpr` will most likely refer to the
- *     `value` variable (e.g. `value.propertyName`). With this the selection is preserved
- *      even when the options are recreated (e.g. reloaded from the server).
- *
- * @example
-    <example module="selectExample">
-      <file name="index.html">
-        <script>
-        angular.module('selectExample', [])
-          .controller('ExampleController', ['$scope', function($scope) {
-            $scope.colors = [
-              {name:'black', shade:'dark'},
-              {name:'white', shade:'light', notAnOption: true},
-              {name:'red', shade:'dark'},
-              {name:'blue', shade:'dark', notAnOption: true},
-              {name:'yellow', shade:'light', notAnOption: false}
-            ];
-            $scope.myColor = $scope.colors[2]; // red
-          }]);
-        </script>
-        <div ng-controller="ExampleController">
-          <ul>
-            <li ng-repeat="color in colors">
-              <label>Name: <input ng-model="color.name"></label>
-              <label><input type="checkbox" ng-model="color.notAnOption"> Disabled?</label>
-              <button ng-click="colors.splice($index, 1)" aria-label="Remove">X</button>
-            </li>
-            <li>
-              <button ng-click="colors.push({})">add</button>
-            </li>
-          </ul>
-          <hr/>
-          <label>Color (null not allowed):
-            <select ng-model="myColor" ng-options="color.name for color in colors"></select>
-          </label><br/>
-          <label>Color (null allowed):
-          <span  class="nullable">
-            <select ng-model="myColor" ng-options="color.name for color in colors">
-              <option value="">-- choose color --</option>
-            </select>
-          </span></label><br/>
-
-          <label>Color grouped by shade:
-            <select ng-model="myColor" ng-options="color.name group by color.shade for color in colors">
-            </select>
-          </label><br/>
-
-          <label>Color grouped by shade, with some disabled:
-            <select ng-model="myColor"
-                  ng-options="color.name group by color.shade disable when color.notAnOption for color in colors">
-            </select>
-          </label><br/>
-
-
-
-          Select <button ng-click="myColor = { name:'not in list', shade: 'other' }">bogus</button>.
-          <br/>
-          <hr/>
-          Currently selected: {{ {selected_color:myColor} }}
-          <div style="border:solid 1px black; height:20px"
-               ng-style="{'background-color':myColor.name}">
-          </div>
-        </div>
-      </file>
-      <file name="protractor.js" type="protractor">
-         it('should check ng-options', function() {
-           expect(element(by.binding('{selected_color:myColor}')).getText()).toMatch('red');
-           element.all(by.model('myColor')).first().click();
-           element.all(by.css('select[ng-model="myColor"] option')).first().click();
-           expect(element(by.binding('{selected_color:myColor}')).getText()).toMatch('black');
-           element(by.css('.nullable select[ng-model="myColor"]')).click();
-           element.all(by.css('.nullable select[ng-model="myColor"] option')).first().click();
-           expect(element(by.binding('{selected_color:myColor}')).getText()).toMatch('null');
-         });
-      </file>
-    </example>
- */
-
-// jshint maxlen: false
-//                     //00001111111111000000000002222222222000000000000000000000333333333300000000000000000000000004444444444400000000000005555555555555550000000006666666666666660000000777777777777777000000000000000888888888800000000000000000009999999999
-var NG_OPTIONS_REGEXP = /^\s*([\s\S]+?)(?:\s+as\s+([\s\S]+?))?(?:\s+group\s+by\s+([\s\S]+?))?(?:\s+disable\s+when\s+([\s\S]+?))?\s+for\s+(?:([\$\w][\$\w]*)|(?:\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)))\s+in\s+([\s\S]+?)(?:\s+track\s+by\s+([\s\S]+?))?$/;
-                        // 1: value expression (valueFn)
-                        // 2: label expression (displayFn)
-                        // 3: group by expression (groupByFn)
-                        // 4: disable when expression (disableWhenFn)
-                        // 5: array item variable name
-                        // 6: object item key variable name
-                        // 7: object item value variable name
-                        // 8: collection expression
-                        // 9: track by expression
-// jshint maxlen: 100
-
-
-var ngOptionsDirective = ['$compile', '$parse', function($compile, $parse) {
-
-  function parseOptionsExpression(optionsExp, selectElement, scope) {
-
-    var match = optionsExp.match(NG_OPTIONS_REGEXP);
-    if (!(match)) {
-      throw ngOptionsMinErr('iexp',
-        "Expected expression in form of " +
-        "'_select_ (as _label_)? for (_key_,)?_value_ in _collection_'" +
-        " but got '{0}'. Element: {1}",
-        optionsExp, startingTag(selectElement));
-    }
-
-    // Extract the parts from the ngOptions expression
-
-    // The variable name for the value of the item in the collection
-    var valueName = match[5] || match[7];
-    // The variable name for the key of the item in the collection
-    var keyName = match[6];
-
-    // An expression that generates the viewValue for an option if there is a label expression
-    var selectAs = / as /.test(match[0]) && match[1];
-    // An expression that is used to track the id of each object in the options collection
-    var trackBy = match[9];
-    // An expression that generates the viewValue for an option if there is no label expression
-    var valueFn = $parse(match[2] ? match[1] : valueName);
-    var selectAsFn = selectAs && $parse(selectAs);
-    var viewValueFn = selectAsFn || valueFn;
-    var trackByFn = trackBy && $parse(trackBy);
-
-    // Get the value by which we are going to track the option
-    // if we have a trackFn then use that (passing scope and locals)
-    // otherwise just hash the given viewValue
-    var getTrackByValueFn = trackBy ?
-                              function(value, locals) { return trackByFn(scope, locals); } :
-                              function getHashOfValue(value) { return hashKey(value); };
-    var getTrackByValue = function(value, key) {
-      return getTrackByValueFn(value, getLocals(value, key));
-    };
-
-    var displayFn = $parse(match[2] || match[1]);
-    var groupByFn = $parse(match[3] || '');
-    var disableWhenFn = $parse(match[4] || '');
-    var valuesFn = $parse(match[8]);
-
-    var locals = {};
-    var getLocals = keyName ? function(value, key) {
-      locals[keyName] = key;
-      locals[valueName] = value;
-      return locals;
-    } : function(value) {
-      locals[valueName] = value;
-      return locals;
-    };
-
-
-    function Option(selectValue, viewValue, label, group, disabled) {
-      this.selectValue = selectValue;
-      this.viewValue = viewValue;
-      this.label = label;
-      this.group = group;
-      this.disabled = disabled;
-    }
-
-    function getOptionValuesKeys(optionValues) {
-      var optionValuesKeys;
-
-      if (!keyName && isArrayLike(optionValues)) {
-        optionValuesKeys = optionValues;
-      } else {
-        // if object, extract keys, in enumeration order, unsorted
-        optionValuesKeys = [];
-        for (var itemKey in optionValues) {
-          if (optionValues.hasOwnProperty(itemKey) && itemKey.charAt(0) !== '$') {
-            optionValuesKeys.push(itemKey);
-          }
-        }
-      }
-      return optionValuesKeys;
-    }
-
-    return {
-      trackBy: trackBy,
-      getTrackByValue: getTrackByValue,
-      getWatchables: $parse(valuesFn, function(optionValues) {
-        // Create a collection of things that we would like to watch (watchedArray)
-        // so that they can all be watched using a single $watchCollection
-        // that only runs the handler once if anything changes
-        var watchedArray = [];
-        optionValues = optionValues || [];
-
-        var optionValuesKeys = getOptionValuesKeys(optionValues);
-        var optionValuesLength = optionValuesKeys.length;
-        for (var index = 0; index < optionValuesLength; index++) {
-          var key = (optionValues === optionValuesKeys) ? index : optionValuesKeys[index];
-          var value = optionValues[key];
-
-          var locals = getLocals(optionValues[key], key);
-          var selectValue = getTrackByValueFn(optionValues[key], locals);
-          watchedArray.push(selectValue);
-
-          // Only need to watch the displayFn if there is a specific label expression
-          if (match[2] || match[1]) {
-            var label = displayFn(scope, locals);
-            watchedArray.push(label);
-          }
-
-          // Only need to watch the disableWhenFn if there is a specific disable expression
-          if (match[4]) {
-            var disableWhen = disableWhenFn(scope, locals);
-            watchedArray.push(disableWhen);
-          }
-        }
-        return watchedArray;
-      }),
-
-      getOptions: function() {
-
-        var optionItems = [];
-        var selectValueMap = {};
-
-        // The option values were already computed in the `getWatchables` fn,
-        // which must have been called to trigger `getOptions`
-        var optionValues = valuesFn(scope) || [];
-        var optionValuesKeys = getOptionValuesKeys(optionValues);
-        var optionValuesLength = optionValuesKeys.length;
-
-        for (var index = 0; index < optionValuesLength; index++) {
-          var key = (optionValues === optionValuesKeys) ? index : optionValuesKeys[index];
-          var value = optionValues[key];
-          var locals = getLocals(value, key);
-          var viewValue = viewValueFn(scope, locals);
-          var selectValue = getTrackByValueFn(viewValue, locals);
-          var label = displayFn(scope, locals);
-          var group = groupByFn(scope, locals);
-          var disabled = disableWhenFn(scope, locals);
-          var optionItem = new Option(selectValue, viewValue, label, group, disabled);
-
-          optionItems.push(optionItem);
-          selectValueMap[selectValue] = optionItem;
-        }
-
-        return {
-          items: optionItems,
-          selectValueMap: selectValueMap,
-          getOptionFromViewValue: function(value) {
-            return selectValueMap[getTrackByValue(value)];
-          },
-          getViewValueFromOption: function(option) {
-            // If the viewValue could be an object that may be mutated by the application,
-            // we need to make a copy and not return the reference to the value on the option.
-            return trackBy ? angular.copy(option.viewValue) : option.viewValue;
-          }
-        };
-      }
-    };
-  }
-
-
-  // we can't just jqLite('<option>') since jqLite is not smart enough
-  // to create it in <select> and IE barfs otherwise.
-  var optionTemplate = document.createElement('option'),
-      optGroupTemplate = document.createElement('optgroup');
-
-  return {
-    restrict: 'A',
-    terminal: true,
-    require: ['select', '?ngModel'],
-    link: function(scope, selectElement, attr, ctrls) {
-
-      // if ngModel is not defined, we don't need to do anything
-      var ngModelCtrl = ctrls[1];
-      if (!ngModelCtrl) return;
-
-      var selectCtrl = ctrls[0];
-      var multiple = attr.multiple;
-
-      // The emptyOption allows the application developer to provide their own custom "empty"
-      // option when the viewValue does not match any of the option values.
-      var emptyOption;
-      for (var i = 0, children = selectElement.children(), ii = children.length; i < ii; i++) {
-        if (children[i].value === '') {
-          emptyOption = children.eq(i);
-          break;
-        }
-      }
-
-      var providedEmptyOption = !!emptyOption;
-
-      var unknownOption = jqLite(optionTemplate.cloneNode(false));
-      unknownOption.val('?');
-
-      var options;
-      var ngOptions = parseOptionsExpression(attr.ngOptions, selectElement, scope);
-
-
-      var renderEmptyOption = function() {
-        if (!providedEmptyOption) {
-          selectElement.prepend(emptyOption);
-        }
-        selectElement.val('');
-        emptyOption.prop('selected', true); // needed for IE
-        emptyOption.attr('selected', true);
-      };
-
-      var removeEmptyOption = function() {
-        if (!providedEmptyOption) {
-          emptyOption.remove();
-        }
-      };
-
-
-      var renderUnknownOption = function() {
-        selectElement.prepend(unknownOption);
-        selectElement.val('?');
-        unknownOption.prop('selected', true); // needed for IE
-        unknownOption.attr('selected', true);
-      };
-
-      var removeUnknownOption = function() {
-        unknownOption.remove();
-      };
-
-
-      // Update the controller methods for multiple selectable options
-      if (!multiple) {
-
-        selectCtrl.writeValue = function writeNgOptionsValue(value) {
-          var option = options.getOptionFromViewValue(value);
-
-          if (option && !option.disabled) {
-            if (selectElement[0].value !== option.selectValue) {
-              removeUnknownOption();
-              removeEmptyOption();
-
-              selectElement[0].value = option.selectValue;
-              option.element.selected = true;
-              option.element.setAttribute('selected', 'selected');
-            }
-          } else {
-            if (value === null || providedEmptyOption) {
-              removeUnknownOption();
-              renderEmptyOption();
-            } else {
-              removeEmptyOption();
-              renderUnknownOption();
-            }
-          }
-        };
-
-        selectCtrl.readValue = function readNgOptionsValue() {
-
-          var selectedOption = options.selectValueMap[selectElement.val()];
-
-          if (selectedOption && !selectedOption.disabled) {
-            removeEmptyOption();
-            removeUnknownOption();
-            return options.getViewValueFromOption(selectedOption);
-          }
-          return null;
-        };
-
-        // If we are using `track by` then we must watch the tracked value on the model
-        // since ngModel only watches for object identity change
-        if (ngOptions.trackBy) {
-          scope.$watch(
-            function() { return ngOptions.getTrackByValue(ngModelCtrl.$viewValue); },
-            function() { ngModelCtrl.$render(); }
-          );
-        }
-
-      } else {
-
-        ngModelCtrl.$isEmpty = function(value) {
-          return !value || value.length === 0;
-        };
-
-
-        selectCtrl.writeValue = function writeNgOptionsMultiple(value) {
-          options.items.forEach(function(option) {
-            option.element.selected = false;
-          });
-
-          if (value) {
-            value.forEach(function(item) {
-              var option = options.getOptionFromViewValue(item);
-              if (option && !option.disabled) option.element.selected = true;
-            });
-          }
-        };
-
-
-        selectCtrl.readValue = function readNgOptionsMultiple() {
-          var selectedValues = selectElement.val() || [],
-              selections = [];
-
-          forEach(selectedValues, function(value) {
-            var option = options.selectValueMap[value];
-            if (option && !option.disabled) selections.push(options.getViewValueFromOption(option));
-          });
-
-          return selections;
-        };
-
-        // If we are using `track by` then we must watch these tracked values on the model
-        // since ngModel only watches for object identity change
-        if (ngOptions.trackBy) {
-
-          scope.$watchCollection(function() {
-            if (isArray(ngModelCtrl.$viewValue)) {
-              return ngModelCtrl.$viewValue.map(function(value) {
-                return ngOptions.getTrackByValue(value);
-              });
-            }
-          }, function() {
-            ngModelCtrl.$render();
-          });
-
-        }
-      }
-
-
-      if (providedEmptyOption) {
-
-        // we need to remove it before calling selectElement.empty() because otherwise IE will
-        // remove the label from the element. wtf?
-        emptyOption.remove();
-
-        // compile the element since there might be bindings in it
-        $compile(emptyOption)(scope);
-
-        // remove the class, which is added automatically because we recompile the element and it
-        // becomes the compilation root
-        emptyOption.removeClass('ng-scope');
-      } else {
-        emptyOption = jqLite(optionTemplate.cloneNode(false));
-      }
-
-      // We need to do this here to ensure that the options object is defined
-      // when we first hit it in writeNgOptionsValue
-      updateOptions();
-
-      // We will re-render the option elements if the option values or labels change
-      scope.$watchCollection(ngOptions.getWatchables, updateOptions);
-
-      // ------------------------------------------------------------------ //
-
-
-      function updateOptionElement(option, element) {
-        option.element = element;
-        element.disabled = option.disabled;
-        // NOTE: The label must be set before the value, otherwise IE10/11/EDGE create unresponsive
-        // selects in certain circumstances when multiple selects are next to each other and display
-        // the option list in listbox style, i.e. the select is [multiple], or specifies a [size].
-        // See https://github.com/angular/angular.js/issues/11314 for more info.
-        // This is unfortunately untestable with unit / e2e tests
-        if (option.label !== element.label) {
-          element.label = option.label;
-          element.textContent = option.label;
-        }
-        if (option.value !== element.value) element.value = option.selectValue;
-      }
-
-      function addOrReuseElement(parent, current, type, templateElement) {
-        var element;
-        // Check whether we can reuse the next element
-        if (current && lowercase(current.nodeName) === type) {
-          // The next element is the right type so reuse it
-          element = current;
-        } else {
-          // The next element is not the right type so create a new one
-          element = templateElement.cloneNode(false);
-          if (!current) {
-            // There are no more elements so just append it to the select
-            parent.appendChild(element);
-          } else {
-            // The next element is not a group so insert the new one
-            parent.insertBefore(element, current);
-          }
-        }
-        return element;
-      }
-
-
-      function removeExcessElements(current) {
-        var next;
-        while (current) {
-          next = current.nextSibling;
-          jqLiteRemove(current);
-          current = next;
-        }
-      }
-
-
-      function skipEmptyAndUnknownOptions(current) {
-        var emptyOption_ = emptyOption && emptyOption[0];
-        var unknownOption_ = unknownOption && unknownOption[0];
-
-        if (emptyOption_ || unknownOption_) {
-          while (current &&
-                (current === emptyOption_ ||
-                current === unknownOption_ ||
-                emptyOption_ && emptyOption_.nodeType === NODE_TYPE_COMMENT)) {
-            // Empty options might have directives that transclude
-            // and insert comments (e.g. ngIf)
-            current = current.nextSibling;
-          }
-        }
-        return current;
-      }
-
-
-      function updateOptions() {
-
-        var previousValue = options && selectCtrl.readValue();
-
-        options = ngOptions.getOptions();
-
-        var groupMap = {};
-        var currentElement = selectElement[0].firstChild;
-
-        // Ensure that the empty option is always there if it was explicitly provided
-        if (providedEmptyOption) {
-          selectElement.prepend(emptyOption);
-        }
-
-        currentElement = skipEmptyAndUnknownOptions(currentElement);
-
-        options.items.forEach(function updateOption(option) {
-          var group;
-          var groupElement;
-          var optionElement;
-
-          if (option.group) {
-
-            // This option is to live in a group
-            // See if we have already created this group
-            group = groupMap[option.group];
-
-            if (!group) {
-
-              // We have not already created this group
-              groupElement = addOrReuseElement(selectElement[0],
-                                               currentElement,
-                                               'optgroup',
-                                               optGroupTemplate);
-              // Move to the next element
-              currentElement = groupElement.nextSibling;
-
-              // Update the label on the group element
-              groupElement.label = option.group;
-
-              // Store it for use later
-              group = groupMap[option.group] = {
-                groupElement: groupElement,
-                currentOptionElement: groupElement.firstChild
-              };
-
-            }
-
-            // So now we have a group for this option we add the option to the group
-            optionElement = addOrReuseElement(group.groupElement,
-                                              group.currentOptionElement,
-                                              'option',
-                                              optionTemplate);
-            updateOptionElement(option, optionElement);
-            // Move to the next element
-            group.currentOptionElement = optionElement.nextSibling;
-
-          } else {
-
-            // This option is not in a group
-            optionElement = addOrReuseElement(selectElement[0],
-                                              currentElement,
-                                              'option',
-                                              optionTemplate);
-            updateOptionElement(option, optionElement);
-            // Move to the next element
-            currentElement = optionElement.nextSibling;
-          }
-        });
-
-
-        // Now remove all excess options and group
-        Object.keys(groupMap).forEach(function(key) {
-          removeExcessElements(groupMap[key].currentOptionElement);
-        });
-        removeExcessElements(currentElement);
-
-<<<<<<< HEAD
-        ngModelCtrl.$render();
-=======
-function isObjectEmpty(obj) {
-  if (obj) {
-    for (var prop in obj) {
-      if (obj.hasOwnProperty(prop)) {
-        return false;
-      }
-    }
-  }
-  return true;
-}
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
-
-        // Check to see if the value has changed due to the update to the options
-        if (!ngModelCtrl.$isEmpty(previousValue)) {
-          var nextValue = selectCtrl.readValue();
-          if (ngOptions.trackBy ? !equals(previousValue, nextValue) : previousValue !== nextValue) {
-            ngModelCtrl.$setViewValue(nextValue);
-            ngModelCtrl.$render();
-          }
-        }
-
-      }
-
-    }
-  };
-}];
-
-/* global jqLiteRemove */
-
-var ngOptionsMinErr = minErr('ngOptions');
-
-/**
- * @ngdoc directive
- * @name ngOptions
- * @restrict A
- *
- * @description
- *
- * The `ngOptions` attribute can be used to dynamically generate a list of `<option>`
- * elements for the `<select>` element using the array or object obtained by evaluating the
- * `ngOptions` comprehension expression.
- *
- * In many cases, `ngRepeat` can be used on `<option>` elements instead of `ngOptions` to achieve a
- * similar result. However, `ngOptions` provides some benefits such as reducing memory and
- * increasing speed by not creating a new scope for each repeated instance, as well as providing
- * more flexibility in how the `<select>`'s model is assigned via the `select` **`as`** part of the
- * comprehension expression. `ngOptions` should be used when the `<select>` model needs to be bound
- *  to a non-string value. This is because an option element can only be bound to string values at
- * present.
- *
- * When an item in the `<select>` menu is selected, the array element or object property
- * represented by the selected option will be bound to the model identified by the `ngModel`
- * directive.
- *
- * Optionally, a single hard-coded `<option>` element, with the value set to an empty string, can
- * be nested into the `<select>` element. This element will then represent the `null` or "not selected"
- * option. See example below for demonstration.
- *
- * ## Complex Models (objects or collections)
- *
  * By default, `ngModel` watches the model by reference, not value. This is important to know when
  * binding the select to a model that is an object or a collection.
  *
@@ -29285,11 +27094,7 @@ var ngPluralizeDirective = ['$locale', '$interpolate', '$log', function($locale,
  * Version 1.4 removed the alphabetic sorting. We now rely on the order returned by the browser
  * when running `for key in myObj`. It seems that browsers generally follow the strategy of providing
  * keys in the order in which they were defined, although there are exceptions when keys are deleted
-<<<<<<< HEAD
- * and reinstated. See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/delete#Cross-browser_issues
-=======
  * and reinstated. See the [MDN page on `delete` for more info](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/delete#Cross-browser_notes).
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
  *
  * If this is not desired, the recommended workaround is to convert your object into an array
  * that is sorted into the order that you prefer before providing it to `ngRepeat`.  You could
@@ -30490,385 +28295,6 @@ var scriptDirective = ['$templateCache', function($templateCache) {
       if (attr.type == 'text/ng-template') {
         var templateUrl = attr.id,
             text = element[0].text;
-<<<<<<< HEAD
-
-        $templateCache.put(templateUrl, text);
-      }
-    }
-  };
-}];
-
-var noopNgModelController = { $setViewValue: noop, $render: noop };
-
-/**
- * @ngdoc type
- * @name  select.SelectController
- * @description
- * The controller for the `<select>` directive. This provides support for reading
- * and writing the selected value(s) of the control and also coordinates dynamically
- * added `<option>` elements, perhaps by an `ngRepeat` directive.
- */
-var SelectController =
-        ['$element', '$scope', '$attrs', function($element, $scope, $attrs) {
-
-  var self = this,
-      optionsMap = new HashMap();
-
-  // If the ngModel doesn't get provided then provide a dummy noop version to prevent errors
-  self.ngModelCtrl = noopNgModelController;
-
-  // The "unknown" option is one that is prepended to the list if the viewValue
-  // does not match any of the options. When it is rendered the value of the unknown
-  // option is '? XXX ?' where XXX is the hashKey of the value that is not known.
-  //
-  // We can't just jqLite('<option>') since jqLite is not smart enough
-  // to create it in <select> and IE barfs otherwise.
-  self.unknownOption = jqLite(document.createElement('option'));
-  self.renderUnknownOption = function(val) {
-    var unknownVal = '? ' + hashKey(val) + ' ?';
-    self.unknownOption.val(unknownVal);
-    $element.prepend(self.unknownOption);
-    $element.val(unknownVal);
-  };
-
-  $scope.$on('$destroy', function() {
-    // disable unknown option so that we don't do work when the whole select is being destroyed
-    self.renderUnknownOption = noop;
-  });
-
-  self.removeUnknownOption = function() {
-    if (self.unknownOption.parent()) self.unknownOption.remove();
-  };
-
-
-  // Read the value of the select control, the implementation of this changes depending
-  // upon whether the select can have multiple values and whether ngOptions is at work.
-  self.readValue = function readSingleValue() {
-    self.removeUnknownOption();
-    return $element.val();
-  };
-
-
-  // Write the value to the select control, the implementation of this changes depending
-  // upon whether the select can have multiple values and whether ngOptions is at work.
-  self.writeValue = function writeSingleValue(value) {
-    if (self.hasOption(value)) {
-      self.removeUnknownOption();
-      $element.val(value);
-      if (value === '') self.emptyOption.prop('selected', true); // to make IE9 happy
-    } else {
-      if (value == null && self.emptyOption) {
-        self.removeUnknownOption();
-        $element.val('');
-      } else {
-        self.renderUnknownOption(value);
-      }
-    }
-  };
-
-
-  // Tell the select control that an option, with the given value, has been added
-  self.addOption = function(value, element) {
-    assertNotHasOwnProperty(value, '"option value"');
-    if (value === '') {
-      self.emptyOption = element;
-    }
-    var count = optionsMap.get(value) || 0;
-    optionsMap.put(value, count + 1);
-  };
-
-  // Tell the select control that an option, with the given value, has been removed
-  self.removeOption = function(value) {
-    var count = optionsMap.get(value);
-    if (count) {
-      if (count === 1) {
-        optionsMap.remove(value);
-        if (value === '') {
-          self.emptyOption = undefined;
-        }
-      } else {
-        optionsMap.put(value, count - 1);
-      }
-    }
-  };
-
-  // Check whether the select control has an option matching the given value
-  self.hasOption = function(value) {
-    return !!optionsMap.get(value);
-  };
-}];
-
-/**
- * @ngdoc directive
- * @name select
- * @restrict E
- *
- * @description
- * HTML `SELECT` element with angular data-binding.
- *
- * The `select` directive is used together with {@link ngModel `ngModel`} to provide data-binding
- * between the scope and the `<select>` control (including setting default values).
- * Ìt also handles dynamic `<option>` elements, which can be added using the {@link ngRepeat `ngRepeat}` or
- * {@link ngOptions `ngOptions`} directives.
- *
- * When an item in the `<select>` menu is selected, the value of the selected option will be bound
- * to the model identified by the `ngModel` directive. With static or repeated options, this is
- * the content of the `value` attribute or the textContent of the `<option>`, if the value attribute is missing.
- * If you want dynamic value attributes, you can use interpolation inside the value attribute.
- *
- * <div class="alert alert-warning">
- * Note that the value of a `select` directive used without `ngOptions` is always a string.
- * When the model needs to be bound to a non-string value, you must either explictly convert it
- * using a directive (see example below) or use `ngOptions` to specify the set of options.
- * This is because an option element can only be bound to string values at present.
- * </div>
- *
- * If the viewValue of `ngModel` does not match any of the options, then the control
- * will automatically add an "unknown" option, which it then removes when the mismatch is resolved.
- *
- * Optionally, a single hard-coded `<option>` element, with the value set to an empty string, can
- * be nested into the `<select>` element. This element will then represent the `null` or "not selected"
- * option. See example below for demonstration.
- *
- * <div class="alert alert-info">
- * In many cases, `ngRepeat` can be used on `<option>` elements instead of {@link ng.directive:ngOptions
- * ngOptions} to achieve a similar result. However, `ngOptions` provides some benefits, such as
- * more flexibility in how the `<select>`'s model is assigned via the `select` **`as`** part of the
- * comprehension expression, and additionally in reducing memory and increasing speed by not creating
- * a new scope for each repeated instance.
- * </div>
- *
- *
- * @param {string} ngModel Assignable angular expression to data-bind to.
- * @param {string=} name Property name of the form under which the control is published.
- * @param {string=} required Sets `required` validation error key if the value is not entered.
- * @param {string=} ngRequired Adds required attribute and required validation constraint to
- * the element when the ngRequired expression evaluates to true. Use ngRequired instead of required
- * when you want to data-bind to the required attribute.
- * @param {string=} ngChange Angular expression to be executed when selected option(s) changes due to user
- *    interaction with the select element.
- * @param {string=} ngOptions sets the options that the select is populated with and defines what is
- * set on the model on selection. See {@link ngOptions `ngOptions`}.
- *
- * @example
- * ### Simple `select` elements with static options
- *
- * <example name="static-select" module="staticSelect">
- * <file name="index.html">
- * <div ng-controller="ExampleController">
- *   <form name="myForm">
- *     <label for="singleSelect"> Single select: </label><br>
- *     <select name="singleSelect" ng-model="data.singleSelect">
- *       <option value="option-1">Option 1</option>
- *       <option value="option-2">Option 2</option>
- *     </select><br>
- *
- *     <label for="singleSelect"> Single select with "not selected" option and dynamic option values: </label><br>
- *     <select name="singleSelect" id="singleSelect" ng-model="data.singleSelect">
- *       <option value="">---Please select---</option> <!-- not selected / blank option -->
- *       <option value="{{data.option1}}">Option 1</option> <!-- interpolation -->
- *       <option value="option-2">Option 2</option>
- *     </select><br>
- *     <button ng-click="forceUnknownOption()">Force unknown option</button><br>
- *     <tt>singleSelect = {{data.singleSelect}}</tt>
- *
- *     <hr>
- *     <label for="multipleSelect"> Multiple select: </label><br>
- *     <select name="multipleSelect" id="multipleSelect" ng-model="data.multipleSelect" multiple>
- *       <option value="option-1">Option 1</option>
- *       <option value="option-2">Option 2</option>
- *       <option value="option-3">Option 3</option>
- *     </select><br>
- *     <tt>multipleSelect = {{data.multipleSelect}}</tt><br/>
- *   </form>
- * </div>
- * </file>
- * <file name="app.js">
- *  angular.module('staticSelect', [])
- *    .controller('ExampleController', ['$scope', function($scope) {
- *      $scope.data = {
- *       singleSelect: null,
- *       multipleSelect: [],
- *       option1: 'option-1',
- *      };
- *
- *      $scope.forceUnknownOption = function() {
- *        $scope.data.singleSelect = 'nonsense';
- *      };
- *   }]);
- * </file>
- *</example>
- *
- * ### Using `ngRepeat` to generate `select` options
- * <example name="ngrepeat-select" module="ngrepeatSelect">
- * <file name="index.html">
- * <div ng-controller="ExampleController">
- *   <form name="myForm">
- *     <label for="repeatSelect"> Repeat select: </label>
- *     <select name="repeatSelect" id="repeatSelect" ng-model="data.repeatSelect">
- *       <option ng-repeat="option in data.availableOptions" value="{{option.id}}">{{option.name}}</option>
- *     </select>
- *   </form>
- *   <hr>
- *   <tt>repeatSelect = {{data.repeatSelect}}</tt><br/>
- * </div>
- * </file>
- * <file name="app.js">
- *  angular.module('ngrepeatSelect', [])
- *    .controller('ExampleController', ['$scope', function($scope) {
- *      $scope.data = {
- *       repeatSelect: null,
- *       availableOptions: [
- *         {id: '1', name: 'Option A'},
- *         {id: '2', name: 'Option B'},
- *         {id: '3', name: 'Option C'}
- *       ],
- *      };
- *   }]);
- * </file>
- *</example>
- *
- *
- * ### Using `select` with `ngOptions` and setting a default value
- * See the {@link ngOptions ngOptions documentation} for more `ngOptions` usage examples.
- *
- * <example name="select-with-default-values" module="defaultValueSelect">
- * <file name="index.html">
- * <div ng-controller="ExampleController">
- *   <form name="myForm">
- *     <label for="mySelect">Make a choice:</label>
- *     <select name="mySelect" id="mySelect"
- *       ng-options="option.name for option in data.availableOptions track by option.id"
- *       ng-model="data.selectedOption"></select>
- *   </form>
- *   <hr>
- *   <tt>option = {{data.selectedOption}}</tt><br/>
- * </div>
- * </file>
- * <file name="app.js">
- *  angular.module('defaultValueSelect', [])
- *    .controller('ExampleController', ['$scope', function($scope) {
- *      $scope.data = {
- *       availableOptions: [
- *         {id: '1', name: 'Option A'},
- *         {id: '2', name: 'Option B'},
- *         {id: '3', name: 'Option C'}
- *       ],
- *       selectedOption: {id: '3', name: 'Option C'} //This sets the default value of the select in the ui
- *       };
- *   }]);
- * </file>
- *</example>
- *
- *
- * ### Binding `select` to a non-string value via `ngModel` parsing / formatting
- *
- * <example name="select-with-non-string-options" module="nonStringSelect">
- *   <file name="index.html">
- *     <select ng-model="model.id" convert-to-number>
- *       <option value="0">Zero</option>
- *       <option value="1">One</option>
- *       <option value="2">Two</option>
- *     </select>
- *     {{ model }}
- *   </file>
- *   <file name="app.js">
- *     angular.module('nonStringSelect', [])
- *       .run(function($rootScope) {
- *         $rootScope.model = { id: 2 };
- *       })
- *       .directive('convertToNumber', function() {
- *         return {
- *           require: 'ngModel',
- *           link: function(scope, element, attrs, ngModel) {
- *             ngModel.$parsers.push(function(val) {
- *               return parseInt(val, 10);
- *             });
- *             ngModel.$formatters.push(function(val) {
- *               return '' + val;
- *             });
- *           }
- *         };
- *       });
- *   </file>
- *   <file name="protractor.js" type="protractor">
- *     it('should initialize to model', function() {
- *       var select = element(by.css('select'));
- *       expect(element(by.model('model.id')).$('option:checked').getText()).toEqual('Two');
- *     });
- *   </file>
- * </example>
- *
- */
-var selectDirective = function() {
-
-  return {
-    restrict: 'E',
-    require: ['select', '?ngModel'],
-    controller: SelectController,
-    link: function(scope, element, attr, ctrls) {
-
-      // if ngModel is not defined, we don't need to do anything
-      var ngModelCtrl = ctrls[1];
-      if (!ngModelCtrl) return;
-
-      var selectCtrl = ctrls[0];
-
-      selectCtrl.ngModelCtrl = ngModelCtrl;
-
-      // We delegate rendering to the `writeValue` method, which can be changed
-      // if the select can have multiple selected values or if the options are being
-      // generated by `ngOptions`
-      ngModelCtrl.$render = function() {
-        selectCtrl.writeValue(ngModelCtrl.$viewValue);
-      };
-
-      // When the selected item(s) changes we delegate getting the value of the select control
-      // to the `readValue` method, which can be changed if the select can have multiple
-      // selected values or if the options are being generated by `ngOptions`
-      element.on('change', function() {
-        scope.$apply(function() {
-          ngModelCtrl.$setViewValue(selectCtrl.readValue());
-        });
-      });
-
-      // If the select allows multiple values then we need to modify how we read and write
-      // values from and to the control; also what it means for the value to be empty and
-      // we have to add an extra watch since ngModel doesn't work well with arrays - it
-      // doesn't trigger rendering if only an item in the array changes.
-      if (attr.multiple) {
-
-        // Read value now needs to check each option to see if it is selected
-        selectCtrl.readValue = function readMultipleValue() {
-          var array = [];
-          forEach(element.find('option'), function(option) {
-            if (option.selected) {
-              array.push(option.value);
-            }
-          });
-          return array;
-        };
-
-        // Write value now needs to set the selected property of each matching option
-        selectCtrl.writeValue = function writeMultipleValue(value) {
-          var items = new HashMap(value);
-          forEach(element.find('option'), function(option) {
-            option.selected = isDefined(items.get(option.value));
-          });
-        };
-
-        // we have to do it on each watch since ngModel watches reference, but
-        // we need to work of an array, so we need to see if anything was inserted/removed
-        var lastView, lastViewRef = NaN;
-        scope.$watch(function selectMultipleWatch() {
-          if (lastViewRef === ngModelCtrl.$viewValue && !equals(lastView, ngModelCtrl.$viewValue)) {
-            lastView = shallowCopy(ngModelCtrl.$viewValue);
-            ngModelCtrl.$render();
-          }
-          lastViewRef = ngModelCtrl.$viewValue;
-        });
-
-=======
 
         $templateCache.put(templateUrl, text);
       }
@@ -31298,7 +28724,6 @@ var selectDirective = function() {
           lastViewRef = ngModelCtrl.$viewValue;
         });
 
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
         // If we are a multiple select then value is now a collection
         // so the meaning of $isEmpty changes
         ngModelCtrl.$isEmpty = function(value) {
@@ -31307,28 +28732,8 @@ var selectDirective = function() {
 
       }
     }
-<<<<<<< HEAD
-  };
 };
 
-
-// The option directive is purely designed to communicate the existence (or lack of)
-// of dynamically created (and destroyed) option elements to their containing select
-// directive via its controller.
-var optionDirective = ['$interpolate', function($interpolate) {
-
-  function chromeHack(optionElement) {
-    // Workaround for https://code.google.com/p/chromium/issues/detail?id=381459
-    // Adding an <option selected="selected"> element to a <select required="required"> should
-    // automatically select the new element
-    if (optionElement[0].hasAttribute('selected')) {
-      optionElement[0].selected = true;
-    }
-  }
-=======
-};
-
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
 
 // The option directive is purely designed to communicate the existence (or lack of)
 // of dynamically created (and destroyed) option elements to their containing select
@@ -31341,21 +28746,12 @@ var optionDirective = ['$interpolate', function($interpolate) {
 
       if (isDefined(attr.value)) {
         // If the value attribute is defined, check if it contains an interpolation
-<<<<<<< HEAD
-        var valueInterpolated = $interpolate(attr.value, true);
-      } else {
-        // If the value attribute is not defined then we fall back to the
-        // text content of the option element, which may be interpolated
-        var interpolateFn = $interpolate(element.text(), true);
-        if (!interpolateFn) {
-=======
         var interpolateValueFn = $interpolate(attr.value, true);
       } else {
         // If the value attribute is not defined then we fall back to the
         // text content of the option element, which may be interpolated
         var interpolateTextFn = $interpolate(element.text(), true);
         if (!interpolateTextFn) {
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
           attr.$set('value', element.text());
         }
       }
@@ -31369,49 +28765,8 @@ var optionDirective = ['$interpolate', function($interpolate) {
             selectCtrl = parent.data(selectCtrlName) ||
               parent.parent().data(selectCtrlName); // in case we are in optgroup
 
-<<<<<<< HEAD
-        function addOption(optionValue) {
-          selectCtrl.addOption(optionValue, element);
-          selectCtrl.ngModelCtrl.$render();
-          chromeHack(element);
-        }
-
-        // Only update trigger option updates if this is an option within a `select`
-        // that also has `ngModel` attached
-        if (selectCtrl && selectCtrl.ngModelCtrl) {
-
-          if (valueInterpolated) {
-            // The value attribute is interpolated
-            var oldVal;
-            attr.$observe('value', function valueAttributeObserveAction(newVal) {
-              if (isDefined(oldVal)) {
-                selectCtrl.removeOption(oldVal);
-              }
-              oldVal = newVal;
-              addOption(newVal);
-            });
-          } else if (interpolateFn) {
-            // The text content is interpolated
-            scope.$watch(interpolateFn, function interpolateWatchAction(newVal, oldVal) {
-              attr.$set('value', newVal);
-              if (oldVal !== newVal) {
-                selectCtrl.removeOption(oldVal);
-              }
-              addOption(newVal);
-            });
-          } else {
-            // The value attribute is static
-            addOption(attr.value);
-          }
-
-          element.on('$destroy', function() {
-            selectCtrl.removeOption(attr.value);
-            selectCtrl.ngModelCtrl.$render();
-          });
-=======
         if (selectCtrl) {
           selectCtrl.registerOption(scope, element, attr, interpolateValueFn, interpolateTextFn);
->>>>>>> aa7267d7f739a7e63f33d34792e3b08cc5abaf97
         }
       };
     }
