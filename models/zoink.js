@@ -25,6 +25,12 @@ var InviteSchema = new Schema({
   , createdAt   : Date
 });
 
+var CarpoolSchema = new Schema({
+  title         : { type: String, required: true }
+  , userName    : String
+  , userPic     : String
+});
+
 var ZoinkSchema = new Schema({
     user        : { type : Schema.Types.ObjectId, ref : 'User' }
   , slug        : { type: String, default: '', trim: true } //, unique: true
@@ -41,7 +47,7 @@ var ZoinkSchema = new Schema({
   , todos       : []
   , messages    : [MessageSchema]
   , purchases   : []
-  , carpools    : []
+  , carpools    : [CarpoolSchema]
   , reqs        : [RequirementSchema]
 });
 

@@ -155,6 +155,16 @@ module.exports = function (io, app) {
       });
     });
 
+    socket.on('publish:rmCar', function (data) {
+      Zoink.findById(data.zoinkId, function(err, zoink) {
+        var rmObj = zoink.carpools.id(data.car._id);
+        rmObj.remove();
+        zoink.save();
+
+        io.sockets.in(data.zoinkId).emit('rmCar', zoink.carpools);
+      });
+    });
+
     // REQS
     socket.on('publish:addReq', function (data) {
       Zoink.findById(data.zoinkId, function(err, zoink) {
