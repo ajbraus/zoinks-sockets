@@ -152,7 +152,6 @@ angular.module('zoinks')
     $scope.addCarpool = function() {
       $scope.carpool.userName = currentUser.displayName;
       var car = { zoinkId: $routeParams.id, car: $scope.carpool };
-      console.log(car);
       socket.emit('publish:addCar', car);
       $scope.carpool = {};
     };
@@ -186,6 +185,7 @@ angular.module('zoinks')
     $scope.addRequirement = function() {
       var req = { zoinkId: $routeParams.id, req: $scope.requirement.name };
       socket.emit('publish:addReq', req);
+      $scope.newRequirement = false;
       $scope.requirement = [];
     };
 
