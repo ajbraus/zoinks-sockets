@@ -142,7 +142,28 @@ module.exports = function (io, app) {
       }, function(err, zoink) {
         io.sockets.in(data.zoinkId).emit('rmMessage', message);
       });
-    })
+    });
+
+    // CARPOOLS
+    socket.on('publish:addCar', function (data) {
+      Zoink.findById(data.zoinkId, function(err, zoink) {
+        zoink.carpools.push(data.car);
+
+        zoink.save();
+
+        io.sockets.in(data.zoinkId).emit('addCar', zoink.carpools);
+      });
+    });
+
+    socket.on('publish:rmCar', function (data) {
+      Zoink.findById(data.zoinkId, function(err, zoink) {
+        var rmObj = zoink.carpools.id(data.car._id);
+        rmObj.remove();
+        zoink.save();
+
+        io.sockets.in(data.zoinkId).emit('rmCar', zoink.carpools);
+      });
+    });
 
     socket.on('publish:rmCar', function (data) {
       Zoink.findById(data.zoinkId, function(err, zoink) {
