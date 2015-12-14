@@ -4,6 +4,7 @@
 angular.module('zoinks', ['zoinks.filters', 
                          'zoinks.services', 
                          'zoinks.directives', 
+                         'zoinks.interceptors',
                          'ngResource',
                          'ngTouch', 
                          'btford.socket-io',

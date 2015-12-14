@@ -12,6 +12,7 @@ module.exports = function(app) {
 
   app.get('/api/me', auth.ensureAuthenticated, function(req, res) {
     User.findById(req.userId, function(err, user) {
+      console.log(user)
       res.send(user);
     });
   });
@@ -111,8 +112,9 @@ module.exports = function(app) {
                 if (!user) { return res.status(400).send({ message: 'User not found' }) };
               }
               user.facebook = profile.id;
+              user.email = profile.email;
               user.picture = user.picture || 'https://graph.facebook.com/v2.3/' + profile.id + '/picture?type=large';
-              user.displayName = user.displayName || profile.name;
+              user.displayName = user.displayName || profile.first_name + profile.last_name;
               user.first = profile.first_name;
               user.last = profile.last_name;
               user.save(function (err) {
@@ -132,7 +134,7 @@ module.exports = function(app) {
             user.facebook = profile.id;
             user.email = profile.email;
             user.picture = 'https://graph.facebook.com/' + profile.id + '/picture?type=large';
-            user.displayName = profile.name[0];
+            user.displayName = profile.first_name + profile.last_name;
             user.first = profile.first_name;
             user.last = profile.last_name;
             user.save(function (err) {

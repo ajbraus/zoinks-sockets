@@ -35,7 +35,7 @@ angular.module('zoinks')
             $scope.currentUser = response.data;  
             $scope.zoinks = Zoink.query();
             $scope.invites = Invite.query();
-            toastr.info("Successfully logged in", "Welcome Back" + $scope.currentUser.displayName)
+            toastr.info("Successfully logged in", "Welcome Back " + $scope.currentUser.displayName)
           } else {
             $auth.logout();
             $location.path('/');
@@ -57,7 +57,7 @@ angular.module('zoinks')
           $('#login-modal').modal('hide');
           $scope.isAuthenticated();
           $scope.user = {};
-          toastr.info('You have successfully created a new account and have been signed-in');
+          toastr.success('');
         })
         .catch(function(response) {
           toastr.error(response.data.message);
@@ -67,7 +67,7 @@ angular.module('zoinks')
     $scope.login = function() {
       $auth.login($scope.user)
         .then(function(response) {
-          toastr.success('You have successfully signed in');
+          toastr.success("Logged in", 'Success');
           $auth.setToken(response.data.token);
           $('#login-modal').modal('hide');
           $scope.isAuthenticated();
@@ -82,7 +82,7 @@ angular.module('zoinks')
       $auth.authenticate(provider)
         .then(function (response) {
           $auth.setToken(response.data.token);
-          toastr.success('You have successfully signed in with ' + provider);
+          toastr.success("Logged in with " + provider, 'Success');
           $('#login-modal').modal('hide');
           $scope.isAuthenticated();
           $location.path('/profile')
@@ -95,7 +95,7 @@ angular.module('zoinks')
     $scope.logout = function() {
       $auth.logout()
         .then(function() {
-          toastr.info('You have been logged out');
+          toastr.info('See you next time', 'Logged Out');
           $auth.logout();
           $scope.currentUser = null;
           $location.path('/')
