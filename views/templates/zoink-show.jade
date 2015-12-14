@@ -88,15 +88,17 @@
             .card-body
               form(ng-submit='addCarpool()', ng-show='newCarpool')
                 .form-group
-                  input.form-control(type='text', ng-model='carpool.name', focus-me='{{newCarpool}}')
+                  input.form-control(type='text', ng-model='carpool.title', focus-me='{{newCarpool}}')
+                  
               .list-group
                 .list-group-item(ng-repeat='carpool in zoink.carpools')
                   .clearfix
                     .pull-left
-                      | {{carpool.name}}
+                      | {{carpool.title}}
                     .pull-right
-                      a.margin-sides.btn.btn-sm.btn-default.pull-right(ng-click='joinCarpool(carpool)')
-                        i.icon.ion-plus-circled.big
+                      //- a.margin-sides.btn.btn-sm.btn-default.pull-right(ng-click='joinCarpool(carpool)')
+                      //-   i.icon.ion-plus-circled.big
+                      button.close(ng-click='removeCarpool(carpool)', ng-if='carpool.userName == currentUser.displayName') &#10006;
                       img.img-responsive.img-circle.pull-right.margin-sides(ng-repeat='passenger in carpool.passengers', ng-src='{{passenger.picUrl}}', width='40px')
         uib-tab(heading='Group Purchases')
           h5 Group Purchases
