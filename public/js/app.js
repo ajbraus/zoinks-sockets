@@ -37,12 +37,7 @@ angular.module('zoinks', ['zoinks.filters',
         templateUrl: 'templates/settings',
         controller: 'SettingsCtrl'
       });
-
-      $routeProvider.when('/pricing', {
-        templateUrl: 'templates/pricing'
-        // controller: 'PriCtrl'
-      });
-
+      
       $routeProvider.when('/how-it-works', {
         templateUrl: 'templates/how-it-works'
         // controller: 'PriCtrl'
