@@ -8,10 +8,14 @@
 */
 
 .jumbotron {
-  padding:120px 0 230px 0;
+  padding:120px 0 270px 0;
   background: url('/img/zoink.jpeg');
   background-size: cover;
   color:white;
+}
+
+.jumbotron .lead {
+  font-size: 27px;
 }
 
 .jumbotron h1 {
