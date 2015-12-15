@@ -1,4 +1,3 @@
-
 pry = require('pryjs')
 eval(pry.it)
 
@@ -17,7 +16,7 @@ INVITES/RSVPS (Adam)
   invites foggy, rsvps clear
 
 ZOINK
-  Edit Zoink in modal
+  Edit Zoink
   Archive zoink (with confirmation!)
   DONE add todos
   DONE add requirements

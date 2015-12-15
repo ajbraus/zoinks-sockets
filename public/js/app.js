@@ -38,6 +38,16 @@ angular.module('zoinks', ['zoinks.filters',
         controller: 'SettingsCtrl'
       });
 
+      $routeProvider.when('/pricing', {
+        templateUrl: 'templates/pricing'
+        // controller: 'PriCtrl'
+      });
+
+      $routeProvider.when('/how-it-works', {
+        templateUrl: 'templates/how-it-works'
+        // controller: 'PriCtrl'
+      });
+
       $routeProvider.otherwise({redirectTo: '/'});
 
       $locationProvider.html5Mode(true);

@@ -8,9 +8,9 @@ nav.navbar.navbar-default
     a.navbar-brand(href='/') Zoinks
     ul.nav.navbar-nav.navbar-left
       li
-        a(href="/") How it Works
+        a(href="/how-it-works") How it Works
       li
-        a(href="/") Pricing
+        a(href="/pricing") Pricing
   #bs-example-navbar-collapse-1.collapse.navbar-collapse
     ul.nav.navbar-nav.navbar-right
       li.dropdown(ng-show='currentUser')
@@ -27,7 +27,7 @@ nav.navbar.navbar-default
             a(ng-click='logout()') Logout
     .nav.navbar-nav.navbar-right
       a.navbar-btn.btn.btn-info(data-toggle='modal', data-target='#new-zoink', ng-show='currentUser') New Zoink
-      a.navbar-btn.btn.btn-info(data-toggle='modal', data-target='#login-modal', ng-hide='currentUser') Get Started
+      a.navbar-btn.btn.btn-info(data-toggle='modal', data-target='#login-modal', ng-hide='currentUser') Start Planning
     ul.nav.navbar-nav.navbar-right
       li.dropdown(ng-show="currentUser && (zoinks.length > 0 || invites.length > 0)")
         a.dropdown-toggle(data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')

@@ -28,24 +28,25 @@ angular.module('zoinks')
     // Upon signup/login, load currentUser into rootscope 
 
     $scope.isAuthenticated = function() {
-      $http.get('/api/me').then(
-        function (response) { // SUCCESS
-          if (!!response.data) {
-            console.log(response.data)
-            $scope.currentUser = response.data;  
-            $scope.zoinks = Zoink.query();
-            $scope.invites = Invite.query();
-            toastr.info("Successfully logged in", "Welcome Back " + $scope.currentUser.displayName)
-          } else {
+      if ($auth.isAuthenticated()) {
+        $http.get('/api/me').then(
+          function (response) { // SUCCESS
+            if (!!response.data) {
+              console.log(response.data)
+              $scope.currentUser = response.data;  
+              $scope.zoinks = Zoink.query();
+              $scope.invites = Invite.query();
+            } else {
+              $auth.logout();
+              $location.path('/');
+            }
+          }, 
+          function (response) { // ERROR
             $auth.logout();
             $location.path('/');
           }
-        }, 
-        function (response) { // ERROR
-          $auth.logout();
-          $location.path('/');
-        }
-      );
+        );
+      }
     };
 
     $scope.isAuthenticated();
