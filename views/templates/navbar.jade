@@ -43,8 +43,8 @@ nav.navbar.navbar-inverse
     .modal-content
       .modal-body
         .alert.alert-danger(ng-show='err') {{err}}
-        button.btn.btn-block.btn-info(ng-click="authenticate('facebook')") Login with Facebook
-        button.btn.btn-block.btn-info(ng-click="authenticate('google')") Login with Google
+        button.btn.btn-block.btn-facebook(ng-click="authenticate('facebook')") Connect with Facebook
+        button.btn.btn-block.btn-google(ng-click="authenticate('google')") Connect with Google
         br
         form
           .form-group
@@ -61,9 +61,9 @@ nav.navbar.navbar-inverse
             input.form-control(type='text', ng-model='user.displayName')
       .modal-footer
         a.btn.btn-link(ng-click='signupMode = true', ng-hide='signupMode') Sign Up
-        button.btn.btn-info(type='submit', ng-hide='signupMode', ng-click='login()') Log In
+        button.btn.btn-primary(type='submit', ng-hide='signupMode', ng-click='login()') Log In
         a.btn.btn-link(ng-click='signupMode = false', ng-show='signupMode') Login
-        button.btn.btn-info(type='submit', ng-cloak='', ng-show='signupMode', ng-click='signup()') Sign Up
+        button.btn.btn-primary(type='submit', ng-cloak='', ng-show='signupMode', ng-click='signup()') Sign Up
 
 #new-zoink.modal.fade(tabindex='-1', role='dialog', aria-labelledby='new-zoinkLabel')
   .modal-dialog.modal-sm(role='document')

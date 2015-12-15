@@ -207,3 +207,17 @@ fieldset {
 .navbar-inverse .navbar-brand {
   color:white;
 }
+
+.btn-facebook {
+  background:  #3b5998;
+  color:white;
+}
+
+.btn-google {
+  background:  #d34836;
+  color:white;
+}
+
+.btn-facebook:hover, .btn-google:hover {
+  color:#dedede;
+}
