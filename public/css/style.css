@@ -221,3 +221,8 @@ fieldset {
 .btn-facebook:hover, .btn-google:hover {
   color:#dedede;
 }
+
+.dropdown-form {
+  padding: 17px;
+  width: 300px;
+}

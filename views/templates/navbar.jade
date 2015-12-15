@@ -13,7 +13,7 @@ nav.navbar.navbar-inverse
     ul.nav.navbar-nav.navbar-right
       li.dropdown(ng-show='currentUser')
         a.dropdown-toggle(data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
-          span.status Me
+          span.status {{currentUser.displayName}}
           span.caret
         ul.dropdown-menu
           li
@@ -25,8 +25,47 @@ nav.navbar.navbar-inverse
             a(ng-click='logout()') Logout
     .nav.navbar-nav.navbar-right
       a.navbar-btn.btn.btn-default(data-toggle='modal', data-target='#new-zoink', ng-show='currentUser') New Zoink
-      a.navbar-btn.btn.btn-default(data-toggle='modal', data-target='#login-modal', ng-hide='currentUser') New Zoink
     ul.nav.navbar-nav.navbar-right
+      li.dropdown(ng-show='!currentUser')
+        a#dropdownMenu1.dropdown-toggle(type='button', data-toggle='dropdown')
+          | Login
+        .dropdown-menu.dropdown-form
+          .alert.alert-danger(ng-show='err') {{err}}
+          button.btn.btn-block.btn-facebook(ng-click="authenticate('facebook')") Connect with Facebook
+          button.btn.btn-block.btn-google(ng-click="authenticate('google')") Connect with Google
+
+          form(ng-submit="login()")
+            .form-group
+              label(for='') Email
+              input.form-control(type='text', ng-model='user.email')
+            .form-group
+              label(for='') Password
+              input.form-control(type='password', ng-model='user.password')
+            button.btn.btn-primary(type='submit', ng-click='login()') Log In
+      li.dropdown(ng-show='!currentUser')
+        a#dropdownMenu1.dropdown-toggle(type='button', data-toggle='dropdown')
+          | Sign Up
+        .dropdown-menu.dropdown-form(style='padding:17px;')
+          .alert.alert-danger(ng-show='err') {{err}}
+          button.btn.btn-block.btn-facebook(ng-click="authenticate('facebook')") Connect with Facebook
+          button.btn.btn-block.btn-google(ng-click="authenticate('google')") Connect with Google
+
+          form(ng-submit="signup()")
+            .form-group
+              label(for='') Email
+              input.form-control(type='text', ng-model='user.email')
+            .form-group
+              label(for='') Username
+              input.form-control(type='text', ng-model='user.displayName')
+            .form-group
+              label(for='') Password
+              input.form-control(type='password', ng-model='user.password')
+            .form-group
+              label(for='') Confirm Password
+              input.form-control(type='password', ng-model='user.confirm')
+            button.btn.btn-primary(type='submit', ng-click='signup()') Sign Up
+
+
       li.dropdown(ng-show="currentUser && (zoinks.length > 0 || invites.length > 0)")
         a.dropdown-toggle(data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
           | Zoinks 
@@ -37,33 +76,6 @@ nav.navbar.navbar-inverse
           li.divider(ng-show="invites.length < 1")
           li(ng-repeat='zoink in zoinks')
             a(href='/zoinks/{{zoink._id}}') {{zoink.title}}
-
-#login-modal.modal.fade(tabindex='-1', role='dialog')
-  .modal-dialog.modal-sm
-    .modal-content
-      .modal-body
-        .alert.alert-danger(ng-show='err') {{err}}
-        button.btn.btn-block.btn-facebook(ng-click="authenticate('facebook')") Connect with Facebook
-        button.btn.btn-block.btn-google(ng-click="authenticate('google')") Connect with Google
-        br
-        form
-          .form-group
-            label(for='') Email
-            input.form-control(type='text', ng-model='user.email')
-          .form-group
-            label(for='') Password
-            input.form-control(type='password', ng-model='user.password')
-          .form-group(ng-show='signupMode')
-            label(for='') Confirm Password
-            input.form-control(type='password', ng-model='user.confirm')
-          .form-group(ng-show='signupMode')
-            label(for='') Username
-            input.form-control(type='text', ng-model='user.displayName')
-      .modal-footer
-        a.btn.btn-link(ng-click='signupMode = true', ng-hide='signupMode') Sign Up
-        button.btn.btn-primary(type='submit', ng-hide='signupMode', ng-click='login()') Log In
-        a.btn.btn-link(ng-click='signupMode = false', ng-show='signupMode') Login
-        button.btn.btn-primary(type='submit', ng-cloak='', ng-show='signupMode', ng-click='signup()') Sign Up
 
 #new-zoink.modal.fade(tabindex='-1', role='dialog', aria-labelledby='new-zoinkLabel')
   .modal-dialog.modal-sm(role='document')
