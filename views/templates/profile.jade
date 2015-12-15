@@ -5,7 +5,7 @@
       img.img-rounded.img-responsive(ng-src="{{user.picture}}")
       h4 {{user.first}} {{user.last}}
     .col-sm-9
-      .page-header
+      .page-header(ng-show="invites.length > 0")
         h4 Invites
       .list-group
         a.list-group-item(ng-repeat="invite in invites" href="/zoinks/{{invite._id}}") 
