@@ -6,29 +6,30 @@ angular.module('zoinks')
 
   .controller('ZoinkShowCtrl', ['$scope', '$routeParams', 'Zoink', 'socket', '$auth', 'Auth', function($scope, $routeParams, Zoink, socket, $auth, Auth) {
     if ($auth.isAuthenticated()) {
-      var currentUser = Auth.currentUser()
+      var currentUser = Auth.currentUser();
       $scope.currentUser = currentUser;
     }
 
 
     Zoink.get({ id: $routeParams.id }, function(data) {
-      $scope.zoink = data
+      $scope.zoink = data;
       socket.emit('publish:joinRoom', $scope.zoink);
 
       $scope.rsvped = _.includes(_.pluck($scope.zoink.rsvps, '_id'), currentUser._id);
       $scope.invited = _.includes(_.pluck($scope.zoink.invites, '_id'), currentUser._id);
+      $scope.totalPurchases.total = calculateTotal($scope.zoink.purchases);
     });
 
     $scope.$on('socket:joinRoom', function (event, clientsCount) {
       $scope.clientsCount = clientsCount;
-    })
+    });
 
     // INVITES
 
     // NEW INVITE
     $scope.toggleNewInvite = function() {
       $scope.newInvite = !$scope.newInvite;
-    }
+    };
 
     $scope.invite = { zoinkId: $routeParams.id }
     $scope.addInvite = function() {
@@ -150,6 +151,7 @@ angular.module('zoinks')
 
     $scope.carpool = {};
     $scope.addCarpool = function() {
+      console.log($scope.carpool);
       $scope.carpool.userName = currentUser.displayName;
       var car = { zoinkId: $routeParams.id, car: $scope.carpool };
       socket.emit('publish:addCar', car);
@@ -210,8 +212,11 @@ angular.module('zoinks')
     });
 
     // REQUIREMENTS CLAIM
-    $scope.claimRequirement = function(req) {
-      var data = { zoinkId: $routeParams.id, req: req, user: currentUser };
+    $scope.claimRequirement = function(req, user) {
+      var assignedUser;
+      if (user) assignedUser = user;
+      else assignedUser = currentUser;
+      var data = { zoinkId: $routeParams.id, req: req, user: assignedUser };
       socket.emit('publish:clReq', data);
     };
 
@@ -224,7 +229,7 @@ angular.module('zoinks')
 
     // REQUIREMENTS UNCLAIM
     $scope.unclaimRequirement = function(req) {
-      var data = { zoinkId: $routeParams.id, req: req, user: currentUser };
+      var data = { zoinkId: $routeParams.id, req: req };
       socket.emit('publish:unclReq', data);
     };
 
@@ -241,10 +246,11 @@ angular.module('zoinks')
     }
 
     // ADD TODO
+    $scope.todo = {};
     $scope.addTodo = function() {
       var todo = { zoinkId: $routeParams.id, todo: $scope.todo };
       socket.emit('publish:addTodo', todo);
-      $scope.todo = [];
+      $scope.todo = {};
     };
 
     $scope.$on('socket:addTodo', function (event, todos) {
@@ -266,6 +272,49 @@ angular.module('zoinks')
         $scope.zoink.todos = todos;
       });
     });
+
+    // PURCHASES
+    $scope.toggleNewPurchase = function() {
+      $scope.newPurchase = !$scope.newPurchase;
+    };
+
+    $scope.purchase = {};
+    $scope.addPurchase = function() {
+      $scope.purchase.userName = currentUser.displayName;
+      var purchase = { zoinkId: $routeParams.id, purchase: $scope.purchase };
+      socket.emit('publish:addPur', purchase);
+      $scope.purchase = {};
+    };
+
+    $scope.$on('socket:addPur', function (event, purchases) {
+      $scope.$apply(function() {
+        // UPDATE all the purchases
+        $scope.zoink.purchases = purchases;
+        $scope.totalPurchases.total = calculateTotal($scope.zoink.purchases);
+      });
+    });
+
+    $scope.removePurchase = function(rmPur) {
+      var purchase = { zoinkId: $routeParams.id, purchase: rmPur };
+      socket.emit('publish:rmPur', purchase);
+    };
+
+    $scope.$on('socket:rmPur', function (event, purchases) {
+      $scope.$apply(function() {
+        $scope.zoink.purchases = purchases;
+        $scope.totalPurchases.total = calculateTotal($scope.zoink.purchases);
+      });
+    });
+
+    $scope.totalPurchases = {};
+    var calculateTotal = function(pur) {
+      // get total money spent
+      var total = 0;
+      angular.forEach(pur, function(v, k) {
+        if (v.cost) total += v.cost;
+      });
+      return total;
+    };
  
   }])
 

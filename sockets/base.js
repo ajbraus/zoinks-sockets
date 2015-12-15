@@ -240,6 +240,27 @@ module.exports = function (io, app) {
       });
     });
 
+    // PURCHASES
+    socket.on('publish:addPur', function (data) {
+      Zoink.findById(data.zoinkId, function(err, zoink) {
+        zoink.purchases.push(data.purchase);
+
+        zoink.save();
+
+        io.sockets.in(data.zoinkId).emit('addPur', zoink.purchases);
+      });
+    });
+
+    socket.on('publish:rmPur', function (data) {
+      Zoink.findById(data.zoinkId, function(err, zoink) {
+        var rmObj = zoink.purchases.id(data.purchase._id);
+        rmObj.remove();
+        zoink.save();
+
+        io.sockets.in(data.zoinkId).emit('rmPur', zoink.purchases);
+      });
+    });
+
     // QUESTIONQUEUE
 
     socket.on('join.room', function (data) {

@@ -48,6 +48,8 @@ angular.module('zoinks.services', [])
     socket.forward('unclReq');
     socket.forward('addTodo');
     socket.forward('rmTodo');
+    socket.forward('addPur');
+    socket.forward('rmPur');
 
     return socket;
   }])
