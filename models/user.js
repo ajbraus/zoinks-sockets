@@ -13,9 +13,9 @@ var UserSchema = new Schema({
   , first         : { type: String, trim: true }
   , last          : { type: String, trim: true }
   , phone         : { type: String, trim: true }
-  , picture       : { type: String, required: true }
-  , displayName   : { type: String, required: true, unique: true, trim: true, set: toLower }
-  , email         : { type: String, required: true, unique: true, trim: true, set: toLower }
+  , picture       : { type: String }
+  , displayName   : { type: String, trim: true, set: toLower }
+  , email         : { type: String, unique: true, trim: true, set: toLower }
   , password      : { type: String, select: false }
   , facebook      : { type: String, select: false }
   , google        : { type: String, select: false }
