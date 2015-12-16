@@ -7,6 +7,7 @@ var User = require('../models/user.js')
   , moment = require('moment')
   , auth = require('./auth')
   , Zoink = require('../models/zoink.js')
+  , phone = require('phone');
 
 module.exports = function(app) {
 
@@ -18,6 +19,9 @@ module.exports = function(app) {
   });
 
   app.put('/api/me', auth.ensureAuthenticated, function(req, res) {
+    if (req.body.phone) {
+      req.body.phone = phone(req.body.phone)[0]
+    }
     User.update(req.userId, req.body, function(err, user) {
       if (!user) {
         return res.status(400).send({ message: 'User not found' });
@@ -34,12 +38,16 @@ module.exports = function(app) {
       if (!user) {
         return res.status(401).send({ message: 'Wrong email or password' });
       }
+
       user.comparePassword(req.body.password, function(err, isMatch) {
         console.log(isMatch)
         if (!isMatch) {
           return res.status(401).send({ message: 'Wrong email or password' });
         }
-        res.send({ token: auth.createJWT(user) });
+        user.loginCount ++
+        user.save(function(err) {
+          res.send({ token: auth.createJWT(user) });
+        });
       });
     });
   });
@@ -53,7 +61,7 @@ module.exports = function(app) {
         email: req.body.email,
         password: req.body.password,
         displayName: req.body.displayName,
-        picture: "http://placehold.it/50x50"
+        picture: "http://placehold.it/50x50"  
       });
       user.save(function(err) {
         if (err) { return res.status(400).send({err: err}) }
@@ -70,6 +78,13 @@ module.exports = function(app) {
       });
     });
   });
+
+
+  // look up user by fb id
+    // if there authenticate
+    // if not there, look up by email
+    // if there, add fb id and authenticate
+    // if not there, create user
 
   app.post('/auth/facebook', function(req, res) {
     var accessTokenUrl = 'https://graph.facebook.com/v2.3/oauth/access_token';
@@ -92,58 +107,42 @@ module.exports = function(app) {
         if (response.statusCode !== 200) {
           return res.status(500).send({ message: profile.error.message });
         }
-
-        // if token present (logged in already)
-        if (req.headers.authorization) {
-          // look up user with facebook profile
-          User.findOne({ facebook: profile.id }, function(err, existingUser) {
-            if (existingUser) {
-              // if user found, refresh the token with this user and send it back
-              return res.status(409).send({ message: 'There is already a Facebook account that belongs to you' });
-            } // else use the token to find the user by their id
-            var token = req.headers.authorization.split(' ')[1];
-            var payload = jwt.decode(token, config.TOKEN_SECRET);
-            
-            console.log("payload:", payload.sub);
-            User.findById(payload.sub, function(err, user) {
-              // user does not exist from token id 
-              if (!user) {
-                // try to find the 
-                if (!user) { return res.status(400).send({ message: 'User not found' }) };
-              }
-              user.facebook = profile.id;
-              user.email = profile.email;
-              user.picture = user.picture || 'https://graph.facebook.com/v2.3/' + profile.id + '/picture?type=large';
-              user.displayName = user.displayName || profile.first_name + profile.last_name;
-              user.first = profile.first_name;
-              user.last = profile.last_name;
-              user.save(function (err) {
-                var token = auth.createJWT(user);
-                res.send({ token: token });
-              });
-            });
-          });
-        } else {
-          // Step 3b. Create a new user account or return an existing one.
-          User.findOne({ facebook: profile.id }, function(err, existingUser) {
-            if (existingUser) {
+        // Step 3b. Create a new user account or return an existing one.
+        User.findOne({ facebook: profile.id }, function(err, existingUser) {
+          if (existingUser) {
+            existingUser.loginCount ++
+            existingUser.save(function(err) {
               var token = auth.createJWT(existingUser);
               return res.send({ token: token });
-            }
-            var user = new User();
-            user.facebook = profile.id;
-            user.email = profile.email;
-            user.picture = 'https://graph.facebook.com/' + profile.id + '/picture?type=large';
-            user.displayName = profile.first_name + profile.last_name;
-            user.first = profile.first_name;
-            user.last = profile.last_name;
-            user.save(function (err) {
-              if (err) { return res.status(400).send({ message: "there was an err: " + err})}
-              var token = auth.createJWT(user);
-              res.send({ token: token });
             });
-          });
-        }
+          } else {
+            User.findOne({ email: profile.email }, function(err, existingUser) {
+              if (existingUser) {
+                existingUser.facebook = profile.id
+                existingUser.picture = 'https://graph.facebook.com/' + profile.id + '/picture?type=large';
+                existingUser.loginCount ++
+                
+                existingUser.save(function(err, user) {
+                  var token = auth.createJWT(existingUser);
+                  return res.send({ token: token });                  
+                })
+              } else {
+                var user = new User();
+                user.facebook = profile.id;
+                user.email = profile.email;
+                user.picture = 'https://graph.facebook.com/' + profile.id + '/picture?type=large';
+                user.displayName = profile.first_name + profile.last_name;
+                user.first = profile.first_name;
+                user.last = profile.last_name;
+                user.save(function (err) {
+                  if (err) { return res.status(400).send({ message: "there was an err: " + err})}
+                  var token = auth.createJWT(user);
+                  res.send({ token: token });
+                });
+              }
+            })
+          }  
+        });
       });
     });
   });
@@ -163,55 +162,45 @@ module.exports = function(app) {
     request.post(accessTokenUrl, { json: true, form: params }, function(err, response, token) {
       var accessToken = token.access_token;
       var headers = { Authorization: 'Bearer ' + accessToken };
-      console.log("accessToken", accessToken);
+
       // Step 2. Retrieve profile information about the current user.
       request.get({ url: peopleApiUrl, headers: headers, json: true }, function(err, response, profile) {
         if (profile.error) {
           return res.status(500).send({message: profile.error.message});
         }
+
         // Step 3a. Link user accounts.
-        if (req.headers.authorization) {
-          console.log('linking google account')
-          User.findOne({ google: profile.sub }, function(err, existingUser) {
-            if (existingUser) {
-              return res.status(409).send({ message: 'There is already a Google account that belongs to you' });
-            }
-            var token = req.headers.authorization.split(' ')[1];
-            var payload = jwt.decode(token, config.TOKEN_SECRET);
-            User.findById(payload.sub, function(err, user) {
-              if (!user) {
-                return res.status(400).send({ message: 'User not found' });
+        User.findOne({ google: profile.sub }, function(err, existingUser) {
+          if (existingUser) {
+            var token = auth.createJWT(existingUser);
+            return res.send({ token: token });                  
+          } else {
+            User.findOne({ email: profile.email }, function(err, existingUser) {
+              if (existingUser) {
+                existingUser.google = profile.sub
+                existingUser.picture = profile.picture.replace('sz=50', 'sz=200');
+
+                existingUser.save(function(err, user) {
+                  var token = auth.createJWT(existingUser);
+                  return res.send({ token: token });                  
+                })
+              } else {
+                var user = new User();
+                user.google = profile.sub;
+                user.first = profile.given_name;
+                user.last = profile.family_name;
+                user.picture = profile.picture.replace('sz=50', 'sz=200');
+                user.displayName = profile.name;
+                user.email = profile.email;
+                user.save(function (err) {
+                  console.log('err:', err);
+                  var token = auth.createJWT(user);
+                  res.send({ token: token });
+                });
               }
-              user.google = profile.sub;
-              user.picture = user.picture || profile.picture.replace('sz=50', 'sz=200');
-              user.displayName = user.displayName || profile.name;
-              user.save(function (err) {
-                var token = auth.createJWT(user);
-                res.send({ token: token });
-              });
             });
-          });
-        } else {
-          // Step 3b. Create a new user account or return an existing one.
-          User.findOne({ google: profile.sub }, function(err, existingUser) {
-            if (existingUser) {
-              return res.send({ token: auth.createJWT(existingUser) });
-            }
-            console.log('creating new user from google profile')
-            var user = new User();
-            user.google = profile.sub;
-            user.first = profile.given_name;
-            user.last = profile.family_name;
-            user.picture = profile.picture.replace('sz=50', 'sz=200');
-            user.displayName = profile.name;
-            user.email = profile.email;
-            user.save(function (err) {
-              console.log('err:', err);
-              var token = auth.createJWT(user);
-              res.send({ token: token });
-            });
-          });
-        }
+          }
+        })
       });
     });
   });

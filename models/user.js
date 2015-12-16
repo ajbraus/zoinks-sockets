@@ -1,6 +1,6 @@
 var mongoose = require('mongoose'),
     bcrypt = require('bcryptjs'),
-    Schema = mongoose.Schema;
+    Schema = mongoose.Schema
 
 // GETTER
 function toLower (v) {
@@ -12,14 +12,14 @@ var UserSchema = new Schema({
   , updated_at    : { type: Date }
   , first         : { type: String, trim: true }
   , last          : { type: String, trim: true }
-  , notifications : { type: Number, default: 2 }
   , phone         : { type: String, trim: true }
-  , picture       : { type: String, required: true }
-  , displayName   : { type: String, required: true, unique: true, trim: true, set: toLower }
-  , email         : { type: String, required: true, unique: true, trim: true, set: toLower }
+  , picture       : { type: String }
+  , displayName   : { type: String, trim: true, set: toLower }
+  , email         : { type: String, unique: true, trim: true, set: toLower }
   , password      : { type: String, select: false }
   , facebook      : { type: String, select: false }
   , google        : { type: String, select: false }
+  , loginCount    : { type:Number, default: 0 }
 })
 
 UserSchema.virtual('fullname').get(function() {

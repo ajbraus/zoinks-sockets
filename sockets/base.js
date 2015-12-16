@@ -232,11 +232,32 @@ module.exports = function (io, app) {
 
     socket.on('publish:rmTodo', function (data) {
       Zoink.findById(data.zoinkId, function(err, zoink) {
-        var index = zoink.todos.indexOf(data.todo);
-        zoink.todos.splice(index, 1);
+        var rmObj = zoink.todos.id(data.todo._id);
+        rmObj.remove();
         zoink.save();
 
         io.sockets.in(data.zoinkId).emit('rmTodo', zoink.todos);
+      });
+    });
+
+    // PURCHASES
+    socket.on('publish:addPur', function (data) {
+      Zoink.findById(data.zoinkId, function(err, zoink) {
+        zoink.purchases.push(data.purchase);
+
+        zoink.save();
+
+        io.sockets.in(data.zoinkId).emit('addPur', zoink.purchases);
+      });
+    });
+
+    socket.on('publish:rmPur', function (data) {
+      Zoink.findById(data.zoinkId, function(err, zoink) {
+        var rmObj = zoink.purchases.id(data.purchase._id);
+        rmObj.remove();
+        zoink.save();
+
+        io.sockets.in(data.zoinkId).emit('rmPur', zoink.purchases);
       });
     });
 

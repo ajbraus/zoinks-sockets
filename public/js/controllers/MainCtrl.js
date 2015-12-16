@@ -23,10 +23,6 @@ angular.module('zoinks')
     $scope.signupMode = false;
     $scope.user = {};
 
-    // upon load, check if auth token there. 
-    // If auth token there check if authentic and load current user from token into rootscope
-    // Upon signup/login, load currentUser into rootscope 
-
     $scope.isAuthenticated = function() {
       if ($auth.isAuthenticated()) {
         $http.get('/api/me').then(
@@ -55,10 +51,10 @@ angular.module('zoinks')
       $auth.signup($scope.user)
         .then(function(response) {
           $auth.setToken(response);
-          $('#login-modal').modal('hide');
           $scope.isAuthenticated();
           $scope.user = {};
-          toastr.success('');
+          toastr.success('')
+          $location.path('/settings');
         })
         .catch(function(response) {
           toastr.error(response.data.message);
@@ -70,9 +66,9 @@ angular.module('zoinks')
         .then(function(response) {
           toastr.success("Logged in", 'Success');
           $auth.setToken(response.data.token);
-          $('#login-modal').modal('hide');
           $scope.isAuthenticated();
           $scope.user = {};
+          $location.path('/profile')
         })
         .catch(function(response) {
           toastr.error(response.data.message, response.status);
@@ -84,9 +80,13 @@ angular.module('zoinks')
         .then(function (response) {
           $auth.setToken(response.data.token);
           toastr.success("Logged in with " + provider, 'Success');
-          $('#login-modal').modal('hide');
           $scope.isAuthenticated();
-          $location.path('/profile')
+          var user = $auth.getPayload()
+          if(user.loginCount == 0) {
+            $location.path('/settings')  
+          } else {
+            $location.path('/profile')
+          }
         })
         .catch(function(response) {
           console.log(response)
@@ -96,9 +96,9 @@ angular.module('zoinks')
     $scope.logout = function() {
       $auth.logout()
         .then(function() {
-          toastr.info('See you next time', 'Logged Out');
           $auth.logout();
           $scope.currentUser = null;
+          toastr.info('See you next time', 'Logged Out');
           $location.path('/')
         });
     };

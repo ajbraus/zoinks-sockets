@@ -13,7 +13,7 @@ var MessageSchema = new Schema({
 });
 
 var RequirementSchema = new Schema({
-    title         : { type: String, required: true }
+    title       : { type: String, required: true }
   , userName    : String
   , userPic     : String
 });
@@ -25,10 +25,21 @@ var InviteSchema = new Schema({
   , createdAt   : Date
 });
 
+var TodoSchema = new Schema({
+  title         : { type: String, required: true }
+});
+
 var CarpoolSchema = new Schema({
   title         : { type: String, required: true }
+  , seats       : Number
   , userName    : String
   , userPic     : String
+});
+
+var PurchaseSchema = new Schema({
+  title         : { type: String, required: true }
+  , cost       : Number
+  , userName    : String
 });
 
 var ZoinkSchema = new Schema({
@@ -44,9 +55,9 @@ var ZoinkSchema = new Schema({
   , desc        : String
   , invites     : [InviteSchema]
   , rsvps       : [{ type : Schema.Types.ObjectId, ref : 'User' }]
-  , todos       : []
+  , todos       : [TodoSchema]
   , messages    : [MessageSchema]
-  , purchases   : []
+  , purchases   : [PurchaseSchema]
   , carpools    : [CarpoolSchema]
   , reqs        : [RequirementSchema]
 });
