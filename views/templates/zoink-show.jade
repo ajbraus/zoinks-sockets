@@ -49,28 +49,30 @@
       uib-tabset.margin-top(justified='true')
         uib-tab(heading='Get Ready')
           h5 Volunteers Needed
-          .card
+          .card#requirements
             .card-header.clearfix
               a.pull-right.btn.btn-link(ng-click='toggleNewRequirement()') Add
-              //-  ng-hide='!rspved'
             .card-body
               form(ng-submit='addRequirement()', ng-show='newRequirement')
                 .form-group
                   input.form-control(type='text', ng-model='requirement.name', focus-me='{{newRequirement}}')
               .list-group
-                .list-group-item(ng-repeat='r in zoink.reqs') {{r.title}}
+                .list-group-item(ng-repeat="r in zoink.reqs | orderBy:'-userName'") {{r.title}}
                   span.pull-right 
-                    {{r.userName}}
-                    button.close(ng-click='removeRequirement(r)') &#10006;
-                    .btn-group(ng-if='!r.userName')
-                      button.btn.btn-sm.btn-default(ng-click='claimRequirement(r)') Claim
-                      button.btn.btn-sm.btn-default.dropdown-toggle(data-toggle="dropdown")
+                    .btn-group
+                      button.btn.btn-sm.btn-default#assign-requirement(data-toggle='dropdown') {{r.userName || 'UNASSIGNED'}}
                         span.caret
                       ul.dropdown-menu
                         li(ng-repeat='rsvp in zoink.rsvps')
                           a(ng-click='claimRequirement(r, rsvp)') {{rsvp.displayName}}
-                    button.btn.btn-sm.btn-default(ng-click='unclaimRequirement(r)' ng-if='r.userName == currentUser.displayName') Unclaim
-                    img.img-responsive.img-circle.pull-left(ng-src='{{r.userPic}}', width='25px')
+                        li
+                          a(ng-click='unclaimRequirement(r)') UNASSIGNED
+                    a#dropdownMenu1.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
+                        i.icon.ion-gear-b
+                      ul.dropdown-menu(aria-labelledby='dropdownMenu1')
+                        li
+                          a(href="" ng-click='removeRequirement(r)') Delete
+                    //- img.img-responsive.img-circle.pull-left(ng-src='{{r.userPic}}', width='25px')
           h5 What to Bring & How to Prepare 
           .card
             .card-header.clearfix
@@ -88,7 +90,6 @@
                     ul.dropdown-menu(aria-labelledby='dropdownMenu1')
                       li
                         a(href="" ng-click="removeTodo(todo)") Delete
-                    //- button.close(ng-click='removeTodo(todo)') &#10006;
 
         uib-tab(heading='Share Rides')
           h5 Carpools and Shared Rides
@@ -108,10 +109,6 @@
                     .pull-left
                       | {{carpool.title}} can take {{carpool.seats || '?'}} passengers
                     .pull-right
-                      //- a.margin-sides.btn.btn-sm.btn-default.pull-right(ng-click='joinCarpool(carpool)')
-                      //-   i.icon.ion-plus-circled.big
-                      //- button.close(ng-click='removeCarpool(carpool)', ng-if='carpool.userName == currentUser.displayName') &#10006;
-
                       a#dropdownMenu1.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
                         i.icon.ion-gear-b
                       ul.dropdown-menu(aria-labelledby='dropdownMenu1')
@@ -138,7 +135,6 @@
                     ul.dropdown-menu(aria-labelledby='dropdownMenu1')
                       li
                         a(href="" ng-click="removePurchase(purchase)") Delete
-                    //- button.close(ng-click='removePurchase(purchase)') &#10006;
               .list-group
                 .list-group-item Total: ${{totalPurchases.total}}
 .col-sm-3.chat.box-shadow-left.whole-height

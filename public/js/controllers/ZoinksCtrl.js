@@ -151,7 +151,6 @@ angular.module('zoinks')
 
     $scope.carpool = {};
     $scope.addCarpool = function() {
-      console.log($scope.carpool);
       $scope.carpool.userName = currentUser.displayName;
       var car = { zoinkId: $routeParams.id, car: $scope.carpool };
       socket.emit('publish:addCar', car);
@@ -161,7 +160,6 @@ angular.module('zoinks')
     $scope.$on('socket:addCar', function (event, cars) {
       $scope.$apply(function() {
         // UPDATE all the cars
-        console.log(cars);
         $scope.zoink.carpools = cars;
       });
     });
