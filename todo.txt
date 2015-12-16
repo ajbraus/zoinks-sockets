@@ -1,6 +1,11 @@
 pry = require('pryjs')
 eval(pry.it)
 
+troubleshoot signing up with email, then linking fb and google.
+troubleshoot invites and rspvs
+payments
+
+
 ONBOARDING (Adam)
   go to user profile/settings form after authenticating to 
     DONE - phone number
