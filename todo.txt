@@ -1,18 +1,14 @@
 pry = require('pryjs')
 eval(pry.it)
 
-don't require everyone to touch the zoink
-  - add people
-  - confirm them
-
 ONBOARDING (Adam)
   - make unique username
   - get phone number from facebook/google
 
 INVITES/RSVPS (Adam)
   invite text droplet
-  text me the text droplet - what, where, when
   rsvp with username & phone number || email
+  text me the text droplet - what, where, when
 
 ZOINK
   tabs are urls
