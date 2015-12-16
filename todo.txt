@@ -5,6 +5,14 @@ troubleshoot signing up with email, then linking fb and google.
 troubleshoot invites and rspvs
 payments
 
+add flake out to clicking the face rsvp
+.btn.btn-default.dropdown(ng-show="rsvped" ng-cloak) 
+  a.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
+    | Unrsvp
+  ul.dropdown-menu
+    li
+      a(href="" ng-click="unrsvp()") Flake Out
+
 
 ONBOARDING (Adam)
   - make unique username

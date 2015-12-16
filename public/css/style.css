@@ -232,3 +232,15 @@ fieldset {
   text-transform: none;
   margin: -5px 14px;
 }
+
+
+[ng\:cloak], [ng-cloak], .ng-cloak {
+    display: none;
+}
+
+.invites-row {
+    width: 100%;
+    padding: 10px 20px 20px 20px;
+    margin: 0 0px;
+    background: white;
+}
