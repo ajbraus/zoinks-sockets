@@ -2,12 +2,11 @@ pry = require('pryjs')
 eval(pry.it)
 
 ONBOARDING (Adam)
-  go to user profile/settings form after authenticating to 
+  DONE go to user profile/settings form after authenticating to
     DONE - phone number
-    - require password if no password
+      DONE - after signup/auth if phone is null redirect to '/settings'
+    DONE - require password if no password
     - if username is already taken add integer to it
-    - update token after updating
-    - logging me out after updating
 
 INVITES/RSVPS (Adam)
   invite modal - Zoink Username (autocomplete w picture) or Name and Email

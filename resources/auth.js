@@ -33,6 +33,7 @@ module.exports = {
 	    name: user.fullname,
 	    picture: user.picture,
 	    displayName: user.displayName,
+	    loginCount: user.loginCount,
 	    iat: moment().unix(),
 	    exp: moment().add(14, 'days').unix()
 	  };
