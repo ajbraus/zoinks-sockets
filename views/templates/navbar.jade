@@ -36,10 +36,10 @@ nav.navbar.navbar-inverse
 
           form(ng-submit="login()")
             .form-group
-              label(for='') Email
+              label(for='') Email*
               input.form-control(type='text', ng-model='user.email')
             .form-group
-              label(for='') Password
+              label(for='') Password*
               input.form-control(type='password', ng-model='user.password')
             button.btn.btn-primary(type='submit', ng-click='login()') Log In
       li.dropdown(ng-show='!currentUser')
@@ -52,16 +52,16 @@ nav.navbar.navbar-inverse
 
           form(ng-submit="signup()")
             .form-group
-              label(for='') Email
-              input.form-control(type='text', ng-model='user.email')
-            .form-group
-              label(for='') Username
+              label(for='') Username*
               input.form-control(type='text', ng-model='user.displayName')
             .form-group
-              label(for='') Password
+              label(for='') Email*
+              input.form-control(type='text', ng-model='user.email')
+            .form-group
+              label(for='') Password*
               input.form-control(type='password', ng-model='user.password')
             .form-group
-              label(for='') Confirm Password
+              label(for='') Confirm Password*
               input.form-control(type='password', ng-model='user.confirm')
             button.btn.btn-primary(type='submit', ng-click='signup()') Sign Up
 

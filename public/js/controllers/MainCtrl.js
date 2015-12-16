@@ -51,10 +51,10 @@ angular.module('zoinks')
       $auth.signup($scope.user)
         .then(function(response) {
           $auth.setToken(response);
-          $('#login-modal').modal('hide');
           $scope.isAuthenticated();
           $scope.user = {};
-          toastr.success('');
+          toastr.success('')
+          $location.path('/settings');
         })
         .catch(function(response) {
           toastr.error(response.data.message);
@@ -68,6 +68,7 @@ angular.module('zoinks')
           $auth.setToken(response.data.token);
           $scope.isAuthenticated();
           $scope.user = {};
+          $location.path('/profile')
         })
         .catch(function(response) {
           toastr.error(response.data.message, response.status);
@@ -80,7 +81,12 @@ angular.module('zoinks')
           $auth.setToken(response.data.token);
           toastr.success("Logged in with " + provider, 'Success');
           $scope.isAuthenticated();
-          $location.path('/profile')
+          var user = $auth.getPayload()
+          if(user.loginCount == 0) {
+            $location.path('/settings')  
+          } else {
+            $location.path('/profile')
+          }
         })
         .catch(function(response) {
           console.log(response)

@@ -2,20 +2,16 @@ pry = require('pryjs')
 eval(pry.it)
 
 ONBOARDING (Adam)
-  go to user profile/settings form after authenticating to 
-    DONE - phone number
-    - require password if no password
-    - if username is already taken add integer to it
-    - update token after updating
-    - logging me out after updating
+  - make unique username
+  - get phone number from facebook/google
 
 INVITES/RSVPS (Adam)
-  invite modal - Zoink Username (autocomplete w picture) or Name and Email
-  check if already invited on server
-  uninvite dropdown busted
-  invites foggy, rsvps clear
+  invite text droplet
+  rsvp with username & phone number || email
+  text me the text droplet - what, where, when
 
 ZOINK
+  tabs are urls
   Edit Zoink
   Archive zoink (with confirmation!)
   DONE add todos

@@ -7,6 +7,7 @@ var User = require('../models/user.js')
   , moment = require('moment')
   , auth = require('./auth')
   , Zoink = require('../models/zoink.js')
+  , phone = require('phone');
 
 module.exports = function(app) {
 
@@ -18,6 +19,9 @@ module.exports = function(app) {
   });
 
   app.put('/api/me', auth.ensureAuthenticated, function(req, res) {
+    if (req.body.phone) {
+      req.body.phone = phone(req.body.phone)[0]
+    }
     User.update(req.userId, req.body, function(err, user) {
       if (!user) {
         return res.status(400).send({ message: 'User not found' });
@@ -34,12 +38,16 @@ module.exports = function(app) {
       if (!user) {
         return res.status(401).send({ message: 'Wrong email or password' });
       }
+
       user.comparePassword(req.body.password, function(err, isMatch) {
         console.log(isMatch)
         if (!isMatch) {
           return res.status(401).send({ message: 'Wrong email or password' });
         }
-        res.send({ token: auth.createJWT(user) });
+        user.loginCount ++
+        user.save(function(err) {
+          res.send({ token: auth.createJWT(user) });
+        });
       });
     });
   });
@@ -53,7 +61,7 @@ module.exports = function(app) {
         email: req.body.email,
         password: req.body.password,
         displayName: req.body.displayName,
-        picture: "http://placehold.it/50x50"
+        picture: "http://placehold.it/50x50"  
       });
       user.save(function(err) {
         if (err) { return res.status(400).send({err: err}) }
@@ -102,14 +110,18 @@ module.exports = function(app) {
         // Step 3b. Create a new user account or return an existing one.
         User.findOne({ facebook: profile.id }, function(err, existingUser) {
           if (existingUser) {
-            var token = auth.createJWT(existingUser);
-            return res.send({ token: token });
+            existingUser.loginCount ++
+            existingUser.save(function(err) {
+              var token = auth.createJWT(existingUser);
+              return res.send({ token: token });
+            });
           } else {
             User.findOne({ email: profile.email }, function(err, existingUser) {
               if (existingUser) {
                 existingUser.facebook = profile.id
                 existingUser.picture = 'https://graph.facebook.com/' + profile.id + '/picture?type=large';
-
+                existingUser.loginCount ++
+                
                 existingUser.save(function(err, user) {
                   var token = auth.createJWT(existingUser);
                   return res.send({ token: token });                  

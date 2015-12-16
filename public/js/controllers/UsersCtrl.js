@@ -12,20 +12,19 @@ angular.module('zoinks')
   }])
 
   .controller('SettingsCtrl', ['$scope', '$http', '$location', 'Zoink', 'Invite', '$auth', 'Auth', function($scope, $http, $location, Zoink, Invite, $auth, Auth) {
-    $http.get('/api/me').then(function(data) {
-      $scope.user = data.data;
+    $http.get('/api/me').then(function(response) {
+      $scope.user = response.data;
     });
 
     $scope.onUCUploadComplete = function (info) {
       $scope.user.picture = info.cdnUrl;
-      console.log($scope.user);
     }
 
     $scope.updateUser = function() {
-      $http.put('/api/me', $scope.user).then(function(data) {
-        console.log(data.data)
-        $auth.setToken(data.data.token);
-        // $location.path('/profile');
+      $http.put('/api/me', $scope.user).then(function(response) {
+        // console.log(response.data)
+        // $auth.setToken(response.data.token);
+        $location.path('/profile');
       });      
     }
   }]);
