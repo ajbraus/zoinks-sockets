@@ -62,7 +62,13 @@
                   span.pull-right 
                     {{r.userName}}
                     button.close(ng-click='removeRequirement(r)') &#10006;
-                    button.btn.btn-sm.btn-default(ng-click='claimRequirement(r)' ng-if='!r.userName') Claim
+                    .btn-group(ng-if='!r.userName')
+                      button.btn.btn-sm.btn-default(ng-click='claimRequirement(r)') Claim
+                      button.btn.btn-sm.btn-default.dropdown-toggle(data-toggle="dropdown")
+                        span.caret
+                      ul.dropdown-menu
+                        li(ng-repeat='rsvp in zoink.rsvps')
+                          a(ng-click='claimRequirement(r, rsvp)') {{rsvp.displayName}}
                     button.btn.btn-sm.btn-default(ng-click='unclaimRequirement(r)' ng-if='r.userName == currentUser.displayName') Unclaim
                     img.img-responsive.img-circle.pull-left(ng-src='{{r.userPic}}', width='25px')
           h5 What to Bring & How to Prepare 
@@ -73,11 +79,16 @@
             .card-body
               form(ng-submit='addTodo()', ng-show='newTodo')
                 .form-group
-                  input.form-control(type='text', ng-model='todo', focus-me='{{newTodo}}')
+                  input.form-control(type='text', ng-model='todo.title', focus-me='{{newTodo}}')
               .list-group
-                .list-group-item(ng-repeat='todo in zoink.todos') {{todo}}
+                .list-group-item(ng-repeat='todo in zoink.todos') {{todo.title}}
                   span.pull-right
-                    button.close(ng-click='removeTodo(todo)') &#10006;
+                    a#dropdownMenu1.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
+                        i.icon.ion-gear-b
+                    ul.dropdown-menu(aria-labelledby='dropdownMenu1')
+                      li
+                        a(href="" ng-click="removeTodo(todo)") Delete
+                    //- button.close(ng-click='removeTodo(todo)') &#10006;
 
         uib-tab(heading='Share Rides')
           h5 Carpools and Shared Rides
@@ -86,31 +97,50 @@
               a.pull-right.btn.btn-link(ng-click='toggleNewCarpool()') Add
               //-  ng-hide='!rspved'
             .card-body
-              form(ng-submit='addCarpool()', ng-show='newCarpool')
+              form(ng-show='newCarpool')
                 .form-group
-                  input.form-control(type='text', ng-model='carpool.title', focus-me='{{newCarpool}}')
+                  input.form-control(type='text' placeholder='Driver name' ng-model='carpool.title' focus-me='{{newCarpool}}')
+                  input.form-control(type='number' placeholder='Number of seats' ng-model='carpool.seats')
+                  input.form-control.btn.btn-default(type='submit', ng-click='addCarpool()')
               .list-group
                 .list-group-item(ng-repeat='carpool in zoink.carpools')
                   .clearfix
                     .pull-left
-                      | {{carpool.title}}
+                      | {{carpool.title}} can take {{carpool.seats || '?'}} passengers
                     .pull-right
                       //- a.margin-sides.btn.btn-sm.btn-default.pull-right(ng-click='joinCarpool(carpool)')
                       //-   i.icon.ion-plus-circled.big
-                      button.close(ng-click='removeCarpool(carpool)', ng-if='carpool.userName == currentUser.displayName') &#10006;
+                      //- button.close(ng-click='removeCarpool(carpool)', ng-if='carpool.userName == currentUser.displayName') &#10006;
+
+                      a#dropdownMenu1.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
+                        i.icon.ion-gear-b
+                      ul.dropdown-menu(aria-labelledby='dropdownMenu1')
+                        li
+                          a(href="" ng-click="removeCarpool(carpool)") Delete
                       img.img-responsive.img-circle.pull-right.margin-sides(ng-repeat='passenger in carpool.passengers', ng-src='{{passenger.picUrl}}', width='40px')
         uib-tab(heading='Group Purchases')
           h5 Group Purchases
           .card
             .card-header.clearfix
               a.pull-right.btn.btn-link(ng-click='toggleNewPurchase()') Add
-              //-  ng-hide='!rspved'
             .card-body
-              form(ng-submit='addPurchase()', ng-show='newPurchase')
+              form(ng-show='newPurchase')
                 .form-group
-                  input.form-control(type='text', ng-model='purchase', focus-me='{{newPurchase}}')
+                  input.form-control(type='text', ng-model='purchase.title', placeholder='Item' focus-me='{{newPurchase}}')
+                  input.form-control(type='text', placeholder='Cost' ng-model='purchase.cost')
+                  input.form-control.btn.btn-default(type='submit', ng-click='addPurchase()')
               .list-group
-                .list-group-item(ng-repeat='purchase in zoink.purchases') {{purchase}}
+                .list-group-item(ng-repeat='purchase in zoink.purchases') {{purchase.title}}
+                  span.pull-right
+                    span(ng-if='purchase.cost') ${{purchase.cost}}
+                    a#dropdownMenu1.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
+                      i.icon.ion-gear-b
+                    ul.dropdown-menu(aria-labelledby='dropdownMenu1')
+                      li
+                        a(href="" ng-click="removePurchase(purchase)") Delete
+                    //- button.close(ng-click='removePurchase(purchase)') &#10006;
+              .list-group
+                .list-group-item Total: ${{totalPurchases.total}}
 .col-sm-3.chat.box-shadow-left.whole-height
   div(ng-repeat="message in zoink.messages")
     {{message.content}}

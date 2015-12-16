@@ -34,6 +34,8 @@ MESSAGES
   'angularMoment' for time ago it words in messages
   messages embedded is a problem - sending always!
   styling
+  text messages from chatting with @group
+
 
 PAYMENTS
   Start New Zoink - 5 RSVPS - free, 25 - 6.99, 100 - 12.99, 300 - 24.99, 1000 34.99
