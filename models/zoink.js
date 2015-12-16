@@ -25,6 +25,10 @@ var InviteSchema = new Schema({
   , createdAt   : Date
 });
 
+var TodoSchema = new Schema({
+  title         : { type: String, required: true }
+});
+
 var CarpoolSchema = new Schema({
   title         : { type: String, required: true }
   , seats       : Number
@@ -51,7 +55,7 @@ var ZoinkSchema = new Schema({
   , desc        : String
   , invites     : [InviteSchema]
   , rsvps       : [{ type : Schema.Types.ObjectId, ref : 'User' }]
-  , todos       : []
+  , todos       : [TodoSchema]
   , messages    : [MessageSchema]
   , purchases   : [PurchaseSchema]
   , carpools    : [CarpoolSchema]

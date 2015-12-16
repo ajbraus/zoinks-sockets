@@ -232,8 +232,8 @@ module.exports = function (io, app) {
 
     socket.on('publish:rmTodo', function (data) {
       Zoink.findById(data.zoinkId, function(err, zoink) {
-        var index = zoink.todos.indexOf(data.todo);
-        zoink.todos.splice(index, 1);
+        var rmObj = zoink.todos.id(data.todo._id);
+        rmObj.remove();
         zoink.save();
 
         io.sockets.in(data.zoinkId).emit('rmTodo', zoink.todos);
