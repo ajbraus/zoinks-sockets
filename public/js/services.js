@@ -22,6 +22,7 @@ angular.module('zoinks.services', [])
         var currentUser = {
           _id: user.sub,
           email: user.email,
+          name: user.name,
           picture: user.picture,
           displayName: user.displayName
         };

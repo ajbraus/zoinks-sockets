@@ -15,7 +15,8 @@ angular.module('zoinks', ['zoinks.filters',
                          'ng-uploadcare',
                          'ui.bootstrap',
                          'ngAnimate',
-                         'toastr'
+                         'toastr',
+                         'ngclipboard'
                          ])
 
     .config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {

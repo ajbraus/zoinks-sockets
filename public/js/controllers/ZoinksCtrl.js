@@ -4,15 +4,23 @@
 
 angular.module('zoinks')
 
-  .controller('ZoinkShowCtrl', ['$scope', '$routeParams', 'Zoink', 'socket', '$auth', 'Auth', function($scope, $routeParams, Zoink, socket, $auth, Auth) {
+  .controller('ZoinkShowCtrl', ['$scope', 'toastr', '$routeParams', 'Zoink', 'socket', '$auth', 'Auth', function($scope, toastr, $routeParams, Zoink, socket, $auth, Auth) {
     if ($auth.isAuthenticated()) {
       var currentUser = Auth.currentUser();
       $scope.currentUser = currentUser;
     }
 
+    $scope.copySuccess = function(e) {
+      toastr.info('Invite copied to clipboard', 'Success')
+    }
+
 
     Zoink.get({ id: $routeParams.id }, function(data) {
       $scope.zoink = data;
+      
+      $scope.inviteMsg = "Hey there, " + currentUser.name + " invited you to " + $scope.zoink.title + " at " + $scope.zoink.location + " on " 
+      //+ $filter('date')($scope.zoink.startsAt, 'EEE MMM d') + " at " + $filter('date')($scope.zoink.startsAt, 'h:mma') ". Follow this link to see more or rsvp."
+
       socket.emit('publish:joinRoom', $scope.zoink);
 
       $scope.rsvped = _.includes(_.pluck($scope.zoink.rsvps, '_id'), currentUser._id);
