@@ -12,53 +12,27 @@ body {
   padding-top: 64px;
 }
 
-/*#zoink {
+#zoink {
   height:100%;
   overflow: hidden;
-  margin:0;
 }
 
 @media (min-width: 768px){
-  #zoink {
-    overflow: hidden;
-  }
   #left {
-    position: absolute;
+    position: fixed;
     top: 64px;
     bottom: 0;
-    left: 0;
     padding-bottom: 64px;
-    width: 75%;
-    overflow-y: scroll; 
-
-
+    overflow: auto; 
   }
   
   #right {
-    position: absolute;
+    position: fixed;
     top: 64px;
-    bottom: 0;
-    right: 0;
     padding-bottom: 64px;
-    overflow-y: scroll;
-    width: 25%;
-
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    overflow-y: scroll;
-    width: 25%;
+    overflow: auto;
   }
 }
-
-#left {
-  height:100%;
-}
-
-#right {
-  height:100%;
-}*/
 
 .jumbotron {
   padding:120px 0 270px 0;
