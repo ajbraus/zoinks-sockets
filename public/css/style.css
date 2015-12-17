@@ -29,7 +29,7 @@ body {
   #right {
     position: fixed;
     top: 64px;
-    padding-bottom: 64px;
+    padding-bottom: 164px;
     overflow: auto;
   }
 }
@@ -124,6 +124,17 @@ a:hover {
           box-shadow: 5px 6px 18px -12px black inset;
 
 }
+
+#chat-input {
+  position: fixed;
+  background: #fff;
+  bottom: 0px;
+  width: 33%;
+  padding: 20px;
+  padding-left: -10px;
+  border-top: 1px solid #dddddd;
+}
+
 .card {
   position: relative;
   overflow: hidden;
@@ -318,7 +329,7 @@ fieldset {
   width: 300px;
 }
 
-#requirements .btn {
+#requirements .list-group .btn {
   text-transform: none;
   margin: -5px 14px;
 }

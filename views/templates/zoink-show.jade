@@ -98,14 +98,14 @@
                   input.form-control.btn.btn-default(type='submit', ng-click='addPurchase()')
               .list-group
                 .list-group-item(ng-repeat='purchase in zoink.purchases') {{purchase.title}} 
-                  a#dropdownMenu1.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
-                    i.icon.ion-gear-b
-                  ul.dropdown-menu(aria-labelledby='dropdownMenu1')
-                    li
-                      a(href="" ng-click="removePurchase(purchase)") Delete
 
                   span.pull-right
                     span(ng-if='purchase.cost') ${{purchase.cost}} 
+                    a#dropdownMenu1.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
+                      i.icon.ion-gear-b
+                    ul.dropdown-menu(aria-labelledby='dropdownMenu1')
+                      li
+                        a(href="" ng-click="removePurchase(purchase)") Delete
               .list-group
                 .list-group-item Total: ${{totalPurchases.total}}
   #right.col-sm-4.chat.box-shadow-left.whole-height
@@ -118,11 +118,12 @@
           ul.dropdown-menu(aria-labelledby='dropdownMenu1')
             li
               a(href="" ng-click="rmMessage(message)") Delete Message
-    form(ng-submit='addMessage()')
-      .form-group
-        textarea.form-control(name='', id='', ng-model='message.content' ng-keyup="$event.keyCode == 13 && addMessage()")
-      .text-right
-        button.btn.btn-success.btn-sm(type='submit') Send
+    #chat-input  
+      form(ng-submit='addMessage()')
+        .form-group
+          textarea.form-control(name='', id='', ng-model='message.content' ng-keyup="$event.keyCode == 13 && addMessage()")
+        .text-right
+          button.btn.btn-success.btn-sm(type='submit') Send
 
   #newInvite.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
     .modal-dialog.modal-sm(role='document')
