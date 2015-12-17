@@ -10,20 +10,28 @@
 body {
   background: #EFEFEF;
   padding-top: 64px;
-  overflow: hidden;
+}
+
+/*#zoink {
   height:100%;
+  overflow: hidden;
+  margin:0;
 }
 
 @media (min-width: 768px){
+  #zoink {
+    overflow: hidden;
+  }
   #left {
     position: absolute;
     top: 64px;
     bottom: 0;
-    height: 80%;
     left: 0;
     padding-bottom: 64px;
     width: 75%;
     overflow-y: scroll; 
+
+
   }
   
   #right {
@@ -32,6 +40,13 @@ body {
     bottom: 0;
     right: 0;
     padding-bottom: 64px;
+    overflow-y: scroll;
+    width: 25%;
+
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
     overflow-y: scroll;
     width: 25%;
   }
@@ -43,7 +58,7 @@ body {
 
 #right {
   height:100%;
-}
+}*/
 
 .jumbotron {
   padding:120px 0 270px 0;
