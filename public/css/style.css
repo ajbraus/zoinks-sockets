@@ -8,7 +8,8 @@
 */
 
 body {
-  background: #EFEFEF
+  background: #EFEFEF;
+  padding-top: 64px;
 }
 
 .jumbotron {
@@ -95,6 +96,7 @@ a:hover {
 .chat {
   background-color: white;
   padding-top:10px;
+  right: 0;
   -webkit-box-shadow: 5px 6px 18px -12px black inset;
      -moz-box-shadow: 5px 6px 18px -12px black inset;
           box-shadow: 5px 6px 18px -12px black inset;

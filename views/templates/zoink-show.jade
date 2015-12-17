@@ -107,7 +107,7 @@
                 span(ng-if='purchase.cost') ${{purchase.cost}} 
           .list-group
             .list-group-item Total: ${{totalPurchases.total}}
-.col-sm-3.col-md-4.chat.box-shadow-left.whole-height
+.col-sm-3.col-md-4.chat.box-shadow-left.whole-height.affix
   div(ng-repeat="message in zoink.messages")
     {{message.content}}
     .small.text-right.text-muted said by {{message.displayName}}&nbsp;
