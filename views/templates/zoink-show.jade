@@ -123,7 +123,7 @@
         .form-group
           textarea.form-control(name='', id='', ng-model='message.content' ng-keyup="$event.keyCode == 13 && addMessage()")
         .text-right
-          button.btn.btn-success.btn-sm(type='submit') Send
+          button.btn.btn-success.btn-sm.hidden(type='submit') Send
 
   #newInvite.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
     .modal-dialog.modal-sm(role='document')
