@@ -8,7 +8,41 @@
 */
 
 body {
-  background: #EFEFEF
+  background: #EFEFEF;
+  padding-top: 64px;
+  overflow: hidden;
+  height:100%;
+}
+
+@media (min-width: 768px){
+  #left {
+    position: absolute;
+    top: 64px;
+    bottom: 0;
+    height: 80%;
+    left: 0;
+    padding-bottom: 64px;
+    width: 75%;
+    overflow-y: scroll; 
+  }
+  
+  #right {
+    position: absolute;
+    top: 64px;
+    bottom: 0;
+    right: 0;
+    padding-bottom: 64px;
+    overflow-y: scroll;
+    width: 25%;
+  }
+}
+
+#left {
+  height:100%;
+}
+
+#right {
+  height:100%;
 }
 
 .jumbotron {
@@ -95,6 +129,7 @@ a:hover {
 .chat {
   background-color: white;
   padding-top:10px;
+  right: 0;
   -webkit-box-shadow: 5px 6px 18px -12px black inset;
      -moz-box-shadow: 5px 6px 18px -12px black inset;
           box-shadow: 5px 6px 18px -12px black inset;
