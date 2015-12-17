@@ -7,6 +7,10 @@
 }
 */
 
+body {
+  background: #EFEFEF
+}
+
 .jumbotron {
   padding:120px 0 270px 0;
   background: url('/img/zoink.jpeg');
