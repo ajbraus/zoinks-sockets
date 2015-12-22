@@ -4,7 +4,7 @@
 
 angular.module('zoinks')
 
-  .controller('ZoinkShowCtrl', ['$scope', 'toastr', '$routeParams', 'Zoink', 'socket', '$auth', 'Auth', function($scope, toastr, $routeParams, Zoink, socket, $auth, Auth) {
+  .controller('ZoinkShowCtrl', ['$scope', 'toastr', '$routeParams', 'Zoink', 'socket', '$auth', 'Auth', '$location', '$anchorScroll', '$timeout', function($scope, toastr, $routeParams, Zoink, socket, $auth, Auth, $location, $anchorScroll, $timeout) {
     if ($auth.isAuthenticated()) {
       var currentUser = Auth.currentUser();
       $scope.currentUser = currentUser;
@@ -12,8 +12,7 @@ angular.module('zoinks')
 
     $scope.copySuccess = function(e) {
       toastr.info('Invite copied to clipboard', 'Success')
-    }
-
+    };
 
     Zoink.get({ id: $routeParams.id }, function(data) {
       $scope.zoink = data;
@@ -26,6 +25,11 @@ angular.module('zoinks')
       $scope.rsvped = _.includes(_.pluck($scope.zoink.rsvps, '_id'), currentUser._id);
       $scope.invited = _.includes(_.pluck($scope.zoink.invites, '_id'), currentUser._id);
       $scope.totalPurchases.total = calculateTotal($scope.zoink.purchases);
+
+      $timeout(function() {
+        $location.hash('bottom');
+        $anchorScroll();
+      });
     });
 
     $scope.$on('socket:joinRoom', function (event, clientsCount) {
@@ -74,8 +78,10 @@ angular.module('zoinks')
                      }
 
     $scope.addMessage = function() {
-      socket.emit('publish:addMessage', $scope.message)
-    }
+      socket.emit('publish:addMessage', $scope.message);
+      $location.hash('bottom');
+      $anchorScroll();
+    };
 
     $scope.$on('socket:addMessage', function (event, message) {
       console.log('message added')

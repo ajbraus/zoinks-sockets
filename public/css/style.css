@@ -29,7 +29,7 @@ body {
   #right {
     position: fixed;
     top: 64px;
-    padding-bottom: 164px;
+    /*padding-bottom: 164px;*/
     overflow: auto;
   }
 }
@@ -122,6 +122,10 @@ a:hover {
   -webkit-box-shadow: 5px 6px 18px -12px black inset;
      -moz-box-shadow: 5px 6px 18px -12px black inset;
           box-shadow: 5px 6px 18px -12px black inset;
+}
+
+#messages {
+  padding-bottom: 200px;
 }
 
 #chat-input {

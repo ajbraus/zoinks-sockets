@@ -109,15 +109,17 @@
               .list-group
                 .list-group-item Total: ${{totalPurchases.total}}
   #right.col-sm-4.chat.box-shadow-left.whole-height
-    div(ng-repeat="message in zoink.messages")
-      {{message.content}}
-      .small.text-right.text-muted said by {{message.displayName}}&nbsp;
-        .text-muted.pull-right.dropdown(ng-show="message.displayName == currentUser.displayName") 
-          a#dropdownMenu1.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
-            i.icon.ion-gear-b
-          ul.dropdown-menu(aria-labelledby='dropdownMenu1')
-            li
-              a(href="" ng-click="rmMessage(message)") Delete Message
+    #messages
+      div(ng-repeat="message in zoink.messages")
+        {{message.content}}
+        .small.text-right.text-muted said by {{message.displayName}}&nbsp;
+          .text-muted.pull-right.dropdown(ng-show="message.displayName == currentUser.displayName") 
+            a#dropdownMenu1.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
+              i.icon.ion-gear-b
+            ul.dropdown-menu(aria-labelledby='dropdownMenu1')
+              li
+                a(href="" ng-click="rmMessage(message)") Delete Message
+    a#bottom
     #chat-input  
       form(ng-submit='addMessage()')
         .form-group
